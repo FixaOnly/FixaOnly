@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Tentang FIXA XITERZ</title>
+  <style>
+  :root {
+  --theme-color: #ff0000; /* default jika belum dipilih */
+    }
+    body {
+      margin: 0;
+      background-color: #000;
+      color: #fff;
+      font-family: 'Arial', sans-serif;
+      padding-bottom: 100px;
+    }
+
+    header {
+      text-align: center;
+      padding: 25px 15px;
+      font-size: 26px;
+      color: var(--theme-color);
+      text-shadow: 0 0 10px var(--theme-color);
+      border-bottom: 2px solid var(--theme-color);
+    }
+
+    .container {
+      max-width: 800px;
+      margin: auto;
+      padding: 20px;
+      line-height: 1.8;
+    }
+
+    .highlight {
+      color: var(--theme-color);
+      font-weight: bold;
+    }
+
+    .quote {
+      margin-top: 30px;
+      font-style: italic;
+      color: #999;
+    }
+
+    .fixed-buttons {
+      position: fixed;
+      bottom: 20px;
+      left: 20px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      z-index: 1000;
+    }
+
+    .fixed-buttons a {
+      padding: 10px 15px;
+      background-color: #ff3c3c;
+      color: white;
+      text-decoration: none;
+      border-radius: 6px;
+      text-align: center;
+      font-weight: bold;
+      box-shadow: 0 0 10px #ff3c3c;
+    }
+
+    .fixed-buttons a:hover {
+      background-color: #e60000;
+    }
+  </style>
+  <script>
+  const savedColor = localStorage.getItem('userColor');
+  if (savedColor) {
+    document.documentElement.style.setProperty('--theme-color', savedColor);
+  }
+</script>
+</head>
+<body>
+
+  <header>TENTANG FIXA XITERZ</header>
+
+  <div class="container">
+    <p><span class="highlight">FIXA XITERZ</span> bukan sebuah tim. Bukan komunitas. Bukan kelompok besar.</p>
+
+    <p>Aku hanya satu orang, berdiri sendiri. Tanpa rekan. Tanpa support dari siapa pun. Semua ini dibangun dari nol, dengan rasa sakit, tekanan, dan tekad yang tidak semua orang bisa mengerti.</p>
+
+    <p>Banyak yang mencaci. Banyak yang mencibir. Tapi aku tidak berhenti. Ketika mereka sibuk menjatuhkan, aku terus membangun.</p>
+
+    <p>Aku bukan pencari validasi. Aku tidak butuh tepuk tangan. Apa yang kubuat, lahir dari passion, dari rasa ingin membuktikan bahwa satu orang pun bisa mengubah banyak hal.</p>
+
+    <p>Ada yang iri, ada yang benci. Tapi aku tetap bergerak. Karena aku tahu, aku bukan seperti mereka. Aku beda.</p>
+
+    <p><span class="highlight">FIXA XITERZ</span> adalah karya. Adalah bukti. Dan aku akan terus berdiri di tengah kebisingan, karena diam adalah kekuatan.</p>
+
+    <div class="quote">“Sendiri bukan kelemahan. Justru karena sendiri, aku kuat.”</div>
+  </div>
+
+</body>
+</html>

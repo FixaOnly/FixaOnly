@@ -1,0 +1,128 @@
+<!DOCTYPE html><html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Bug Report - Fixa Team</title>
+  <script type="module">
+    // Firebase config
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/9.22.2/firebase-app.js";
+    import { getDatabase, ref, push } from "https://www.gstatic.com/firebasejs/9.22.2/firebase-database.js";
+    import { getStorage, ref as sRef, uploadBytes, getDownloadURL } from "https://www.gstatic.com/firebasejs/9.22.2/firebase-storage.js";const firebaseConfig = {
+  apiKey: "YOUR_API_KEY",
+  authDomain: "fixashop-517cb.firebaseapp.com",
+  projectId: "fixashop-517cb",
+  databaseURL: "https://fixashop-517cb-default-rtdb.firebaseio.com",
+  storageBucket: "fixashop-517cb.appspot.com",
+};
+const app = initializeApp(firebaseConfig);
+const db = getDatabase(app);
+const storage = getStorage(app);
+
+document.getElementById('bugForm').addEventListener('submit', async (e) => {
+  e.preventDefault();
+  const nama = document.getElementById('nama').value;
+  const jenis = document.getElementById('jenis').value;
+  const deskripsi = document.getElementById('deskripsi').value;
+  const file = document.getElementById('gambar').files[0];
+  let gambarURL = "";
+
+  if (file) {
+    const storageRef = sRef(storage, 'bug_images/' + Date.now() + '_' + file.name);
+    await uploadBytes(storageRef, file);
+    gambarURL = await getDownloadURL(storageRef);
+  }
+
+  const laporanRef = ref(db, 'bug_reports');
+  await push(laporanRef, {
+    nama, jenis, deskripsi, gambarURL,
+    waktu: new Date().toISOString()
+  });
+
+  alert("✅ Laporan berhasil dikirim. Terima kasih!");
+  document.getElementById('bugForm').reset();
+});
+
+  </script>
+  <style>
+  :root {
+  --theme-color: #ff0000; /* default jika belum dipilih */
+    }
+    body {
+      background: #000;
+      color: var(--theme-color);
+      font-family: 'Segoe UI', sans-serif;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      padding: 20px;
+    }
+    .container {
+      width: 100%;
+      max-width: 500px;
+      background: #111;
+      padding: 24px;
+      border-radius: 16px;
+      box-shadow: 0 0 20px var(--theme-color);
+      animation: fadeIn 1s ease-in-out;
+    }
+    input, textarea, select {
+      width: 100%;
+      padding: 10px;
+      margin-bottom: 16px;
+      border-radius: 10px;
+      border: none;
+      background: #222;
+      color: var(--theme-color);
+      outline: none;
+    }
+    input[type="file"] {
+      padding: 6px;
+      background: #111;
+    }
+    button {
+      background: #000;
+      border: none;
+      padding: 12px;
+      width: 100%;
+      color: var(--theme-color);
+      font-weight: bold;
+      border-radius: 10px;
+      cursor: pointer;
+      transition: background 0.3s;
+    }
+    button:hover {
+      background: #d00;
+    }
+    @keyframes fadeIn {
+      from {opacity: 0; transform: translateY(10px);}
+      to {opacity: 1; transform: translateY(0);}
+    }
+  </style>
+    <script>
+    // Ambil warna yang disimpan dari halaman sebelumnya
+    const savedColor = localStorage.getItem('userColor');
+    if (savedColor) {
+      document.documentElement.style.setProperty('--theme-color', savedColor);
+    }
+</script>
+</head>
+<body>
+  <div class="container">
+    <h2>Lapor Masalah / Bug 🐞</h2>
+    <form id="bugForm">
+      <input type="text" id="nama" placeholder="Nama Anda" required>
+      <select id="jenis" required>
+        <option value="" disabled selected>Pilih Jenis Masalah</option>
+        <option value="Crash">Crash</option>
+        <option value="Tidak Berfungsi">Tidak Berfungsi</option>
+        <option value="File Rusak">File Rusak</option>
+        <option value="Lainnya">Lainnya</option>
+      </select>
+      <textarea id="deskripsi" placeholder="Jelaskan masalah yang terjadi..." rows="4" required></textarea>
+      <input type="file" id="gambar" accept="image/*">
+      <button type="submit">Kirim Laporan</button>
+    </form>
+  </div>
+</body>
+</html>

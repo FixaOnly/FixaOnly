@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Mengarahkan ke WhatsApp...</title>
+  <style>
+    :root {
+      --theme-color: #FF3131; /* Default jika tidak ada di localStorage */
+    }
+
+    body {
+      background-color: #0d0d0d;
+      color: white;
+      font-family: 'Segoe UI', sans-serif;
+      height: 100vh;
+      margin: 0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      flex-direction: column;
+    }
+
+    h1 {
+      font-size: 2rem;
+      color: var(--theme-color);
+      text-shadow: 0 0 5px var(--theme-color),
+                   0 0 10px var(--theme-color),
+                   0 0 20px var(--theme-color);
+      animation: pulse 1.5s infinite;
+    }
+
+    p {
+      margin-top: 10px;
+      color: #ccc;
+    }
+
+    @keyframes pulse {
+      0% {
+        text-shadow: 0 0 5px var(--theme-color),
+                     0 0 10px var(--theme-color),
+                     0 0 20px var(--theme-color);
+      }
+      50% {
+        text-shadow: 0 0 10px var(--theme-color),
+                     0 0 20px var(--theme-color),
+                     0 0 40px var(--theme-color);
+      }
+      100% {
+        text-shadow: 0 0 5px var(--theme-color),
+                     0 0 10px var(--theme-color),
+                     0 0 20px var(--theme-color);
+      }
+    }
+  </style>
+  <script>
+  const savedColor = localStorage.getItem('userColor');
+  if (savedColor) {
+    document.documentElement.style.setProperty('--theme-color', savedColor);
+  }
+</script>
+</head>
+<body>
+
+  <h1>🔁 Menuju WhatsApp...</h1>
+  <p>Mohon tunggu sebentar...</p>
+
+  <script>
+    // Ambil tema dari localStorage
+    const storedTheme = localStorage.getItem("themeColor");
+    if (storedTheme) {
+      document.documentElement.style.setProperty('--theme-color', storedTheme);
+    }
+
+    // Redirect otomatis
+    const nomor = "6288220373629";
+    const pesan = encodeURIComponent("Halo kak! Saya tertarik...");
+    setTimeout(() => {
+      window.location.href = `https://wa.me/${nomor}?text=${pesan}`;
+    }, 3000);
+  </script>
+
+</body>
+</html>

@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Request Fitur Baru - Fixa Team</title>
+
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/9.22.2/firebase-app.js";
+    import { getDatabase, ref, push, set } from "https://www.gstatic.com/firebasejs/9.22.2/firebase-database.js";
+
+    const firebaseConfig = {
+      apiKey: "AIzaSyDdX...", // ganti jika perlu
+      authDomain: "fixashop-517cb.firebaseapp.com",
+      databaseURL: "https://fixashop-517cb-default-rtdb.firebaseio.com",
+      projectId: "fixashop-517cb",
+      storageBucket: "fixashop-517cb.firebasestorage.app",
+      messagingSenderId: "",
+      appId: ""
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const database = getDatabase(app);
+
+    window.submitRequest = function () {
+      const nama = document.getElementById("nama").value;
+      const judul = document.getElementById("judul").value;
+      const deskripsi = document.getElementById("deskripsi").value;
+
+      if (!nama || !judul || !deskripsi) {
+        alert("Lengkapi semua data dulu!");
+        return;
+      }
+
+      const reqRef = ref(database, "fitur_request");
+      const newReq = push(reqRef);
+      set(newReq, {
+        nama,
+        judul,
+        deskripsi,
+        waktu: new Date().toISOString()
+      }).then(() => {
+        alert("✅ Permintaan berhasil dikirim!");
+        document.getElementById("form-request").reset();
+      });
+    };
+  </script>
+
+  <style>
+  :root {
+  --theme-color: #ff0000; /* default jika belum dipilih */
+    }
+    body {
+      background: #000;
+      color: var(--theme-color);
+      font-family: 'Segoe UI', sans-serif;
+      padding: 20px;
+    }
+
+    h1 {
+      color: var(--theme-color);
+      text-align: center;
+      margin-bottom: 30px;
+      text-shadow: 0 0 12px var(--theme-color);
+    }
+
+    .form-container {
+      background: #111;
+      border-radius: 12px;
+      padding: 25px;
+      max-width: 500px;
+      margin: 0 auto;
+      box-shadow: 0 0 18px var(--theme-color);
+    }
+
+    label {
+      display: block;
+      margin-bottom: 6px;
+      color: var(--theme-color);
+      font-weight: bold;
+      text-shadow: 0 0 6px var(--theme-color);
+    }
+
+    input, textarea {
+      width: 100%;
+      padding: 10px;
+      background: #000;
+      color: var(--theme-color);
+      border: 1px solid var(--theme-color);
+      border-radius: 8px;
+      margin-bottom: 15px;
+      box-shadow: inset 0 0 6px var(--theme-color);
+    }
+
+    input::placeholder,
+    textarea::placeholder {
+      color: #fff;
+    }
+
+    input:focus, textarea:focus {
+      outline: none;
+      border-color: var(--theme-color);
+      box-shadow: 0 0 12px var(--theme-color);
+    }
+
+    button {
+      background: #001;
+      color: #fff;
+      border: none;
+      padding: 12px 20px;
+      border-radius: 10px;
+      font-weight: bold;
+      width: 100%;
+      cursor: pointer;
+      transition: 0.3s;
+      text-shadow: 0 0 5px var(--theme-color);
+    }
+
+    button:hover {
+      background: var(--theme-color);
+      box-shadow: 0 0 20px var(--theme-color);
+    }
+
+    ::-webkit-scrollbar {
+      width: 6px;
+    }
+    ::-webkit-scrollbar-thumb {
+      background: var(--theme-color);
+      border-radius: 10px;
+    }
+  </style>
+    <script>
+    // Ambil warna yang disimpan dari halaman sebelumnya
+    const savedColor = localStorage.getItem('userColor');
+    if (savedColor) {
+      document.documentElement.style.setProperty('--theme-color', savedColor);
+    }
+</script>
+</head>
+<body>
+  <h1>🧠 Request Fitur Baru</h1>
+  <div class="form-container">
+    <form id="form-request" onsubmit="event.preventDefault(); submitRequest();">
+      <label for="nama">Nama Pengirim</label>
+      <input type="text" id="nama" placeholder="Contoh: KingCheatX" required />
+
+      <label for="judul">Judul Permintaan</label>
+      <input type="text" id="judul" placeholder="Contoh: Mode Auto Headshot" required />
+
+      <label for="deskripsi">Deskripsi Fitur</label>
+      <textarea id="deskripsi" rows="5" placeholder="Tulis detail fitur atau cheat yang kamu pengen..." required></textarea>
+
+      <button type="submit">🚀 Kirim Permintaan</button>
+    </form>
+  </div>
+</body>
+</html>

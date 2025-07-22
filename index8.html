@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Dukung Fixa</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+  :root {
+  --theme-color: #ff0000; /* default jika belum dipilih */
+    }
+    body {
+      background-color: #000;
+      font-family: 'Segoe UI', sans-serif;
+    }
+
+    .neon-text {
+      color: var(--theme-color);
+      text-shadow:
+        0 0 5px var(--theme-color);
+        0 0 10px var(--theme-color);
+        0 0 20px var(--theme-color);
+        0 0 40px var(--theme-color);
+      animation: flicker 2s infinite;
+    }
+
+    @keyframes flicker {
+      0%, 100% {
+        opacity: 1;
+      }
+      50% {
+        opacity: 0.85;
+      }
+    }
+
+    .donate-btn {
+      background-color: #111;
+      border: 2px solid var(--theme-color);
+      color: white;
+      font-weight: bold;
+      padding: 0.8rem 1.5rem;
+      border-radius: 1rem;
+      box-shadow: 0 0 20px var(--theme-color);
+      transition: 0.3s ease;
+    }
+
+    .donate-btn:hover {
+      background-color: var(--theme-color);
+      color: black;
+      transform: scale(1.05);
+      box-shadow: 0 0 30px var(--theme-color);
+    }
+  </style>
+  <script>
+  const savedColor = localStorage.getItem('userColor');
+  if (savedColor) {
+    document.documentElement.style.setProperty('--theme-color', savedColor);
+  }
+</script>
+</head>
+<body class="flex items-center justify-center min-h-screen px-4 py-10 text-center">
+
+  <div class="max-w-md">
+    <h1 class="text-3xl font-bold neon-text mb-6">💔 SEBELUM KAMU PERGI...</h1>
+    <p class="text-gray-300 text-lg mb-4">
+      Semua yang kamu lihat di sini dibuat dengan perjuangan sendiri, tanpa tim, tanpa bantuan, dan kadang tanpa arah...
+    </p>
+    <p class="text-gray-400 mb-6">
+      Tapi FIXA tetap jalan... Demi komunitas ini. Demi kalian yang tetap butuh.  
+      Dukungan sekecil apapun sangat berarti dan menjadi alasan untuk terus bertahan.
+    </p>
+    <p class="text-gray-500 italic mb-8">
+      Mungkin kamu cuma klik. Tapi buat aku, itu bisa jadi semangat buat lanjut hidup.
+    </p>
+
+    <a href="https://sociabuzz.com/fixa/tribe" class="donate-btn inline-block">❤️ LANJUT KE DONET</a>
+  </div>
+
+</body>
+</html>

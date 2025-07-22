@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Ambil Password</title>
+  <style>
+  :root {
+  --theme-color: #ff0000; /* default jika belum dipilih */
+    }
+    body {
+      background: #000;
+      color: var(--theme-color);
+      font-family: 'Arial', sans-serif;
+      text-align: center;
+      padding: 40px;
+    }
+
+    select, button {
+      padding: 12px 20px;
+      margin: 20px 0;
+      border: none;
+      border-radius: 10px;
+      font-size: 18px;
+      background-color: #1a1a1a;
+      color: var(--theme-color);
+      outline: none;
+    }
+
+    button {
+      background-color: #111;
+      color: white;
+      cursor: pointer;
+      transition: 0.3s;
+    }
+
+    button:hover {
+      background-color: var(--theme-color);
+    }
+  </style>
+    <script>
+    // Ambil warna yang disimpan dari halaman sebelumnya
+    const savedColor = localStorage.getItem('userColor');
+    if (savedColor) {
+      document.documentElement.style.setProperty('--theme-color', savedColor);
+    }
+</script>
+</head>
+<body>
+
+  <h1>🔐 Ambil Password</h1>
+  <p>Pilih akun yang mau kamu buka untuk ambil password:</p>
+
+  <select id="linkSelect">
+    <option value="">-- Pilih Sumber --</option>
+    <option value="https://sfl.gl/PhWY0mVI"> HOLOGRAM SENJATA FF ORI🔴</option>
+    <option value="https://sfl.gl/MZKlGSCi"> HOLOGRAM SENJATA FF MAX🔴</option>
+    <option value="https://sfl.gl/lFukh">🔴 INJEKTOR WANN X ZHEY</option>
+    <option value="https://sfl.gl/0WTb0">🔴 INJEKTOR SALZ XITERZ</option>
+    <option value="https://sfl.gl/kBTHZ">🔴 INJEKTOR NOEL</option>
+    <option value="https://sfl.gl/48vor7">🔴 INJEKTOR RASK</option>
+    <option value="https://sfl.gl/jp9F2zrx">🔴 INJEKTOR VYRON</option>
+    <option value="https://sfl.gl/PhWY0mVI">🔴 INJEKTOR SENSI HEADLOCK</option>
+    <option value="https://sfl.gl/ehKyjMf">🔴 INJEKTOR RANS</option>
+    <option value="https://sfl.gl/uOYQe">🔴 INJEKTOR FREE</option>
+  </select>
+
+  <br>
+
+  <button onclick="ambilLink()">🎯 Ambil Password</button>
+
+  <script>
+    function ambilLink() {
+      const select = document.getElementById('linkSelect');
+      const link = select.value;
+      if (link) {
+        window.location.href = link;
+      } else {
+        alert("Pilih dulu salah satu sumber!");
+      }
+    }
+  </script>
+
+</body>
+</html>

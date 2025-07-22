@@ -1,0 +1,285 @@
+<!DOCTYPE html>  <html lang="id">  
+<head>  
+  <meta charset="UTF-8" />  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>  
+  <title>Menu Pembelian</title>  
+  <style>
+    :root {
+      --theme-color: #FF3131;
+    }
+    body {  
+      background-color: #111;  
+      font-family: Arial, sans-serif;  
+      color: var(--theme-color);
+      margin: 0;  
+      padding: 0 0 60px;  
+    }  .container {  
+  max-width: 500px;  
+  margin: 20px auto;  
+  background: #1a1a1a;  
+  padding: 20px;  
+  border-radius: 12px;  
+  box-shadow: 0 0 10px var(--theme-color);
+}  
+
+label {  
+  display: block;  
+  margin-top: 15px;  
+  font-weight: bold;  
+}  
+
+select, input[type="text"], input[type="number"], input[type="file"] {  
+  width: 100%;  
+  padding: 10px;  
+  margin-top: 5px;  
+  border-radius: 8px;  
+  border: 1px solid var(--theme-color);
+  background: #222;  
+  color: white;  
+}  
+
+button {  
+  width: 100%;  
+  padding: 12px;  
+  margin-top: 20px;  
+  background-color: #111;  
+  color: var(--theme-color);
+  font-weight: bold;  
+  border: none;  
+  border-radius: 10px;  
+  cursor: pointer;  
+  font-size: 16px;  
+}  
+
+.list-harga {  
+  background: #222;  
+  padding: 10px;  
+  margin-top: 15px;  
+  border-radius: 8px;  
+  font-size: 14px;  
+}  
+
+.qris-btn {  
+  position: fixed;  
+  bottom: 10px;  
+  left: 10px;  
+  background: #111;  
+  padding: 10px 15px;  
+  color: white;  
+  border-radius: 8px;  
+  font-weight: bold;  
+  box-shadow: 0 0 8px var(--theme-color);
+  z-index: 999;  
+  cursor: pointer;  
+}
+
+  </style> 
+  <script>
+    // Ambil warna yang disimpan dari halaman sebelumnya
+    const savedColor = localStorage.getItem('userColor');
+    if (savedColor) {
+      document.documentElement.style.setProperty('--theme-color', savedColor);
+    }
+  </script>  
+</head>  
+<body>  <div class="container">  
+  <h2 align="center" style="color:var(--theme-color);">Menu Pembelian</h2>  <label for="device">Pilih Device:</label>
+<select id="device">
+<option value="">-- Pilih --</option>
+<option value="android">Android</option>
+<option value="iphone">iPhone</option>
+<option value="pc">PC/Laptop</option>
+</select>
+
+<label for="game">Pilih Game:</label>
+<select id="game">
+<option value="">-- Pilih --</option>
+<option value="ff">Free Fire</option>
+<option value="ml">Mobile Legends</option>
+<option value="pubg">PUBG</option>
+</select>
+
+  <div class="list-harga" id="listHarga">Silakan pilih device dan game.</div>  <label for="nama">Nama:</label>
+<input type="text" id="nama" placeholder="Nama kamu">
+
+<label for="nominal">Nominal Transfer (Rp):</label>
+<input type="text" id="nominal" inputmode="numeric" placeholder="Contoh: 20000">
+
+  <div id="terbilang" style="margin-top: 5px; font-size: 13px; color: #aaa;"></div>  <label for="metode">Metode Pembayaran:</label>
+<select id="metode">
+<option value="">-- Pilih --</option>
+<option value="DANA">DANA</option>
+<option value="OVO">OVO</option>
+<option value="GOPAY">GOPAY</option>
+<option value="QRIS">QRIS</option>
+</select>
+
+  <div id="infoPembayaran" style="margin-top: 10px; font-size: 14px; color: lightgreen;"></div>  <label for="bukti">Upload Bukti Transfer:</label>
+<input type="file" id="bukti" accept="image/*">
+
+<button onclick="kirimWa()">Kirim ke Admin (WhatsApp)</button>
+
+</div>  <div class="qris-btn" onclick="window.open('https://wa.me/6288220373629?text=Halo%20Admin,%20boleh%20minta%20QRIS%20nya?', '_blank')">  
+  Minta QRIS  
+</div>  <script>  
+  const listHarga = {  
+    android: {  
+      ff: ['•#📱 PANEL ANDRO NO ROOT',  
+    '• 50K - 5 DAYS',  
+    '• 90K - 10 DAYS',  
+    '• 200K - 1 BULAN',  
+    '• 500K - PERMANEN',  
+  
+    '•#🧩 INJEKTOR VIP INJEKTOR FIXA XITERZ',  
+    '• 15K - 7 DAYS',  
+    '• 30K - 20 DAYS',  
+    '• 70K - PERMANENT',  
+    '• INJEKTOR PRIBADI + PERMANEN - 120K',  
+    '• Injektor pribadi pakai nama+logo mu',  
+    '• INJEKTOR PRIBADI + APK ADMIN - 150K',  
+    '• Apk Admin bisa jual lagi, bisa bikin username+password sendiri',  
+  
+    '•#📁 FILE VIP',  
+    '• Headlock V2 – 35K',  
+    '• Aimlock 70% – 30K',  
+    '• Aimbot Drag HS – 30K',  
+    '• Aimlock Badan – 40K',  
+    '• Stabilizer – 25K',  
+    '• Aimbot 50% – 25K',  
+    '• AimFOV 60% – 25K',  
+    '• Stabilizer X Layar Licin – 35K',  
+    '• File Modz – 50K',  
+    '• Fix Lag – 35K',  
+  
+    '•#🟢 HOLOGRAM',  
+    '• Full Badan – 50K',  
+    '• Kepala – 25K',  
+    '• Senjata – 25K',  
+    '• 3D – 40K',  
+    '•#📱 APLIKASI LAIN',  
+  '• Fake Lag (All Mode) – 50K',  
+  '• Regedit – 30K',  
+  '• Sensi – 50K',  
+  '• Booster Game – 40K',  
+  '• Bypass Pribadi V1 – 30K',  
+  '• Bypass V2 – 50K'  
+],  
+      ml: ['• Belum Tersedia'],  
+      pubg: ['• Belum Tersedia'],  
+    },  
+    iphone: {  
+      ff: ['•#🍎 PANEL FLORIT IPHONE',  
+  '• 1 Hari – 80K',  
+  '• 7 Hari – 200K',  
+  '• 31 Hari – 400K',  
+  '• GBOX – 300K (Tanpa PC/Laptop)'],  
+      ml: ['• Belum Tersedia'],  
+      pubg: ['• Belum Tersedia'],  
+    },  
+    pc: {  
+      ff: ['•#🖥️ PANEL PC/LAPTOP PREMIUM',  
+  '• 7 Hari – 150K',  
+  '• 1 Bulan – 300K',  
+  '• 3 Bulan – 700K',  
+  '• Permanen – 1,3JT',  
+  
+  '•#💻 PANEL PC/LAPTOP VIP',  
+  '• 7 Hari – 50K',  
+  '• 14 Hari – 100K',  
+  '• Permanen – 150K',  
+  
+  '•#🛡️ BYPASS PC/LAPTOP ANTIBAN',  
+  '• 7 Hari – 80K',  
+  '• 14 Hari – 120K',  
+  '• 30 Hari – 200K',  
+  '• 45 Hari – 250K',  
+  '• 60 Hari – 350K'],  
+      ml: ['• Belum Tersedia'],  
+      pubg: ['• Belum Tersedia'],  
+    }  
+  };  
+  
+  const nomorTujuan = {  
+    DANA: { nomor: '083820702764', nama: 'SAN## AND## RIF#' },  
+    OVO: { nomor: '088220373629', nama: 'FIXA XITERZ' },  
+    GOPAY: { nomor: '088220373629', nama: 'FIXA XITERZ' }  
+  };  
+  
+  document.getElementById('device').addEventListener('change', tampilkanList);  
+  document.getElementById('game').addEventListener('change', tampilkanList);  
+  
+  function tampilkanList() {  
+    const d = document.getElementById('device').value;  
+    const g = document.getElementById('game').value;  
+    const target = document.getElementById('listHarga');  
+  
+    if (d && g && listHarga[d] && listHarga[d][g]) {  
+      target.innerHTML = listHarga[d][g].join('<br>');  
+    } else {  
+      target.innerHTML = 'Silakan pilih device dan game.';  
+    }  
+  }  
+  
+  document.getElementById('metode').addEventListener('change', function() {  
+    const metode = this.value;  
+    const info = document.getElementById('infoPembayaran');  
+    if (metode === 'QRIS') {  
+      info.innerHTML = '<b>Silakan klik tombol "Minta QRIS" di kiri bawah.</b>';  
+    } else if (nomorTujuan[metode]) {  
+      const { nomor, nama } = nomorTujuan[metode];  
+      info.innerHTML = `Nomor Tujuan: <b>${nomor}</b><br>Atas Nama: <b>${nama}</b>`;  
+    } else {  
+      info.innerHTML = '';  
+    }  
+  });  
+  
+  document.getElementById('nominal').addEventListener('input', function() {  
+    let val = this.value.replace(/\D/g, '');  
+    this.value = val.replace(/\B(?=(\d{3})+(?!\d))/g, ',');  
+    if (val) {  
+      document.getElementById('terbilang').innerText = `${val.replace(/\B(?=(\d{3})+(?!\d))/g, ',')} [ ${angkaKeTulisan(val)} ]`;  
+    } else {  
+      document.getElementById('terbilang').innerText = '';  
+    }  
+  });  
+  
+  function angkaKeTulisan(angka) {  
+    const s = ["", "Ribu", "Juta"];  
+    let n = parseInt(angka);  
+    if (isNaN(n)) return "";  
+    if (n >= 1000000) return "1 JUTA+";  
+    if (n >= 1000) return (n / 1000).toFixed(0) + " " + s[1];  
+    return n + " Rupiah";  
+  }  
+  
+  function kirimWa() {  
+    const nama = document.getElementById('nama').value;  
+    const nominal = document.getElementById('nominal').value;  
+    const metode = document.getElementById('metode').value;  
+    const tujuan = nomorTujuan[metode];  
+    const pesan = metode === 'QRIS' ?  
+      `Halo Admin,%0ASaya ingin konfirmasi pembayaran via QRIS:%0A👤 Nama: ${nama}%0A💰 Nominal: Rp${nominal}` :  
+      `Halo Admin,%0ASaya ingin konfirmasi pembayaran:%0A👤 Nama: ${nama}%0A💰 Nominal: Rp${nominal}%0A💳 Metode: ${metode}%0A📞 Nomor Tujuan: ${tujuan.nomor}%0A👤 Atas Nama: ${tujuan.nama}`;  
+  
+    window.open(`https://wa.me/6288220373629?text=${pesan}`, '_blank');  
+  }  
+</script> 
+</body>  
+<div class="bantuan-btn" onclick="window.open('https://wa.me/6281234567890?text=Halo%20Admin,%20saya%20butuh%20bantuan%20mengenai%20pembelian', '_blank')">  
+  Bantuan  
+<style>  
+  .bantuan-btn {  
+  position: fixed;  
+  bottom: 10px;  
+  right: 10px;  
+  background: #111;  
+  padding: 10px 15px;  
+  color: white;  
+  border-radius: 8px;  
+  font-weight: bold;  
+  box-shadow: 0 0 8px var(--theme-color);
+  z-index: 999;  
+  cursor: pointer;  
+}  
+</div>  
+</html>

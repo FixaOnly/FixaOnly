@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Chat Publik</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+  :root {
+  --theme-color: #ff0000; /* default jika belum dipilih */
+    }
+    body {
+      background-color: #000;
+      color: white;
+      font-family: 'Segoe UI', sans-serif;
+    }
+    .neon {
+      color: var(--theme-color);
+      text-shadow: 0 0 5px var(--theme-color);, 0 0 10px var(--theme-color);
+    }
+    ::placeholder {
+      color: var(--theme-color);
+    }
+  </style>
+  <script>
+  const savedColor = localStorage.getItem('userColor');
+  if (savedColor) {
+    document.documentElement.style.setProperty('--theme-color', savedColor);
+  }
+</script>
+</head>
+<body class="flex flex-col min-h-screen">
+
+  <header class="p-4 flex justify-between items-center bg-black border-b border-red-600">
+    <h1 class="text-2xl font-bold neon">💬 Chat Publik</h1>
+    <button id="loginBtn" class="bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded">Login Google</button>
+    <div id="userInfo" class="hidden text-sm text-gray-400"></div>
+  </header>
+
+  <main class="flex-grow overflow-auto p-4" id="chatBox">
+    <div class="text-gray-400 text-sm">Memuat chat...</div>
+  </main>
+
+  <footer class="p-4 bg-black border-t border-red-600">
+    <div class="flex gap-2">
+      <input id="messageInput" type="text" placeholder="Tulis pesan..." class="flex-grow p-2 rounded bg-gray-800 text-white" disabled />
+      <button id="sendBtn" class="bg-red-600 hover:bg-red-700 px-4 py-2 " disabled>Kirim</button>
+    </div>
+  </footer>
+
+  <!-- Firebase -->
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-database-compat.js"></script>
+
+  <script>
+    // Konfigurasi Firebase kamu
+    const firebaseConfig = {
+      apiKey: "AIzaSyChvZvL-K5zABEewOV_x9yc5ToPo62Rhoo",
+      authDomain: "fixashop-517cb.firebaseapp.com",
+      databaseURL: "https://fixashop-517cb-default-rtdb.firebaseio.com",
+      projectId: "fixashop-517cb",
+      storageBucket: "fixashop-517cb.appspot.com",
+      messagingSenderId: "591165951570",
+      appId: "1:591165951570:web:b51bb6ae49c82bfb55d98b",
+      measurementId: "G-328DSSFCFK"
+    };
+    firebase.initializeApp(firebaseConfig);
+
+    const auth = firebase.auth();
+    const db = firebase.database();
+
+    const loginBtn = document.getElementById('loginBtn');
+    const userInfo = document.getElementById('userInfo');
+    const sendBtn = document.getElementById('sendBtn');
+    const msgInput = document.getElementById('messageInput');
+    const chatBox = document.getElementById('chatBox');
+
+    let currentUser = null;
+
+    loginBtn.onclick = async () => {
+      const provider = new firebase.auth.GoogleAuthProvider();
+      try {
+        const result = await auth.signInWithPopup(provider);
+        currentUser = result.user;
+        userInfo.innerText = `Masuk sebagai ${currentUser.displayName}`;
+        userInfo.classList.remove('hidden');
+        loginBtn.classList.add('hidden');
+        sendBtn.disabled = false;
+        msgInput.disabled = false;
+        saveUserData(currentUser);
+      } catch (error) {
+        alert("Gagal login: " + error.message);
+      }
+    };
+
+    function saveUserData(user) {
+      db.ref('users/' + user.uid).set({
+        name: user.displayName,
+        email: user.email
+      });
+    }
+
+    sendBtn.onclick = () => {
+      const msg = msgInput.value.trim();
+      if (!msg) return;
+      db.ref('chat/public').push({
+        name: currentUser.displayName,
+        uid: currentUser.uid,
+        message: msg,
+        time: new Date().toISOString()
+      });
+      msgInput.value = '';
+    };
+
+    // Load chat
+    db.ref('chat/public').limitToLast(50).on('child_added', (snapshot) => {
+      const { name, message, time } = snapshot.val();
+      const div = document.createElement('div');
+      div.innerHTML = `<p><span class="text-red-500 font-bold">${name}</span>: ${message}</p>`;
+      chatBox.appendChild(div);
+      chatBox.scrollTop = chatBox.scrollHeight;
+    });
+  </script>
+</body>
+</html>

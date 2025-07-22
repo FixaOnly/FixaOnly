@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Join Team Fixa</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+  :root {
+      --theme-color: #FF3131;
+    }
+    body {
+      background-color: #000;
+      font-family: 'Segoe UI', sans-serif;
+    }
+    .neon-red {
+      color: var(--theme-color);
+      text-shadow: 0 0 10px var(--theme-color), 0 0 20px var(--theme-color);
+      animation: pulse 2s infinite;
+    }
+    @keyframes pulse {
+      0%, 100% { text-shadow: 0 0 10px #999, 0 0 20px #999; }
+      50% { text-shadow: 0 0 20px #555, 0 0 40px #000; }
+    }
+    .card {
+      background: #111;
+      border: 2px solid var(--theme-color);
+      box-shadow: 0 0 20px var(--theme-color);
+    }
+    .btn {
+      background-color: var(--theme-color);
+      color: white;
+    }
+    .btn:hover {
+      background-color: white;
+      color: var(--theme-color);
+    }
+  </style>
+  <script>
+    // Ambil warna yang disimpan dari halaman sebelumnya
+    const savedColor = localStorage.getItem('userColor');
+    if (savedColor) {
+      document.documentElement.style.setProperty('--theme-color', savedColor);
+    }
+</script>
+</head>
+<body class="text-white px-4 py-10">
+  <h1 class="text-4xl font-bold neon-red text-center mb-6">🚀 Gabung Team Fixa Sekarang!</h1>
+  <p class="text-center text-gray-300 max-w-xl mx-auto mb-10">
+    Jadilah bagian dari Team Fixa dan dapatkan akses penuh ke tools, script eksklusif, grup premium, dan komunitas elite! Harga <strong>sekali bayar, permanen</strong>. 💯
+  </p>
+
+  <div class="max-w-xl mx-auto card p-6 rounded-xl">
+    <label class="block mb-2">👤 Nama Kamu</label>
+    <input type="text" id="nama" class="w-full p-2 rounded bg-black border border-var(-theme-color);-500 mb-4" placeholder="Contoh: FixaXiterz" />
+
+    <label class="block mb-2">📱 Nomor WhatsApp</label>
+    <input type="text" id="nowa" class="w-full p-2 rounded bg-black border border-var(-theme-color);-500 mb-4" placeholder="Contoh: 081234567890" />
+
+    <label class="block mb-2">📝 Alasan Bergabung</label>
+    <input type="text" id="alasan" class="w-full p-2 rounded bg-black border border-var(-theme-color)-500 mb-4" placeholder="Contoh: Ingin jualan" />
+
+    <label class="block mb-2">🎖️ Pilih Role / Paket</label>
+    <select id="paket" class="w-full p-2 rounded bg-black border border-var(--theme-color);-500 text-white mb-6">
+      <option value="" disabled selected>-- Pilih Paket --</option>
+      <option value="Admin Grup - 250K">👥 Admin Grup - 250K</option>
+      <option value="Admin Saluran - 500K">📢 Admin Saluran - 500K</option>
+      <option value="Reseller - 1JT">👑 Reseller - 1JT</option>
+    </select>
+
+    <button onclick="kirimWA()" class="btn w-full py-2 rounded font-bold text-lg transition-all">💬 Join via WhatsApp</button>
+  </div>
+  <!-- ✅ Tombol -->
+<button onclick="togglePopup()" class="mt-6 inline-block px-6 py-3 rounded-xl text-white font-bold border-2 border-var(--theme-color);-600 shadow-md hover:bg-red-600 hover:text-black transition-all duration-300 hover:shadow-red-500/50">
+  🎯 Syarat & Keuntungan Gabung
+</button>
+
+<!-- ✅ Popup -->
+<div id="popup" class="fixed top-0 left-0 w-full h-full bg-black bg-opacity-80 flex items-center justify-center hidden z-50">
+  <div class="bg-zinc-900 text-white max-w-md w-full p-6 rounded-2xl shadow-xl border-2 border-var(--theme-color);-600 animate-slideUp relative">
+    
+    <h2 class="text-2xl font-bold text-var(-theme-color)-500 mb-4 text-center">📜 Syarat & Keuntungan</h2>
+
+    <div class="space-y-4 text-sm leading-relaxed">
+      <div>
+        <h3 class="text-red-400 font-semibold mb-1">✅ Keuntungan Bergabung:</h3>
+        <ul class="list-disc ml-6">
+          <li>Bisa dijual kembali ke player lain</li>
+          <li>Gabung komunitas Fixa yang aktif & ramai</li>
+          <li>Auto dipercaya pembeli (branding Team Fixa)</li>
+          <li>Full akses ke semua fitur dan update</li>
+          <li>Cocok buat bisnis jangka panjang</li>
+          <li>Akses ke grup & saluran cheat eksklusif</li>
+          <li>Update tools setiap minggu (VIP Only)</li>
+          <li>Harga permanen, tanpa biaya bulanan</li>
+          <li>Dukungan langsung dari Admin & Team</li>
+          <li>Reseller dapet semua akses + untung jual ulang</li>
+        </ul>
+      </div>
+
+      <div>
+        <h3 class="text-red-400 font-semibold mb-1">⚠️ Syarat & Ketentuan:</h3>
+        <ul class="list-disc ml-6">
+          <li>Wajib kirim data diri (KTP/Kartu Player)</li>
+          <li>Siapa pun yang langsung jual ke pembeli sebelum verifikasi, langsung dikeluarkan dari tim</li>
+          <li>Nomor WhatsApp aktif & tidak spam</li>
+          <li>Gunakan tools Fixa dengan bijak, tidak untuk merugikan orang lain</li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- ❌ Tombol Tutup -->
+    <button onclick="togglePopup()" class="absolute top-2 right-4 text-white text-2xl hover:text-red-500">×</button>
+  </div>
+</div>
+
+<!-- ✅ CSS Animasi -->
+<style>
+  @keyframes slideUp {
+    from { transform: translateY(100px); opacity: 0; }
+    to { transform: translateY(0); opacity: 1; }
+  }
+  .animate-slideUp {
+    animation: slideUp 0.3s ease-out;
+  }
+</style>
+
+<!-- ✅ Script Show/Hide -->
+<script>
+  function togglePopup() {
+    const popup = document.getElementById('popup');
+    popup.classList.toggle('hidden');
+  }
+</script>
+  <script>
+    function kirimWA() {
+      const nama = document.getElementById("nama").value.trim();
+      const nowa = document.getElementById("nowa").value.trim();
+      const alasan = document.getElementById("alasan").value.trim();
+      const paket = document.getElementById("paket").value;
+
+      if (!nama || !nowa || !alasan || !paket) {
+        alert("Lengkapi semua data terlebih dahulu ya!");
+        return;
+      }
+
+      const pesan = `Halo Admin, saya mau gabung Team Fixa.%0A%0A👤 Nama: ${nama}%0A📱 Nomor WA: ${nowa}%0A📝 Alasan Bergabung: ${alasan}%0A🎖️ Mau Role: ${paket}`;
+      const nomorAdmin = "6288220373629"; // Ganti dengan nomor kamu
+
+      window.open(`https://wa.me/${nomorAdmin}?text=${pesan}`, "_blank");
+    }
+  </script>
+</body>
+
+</html>

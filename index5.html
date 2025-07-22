@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <title>Testimoni Pengguna</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <style>
+  <style>
+    :root {
+      --theme-color: #FF3131;
+    }
+    body {
+      margin: 0;
+      padding: 0;
+      background-color: #000;
+      font-family: 'Arial', sans-serif;
+      color: var(--theme-color);
+    }
+
+    header {
+      text-align: center;
+      padding: 20px;
+      color: var(--theme-color);
+      text-shadow: 0 0 5px var(--theme-color);, 0 0 10px #ff0000;
+      font-size: 2em;
+    }
+
+    .container {
+      max-width: 700px;
+      margin: 0 auto;
+      padding: 20px;
+    }
+
+    .testimoni {
+      background-color: #111;
+      border-left: 5px solid var(--theme-color);
+      padding: 15px 20px;
+      margin: 15px 0;
+      border-radius: 8px;
+      box-shadow: 0 0 10px var(--theme-color);
+    }
+
+    .testimoni p {
+      margin: 5px 0;
+    }
+
+    .user {
+      color: #fff;
+      font-weight: bold;
+    }
+
+    .device-game {
+      font-size: 0.9em;
+      color: #888;
+    }
+
+    .btn-container {
+      position: fixed;
+      bottom: 20px;
+      left: 20px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .btn {
+      background-color: #007bff;
+      color: white;
+      border: none;
+      padding: 10px 15px;
+      border-radius: 10px;
+      font-size: 14px;
+      cursor: pointer;
+      box-shadow: 0 0 10px #007bff80;
+    }
+
+    .btn:hover {
+      background-color: #0056b3;
+    }
+  </style>
+  <script>
+    // Ambil warna dari localStorage, jika ada
+    const savedColor = localStorage.getItem('userColor');
+    if (savedColor) {
+      document.documentElement.style.setProperty('--theme-color', savedColor);
+    }
+  </script>
+</head>
+<body>
+
+<header>📝 Testimoni Pengguna</header>
+
+<div class="container" id="testimoniContainer">
+  <!-- Testimoni akan dimuat di sini -->
+</div>
+
+<script>
+  const names = [
+    "Raka", "Nanda", "Siska", "Bayu", "Rini", "Dewi", "Andra", "Sandro", "Alif", "Gita",
+    "Yudha", "Lina", "Bambang", "Putri", "Reza", "Maya", "Gilang", "Rafa", "Indah", "Bagus",
+    "Farhan", "Santi", "Yuni", "Ari", "Cindy", "Dian", "Iqbal", "Nina", "Kevin", "Ratna",
+    "Wahyu", "Zahra", "Aditya", "Lutfi", "Silvi", "Angga", "Rizki", "Tika", "Nando", "Dinda",
+    "Vina", "Agung", "Bella", "Fikri", "Ayu", "Salma", "Fadil", "Daffa", "Laila", "Rendy"
+  ];
+
+  const devices = ["Android", "iPhone", "PC"];
+  const games = ["Free Fire", "Mobile Legends", "PUBG"];
+
+  const uniqueComments = [
+    "Mantap cheatnya, langsung auto headshot.",
+    "Aman banget, udah seminggu pakai belum kena ban.",
+    "Gak nyangka bisa menang terus pake ini.",
+    "Tampilan simple tapi fitur keren.",
+    "Adminnya cepet bales, mantap deh.",
+    "Sumpah enak banget jadi MVP terus.",
+    "Cocok buat push rank!",
+    "Nyesel baru tahu sekarang 😭",
+    "Cheat paling aman yang pernah gua coba.",
+    "Udah coba semua, ini paling stabil.",
+    "Work banget di device gua.",
+    "PC gua kentang tapi tetap bisa pakai!",
+    "iPhone gua aman terus, nice.",
+    "Freefire makin seru pake cheat ini.",
+    "Gak lag sama sekali.",
+    "Auto savage ML!",
+    "Lancar jaya bang, makasih!",
+    "Suka banget tampilan menunya.",
+    "PUBG gua sekarang GG parah.",
+    "No recoil beneran work bro.",
+    "Keren abis, thankyou!",
+    "Sudah coba 3 hari full aman.",
+    "Cheatnya ga kelihatan, enak banget.",
+    "Langsung bisa top global.",
+    "Cocok buat turnamen iseng 😎",
+    "Support device jadul, respect.",
+    "Work di semua map ML.",
+    "Bisa setting sendiri, fleksibel banget.",
+    "UI-nya simple dan user friendly.",
+    "Cheatnya update terus, aman banget.",
+    "Mobile Legends gua naik terus rank-nya.",
+    "PUBG chicken dinner terus.",
+    "FF damage 999 asli ngeri.",
+    "Nyobain di iPhone XR, aman jaya.",
+    "Sudah dipakai di warnet juga lancar.",
+    "Setiap fitur bener-bener jalan.",
+    "Gak ribet installnya, tinggal klik.",
+    "Menu pembelian jelas dan gampang.",
+    "Cheat ini legend sih.",
+    "Masih aman sampe patch terbaru.",
+    "Gak nyangka bakal work sehalus ini.",
+    "Kaya main pake script dewa.",
+    "Pokoknya GG banget!",
+    "Gak nyesel beli disini.",
+    "Harga murah fitur dewa.",
+    "Top-up langsung dikasih file-nya.",
+    "Ga ribet sama sekali setupnya.",
+    "Keren bisa pilih sesuai device.",
+    "Bener-bener bantu banget buat turnamen.",
+    "Fix langganan tiap season!"
+  ];
+
+  const container = document.getElementById('testimoniContainer');
+
+  for (let i = 0; i < 50; i++) {
+    const name = names[i]; // unik
+    const device = devices[Math.floor(Math.random() * devices.length)];
+    const game = games[Math.floor(Math.random() * games.length)];
+    const comment = uniqueComments[i]; // unik juga
+
+    const div = document.createElement('div');
+    div.className = 'testimoni';
+    div.innerHTML = `
+      <p class="user">⭐ ${name}</p>
+      <p class="device-game">${device} - ${game}</p>
+      <p>"${comment}"</p>
+    `;
+    container.appendChild(div);
+  }
+</script>
+
+</body>
+</html>
