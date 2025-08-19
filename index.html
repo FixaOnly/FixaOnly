@@ -1,0 +1,343 @@
+<!doctype html>
+
+<html lang="id">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>List Harga — PC / Android / iPhone</title>
+  <style>
+    :root{
+      --bg:#0a0a0a;
+      --card:#101013;
+      --muted:#b9b9c9;
+      --text:#f5f5f7;
+      --primary:#ff2d55; /* neon red */
+      --accent:#ff4d6d;
+      --ring: 0 0 0 2px var(--primary);
+      --shadow: 0 10px 30px rgba(255,45,85,.15);
+      --radius: 18px;
+    }
+    *{box-sizing:border-box}
+    html,body{background:var(--bg);color:var(--text);font-family:ui-rounded, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, "Apple Color Emoji", "Segoe UI Emoji";}
+    .wrap{max-width:1100px;margin:32px auto;padding:0 16px}
+    .heading{display:flex;align-items:center;gap:12px;}
+    .heading h1{font-size:clamp(20px,3.2vw,34px);margin:0}
+    .heading .badge{padding:.35rem .7rem;border:1px solid #27272a;border-radius:999px;font-size:.8rem;color:var(--muted)}
+    .grid{display:grid;grid-template-columns:repeat(3,1fr);gap:18px;margin-top:18px}
+    @media (max-width:960px){.grid{grid-template-columns:1fr 1fr}}
+    @media (max-width:640px){.grid{grid-template-columns:1fr}}.card{background:linear-gradient(180deg,rgba(255,45,85,.08),transparent 45%) , var(--card); border:1px solid #1d1d22;border-radius:var(--radius);box-shadow:var(--shadow);overflow:hidden;}
+.card-header{display:flex;align-items:center;justify-content:space-between;padding:18px 16px;border-bottom:1px solid #1e1e25;background:radial-gradient(1200px 220px at -10% -60%,rgba(255,45,85,.15),transparent 60%)}
+.title{display:flex;align-items:center;gap:12px}
+.title .icon{width:38px;height:38px;border-radius:12px;display:grid;place-items:center;background:#1a1a1f;border:1px solid #24242a;font-size:20px}
+.title h2{margin:0;font-size:1.1rem;letter-spacing:.3px}
+.note{font-size:.85rem;color:var(--muted)}
+
+.body{padding:10px 8px 14px}
+.search{margin:8px 8px 12px;display:flex;gap:8px}
+.search input{width:100%;background:#0f0f14;border:1px solid #222228;border-radius:12px;padding:10px 12px;color:var(--text);outline:none}
+.search input:focus{box-shadow:var(--ring)}
+
+.prices{display:grid;gap:6px;padding:0;margin:0;list-style:none}
+.item{display:flex;align-items:center;gap:10px;justify-content:space-between;border:1px solid #1d1d22;background:#0e0e12;border-radius:14px;padding:12px 12px}
+.left{display:flex;align-items:center;gap:10px;min-width:0}
+.name{font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.tag{font-size:.7rem;border:1px dashed #2b2b33;color:var(--muted);padding:.25rem .45rem;border-radius:999px;}
+.price{font-weight:700;letter-spacing:.3px}
+.price::before{content:"Rp ";opacity:.9}
+
+.divider{height:1px;background:#1c1c22;margin:10px 8px}
+
+.footer{display:flex;justify-content:space-between;align-items:center;padding:12px 14px;border-top:1px solid #1e1e25;color:var(--muted);font-size:.85rem}
+.cta{display:inline-flex;align-items:center;gap:8px;background:linear-gradient(180deg,var(--primary),var(--accent));border:none;border-radius:12px;color:#fff;padding:10px 14px;font-weight:700;cursor:pointer;text-decoration:none}
+.cta:focus{outline:none;box-shadow:var(--ring)}
+
+/* Helper: visually group items */
+.section-label{margin:10px 9px 6px;color:var(--muted);font-size:.8rem;text-transform:uppercase;letter-spacing:.12em}
+
+  </style>
+</head>
+<body>
+  <main class="wrap">
+    <div class="heading">
+      <h1>List Harga</h1>
+      <span class="badge">Mudah diedit • Tampilan kotak</span>
+    </div><div class="grid">
+  <!-- PC -->
+  <section class="card" data-card="pc">
+    <div class="card-header">
+      <div class="title">
+        <div class="icon">🤖</div>
+        <h2>Menu Panel Android Prmemium</h2>
+      </div>
+      <span class="note">No Root / Root</span>
+    </div>
+    <div class="body">
+      <div class="search" hidden>
+        <input type="search" placeholder="Cari item Panel…" aria-label="Cari item Panel" data-search="pc"/>
+      </div>
+
+      <div class="section-label">Paket Populer</div>
+      <ul class="prices" id="pc-populer">
+        <li class="item"><div class="left"><span class="name">Panel Andro Shadow Mods V1</span><span class="tag">3 Hari</span></div><div class="price" data-price>40.000</div></li>
+        <li class="item"><div class="left"><span class="name">Panel Andro Shadow Mods V1</span><span class="tag">7 hari</span></div><div class="price" data-price>70.000</div></li>
+        <li class="item"><div class="left"><span class="name">Panel Andro Shadow Mods V1</span><span class="tag">14 hari</span></div><div class="price" data-price>100.000</div></li>
+        <li class="item"><div class="left"><span class="name">Panel Andro Shadow Mods V1</span><span class="tag">1 Bulan</span></div><div class="price" data-price>200.000</div></li>
+        <li class="item"><div class="left"><span class="name">Panel Andro Shadow Mods V1</span><span class="tag">Permanen</span></div><div class="price" data-price>500.000</div></li>
+        <span class="note">Panel Andro V2👇</span>
+        <li class="item"><div class="left"><span class="name">Panel Andro Shadow Mods V2</span><span class="tag">3 Hari</span></div><div class="price" data-price>50.000</div></li>
+        <li class="item"><div class="left"><span class="name">Panel Andro Shadow Mods V2</span><span class="tag">7 hari</span></div><div class="price" data-price>90.000</div></li>
+        <li class="item"><div class="left"><span class="name">Panel Andro Shadow Mods V2</span><span class="tag">14 hari</span></div><div class="price" data-price>150.000</div></li>
+        <li class="item"><div class="left"><span class="name">Panel Andro Shadow Mods V2</span><span class="tag">1 Bulan</span></div><div class="price" data-price>250.000</div></li>
+        <li class="item"><div class="left"><span class="name">Panel Andro Shadow Mods V2</span><span class="tag">Permanen</span></div><div class="price" data-price>700.000</div></li>
+
+      </ul>
+
+      <div class="section-label">Add‑On</div>
+      <ul class="prices" id="pc-addon">
+        <li class="item"><div class="left"><span class="name">Free Cara Pasang</span></li>
+        <li class="item"><div class="left"><span class="name">Antiban/Anti Blacklist</span></li>
+        <li class="item"><div class="left"><span class="name">Update Prioritas</span></li>
+      </ul>
+    </div>
+    <div class="footer">
+      <span>Harga khusus perangkat Android.</span>
+      <a class="cta" href="chat.html" onclick="alert('Hubungi admin ;">Order</a>
+    </div>
+  </section>
+
+  <!-- Android -->
+  <section class="card" data-card="android">
+    <div class="card-header">
+      <div class="title">
+        <div class="icon">🤖</div>
+        <h2>Menu Injektor ShadowMods Premium [ Android ] </h2>
+      </div>
+      <span class="note">Semua merk HP</span>
+    </div>
+    <div class="body">
+      <div class="section-label">Paket Populer</div>
+      <ul class="prices" id="and-populer">
+        <li class="item"><div class="left"><span class="name">Injektor Premium</span><span class="tag">3 Hari</span></div><div class="price" data-price>15.000</div></li>
+        <li class="item"><div class="left"><span class="name">Injektor Premium</span><span class="tag">7 hari</span></div><div class="price" data-price>25.000</div></li>
+        <li class="item"><div class="left"><span class="name">Injektor Premium</span><span class="tag">30 hari</span></div><div class="price" data-price>85.000</div></li>
+        <li class="item"><div class="left"><span class="name">Injektor Premium</span><span class="tag">Permanen</span></div><div class="price" data-price>150.000</div></li>
+      </ul>
+
+      <div class="section-label">Add‑On</div>
+      <ul class="prices" id="and-addon">
+        <li class="item"><div class="left"><span class="name">Free Cara Pasang</span></li>
+        <li class="item"><div class="left"><span class="name">Shizuku/No Shizuku Bisa</span></div></li>
+        <li class="item"><div class="left"><span class="name">Antiban/Anti Blacklist</span></li>
+        <li class="item"><div class="left"><span class="name">Beli Permanen Free Update</span></li>
+      </ul>
+    </div>
+    <div class="footer">
+      <span>Cocok untuk Android 8+</span>
+      <a class="cta" href="chat.html" onclick="alert('Hubungi admin ;">Order</a>
+    </div>
+  </section>
+      
+      <section class="card" data-card="android">
+    <div class="card-header">
+      <div class="title">
+        <div class="icon">🤖</div>
+        <h2>Menu Files Premium [ Android ]  </h2>
+      </div>
+      <span class="note">Semua merk HP</span>
+    </div>
+    <div class="body">
+      <div class="section-label">Paket Populer</div>
+      <ul class="prices" id="and-populer">
+        <li class="item"><div class="left"><span class="name">Aimbot Drag Hs</span></div><div class="price" data-price>30.000</div></li>
+        <li class="item"><div class="left"><span class="name">Aimbot 50%</span></div><div class="price" data-price>25.000</div></li>
+        <li class="item"><div class="left"><span class="name">Aimlock Badan</span></div><div class="price" data-price>40.000</div></li>
+        <li class="item"><div class="left"><span class="name">Aimlock 70%</span></div><div class="price" data-price>30.000</div></li>
+        <li class="item"><div class="left"><span class="name">Aimfov 60%</span></div><div class="price" data-price>25.000</div></li>
+        <li class="item"><div class="left"><span class="name">Headlock V2</span></div><div class="price" data-price>55.000</div></li>
+
+        </ul>
+
+      <div class="section-label">Add‑On</div>
+      <ul class="prices" id="and-addon">
+        <li class="item"><div class="left"><span class="name">Free Cara Pasang</span><span class="tag">Good</span></div></li>
+        <li class="item"><div class="left"><span class="name">Antiban/Anti Blacklist</span><span class="tag">Good</span></div></li>
+        <li class="item"><div class="left"><span class="name">Work Semua Android</span><span class="tag">999x</span></div></li>
+      </ul>
+    </div>
+    <div class="footer">
+      <span>Cocok untuk Android 8+</span>
+      <a class="cta" href="chat.html" onclick="alert('Hubungi admin ;">Order</a>
+    </div>
+  </section>
+      
+      <section class="card" data-card="android">
+    <div class="card-header">
+      <div class="title">
+        <div class="icon">🤖</div>
+        <h2>Menu Hologram Premium</h2>
+      </div>
+      <span class="note">Semua merk HP</span>
+    </div>
+    <div class="body">
+      <div class="section-label">Paket Populer</div>
+      <ul class="prices" id="and-populer">
+        <li class="item"><div class="left"><span class="name">Hologram Senjata</span></div><div class="price" data-price>25.000</div></li>
+        <li class="item"><div class="left"><span class="name">Hologram Full Badan</span></div><div class="price" data-price>50.000</div></li>
+        <li class="item"><div class="left"><span class="name">Hologram 3D</span></div><div class="price" data-price>40.000</div></li>
+        <li class="item"><div class="left"><span class="name">Hologram Pribadi</span></div><div class="price" data-price>70.000</div></li>
+        </ul>
+
+      <div class="section-label">Add‑On</div>
+      <ul class="prices" id="and-addon">
+        <li class="item"><div class="left"><span class="name">Work Semua FreeFire</span></li>
+        <li class="item"><div class="left"><span class="name">Free Cara Pasang</span></div></li>
+        <li class="item"><div class="left"><span class="name">Antiban/Anti Blacklist</span></div></li>
+      </ul>
+    </div>
+    <div class="footer">
+      <span>Cocok untuk Android 8+</span>
+      <a class="cta" href="chat.html" onclick="alert('Hubungi admin ;">Order</a>
+    </div>
+  </section>
+      
+      <section class="card" data-card="android">
+    <div class="card-header">
+      <div class="title">
+        <div class="icon">🤖</div>
+        <h2>Menu Aplikasi Premium</h2>
+      </div>
+      <span class="note">Semua merk HP</span>
+    </div>
+    <div class="body">
+      <div class="section-label">Paket Populer</div>
+      <ul class="prices" id="and-populer">
+        <li class="item"><div class="left"><span class="name">Aplikasi Sensi</span></div><div class="price" data-price>30.000</div></li>
+        <li class="item"><div class="left"><span class="name">Aplikasi GameBooster Anti Lag</span></div><div class="price" data-price>40.000</div></li>
+        <li class="item"><div class="left"><span class="name">Aplikasi Bypass Antiban V1</span></div><div class="price" data-price>30.000</div></li>
+        <li class="item"><div class="left"><span class="name">Aplikasi Bypass Antiban V2</span></div><div class="price" data-price>50.000</div></li>
+        <li class="item"><div class="left"><span class="name">Aplikasi Regedit</span></div><div class="price" data-price>30.000</div></li>
+        </ul>
+
+      <div class="section-label">Add‑On</div>
+      <ul class="prices" id="and-addon">
+        <li class="item"><div class="left"><span class="name">Free Cara Pasang</span></div></li>
+        <li class="item"><div class="left"><span class="name">Antiban/Anti Blacklist</span></li>
+      </ul>
+    </div>
+    <div class="footer">
+      <span>Cocok untuk Android 8+</span>
+      <a class="cta" href="chat.html" onclick="alert('Hubungi admin ;">Order</a>
+    </div>
+  </section>
+      
+      <section class="card" data-card="android">
+    <div class="card-header">
+      <div class="title">
+        <div class="icon">💻</div>
+        <h2>Menu Panel Pc/Laptop V1</h2>
+      </div>
+      <span class="note">Premium</span>
+    </div>
+    <div class="body">
+      <div class="section-label">Paket Populer</div>
+      <ul class="prices" id="and-populer">
+        <li class="item"><div class="left"><span class="name">1 Hari</span></div><div class="price" data-price>15.000</div></li>
+        <li class="item"><div class="left"><span class="name">3 Hari</span></div><div class="price" data-price>45.000</div></li>
+        <li class="item"><div class="left"><span class="name">7 Hari</span></div><div class="price" data-price>70.000</div></li>
+        <li class="item"><div class="left"><span class="name">1 Bulan</span></div><div class="price" data-price>150.000</div></li>
+        <li class="item"><div class="left"><span class="name">Permanen</span></div><div class="price" data-price>500.000</div></li>
+        </ul>
+
+      <div class="section-label">Add‑On</div>
+      <ul class="prices" id="and-addon">
+        <li class="item"><div class="left"><span class="name">Free Cara Pasang/Remot</span></li>
+        <li class="item"><div class="left"><span class="name">Antiban/Anti Blacklist</span></li>
+      </ul>
+    </div>
+    <div class="footer">
+      <span>Cocok Untuk Windows 10+</span>
+      <a class="cta" href="chat.html" onclick="alert('Hubungi admin ;">Order</a>
+    </div>
+  </section>
+      
+      <section class="card" data-card="android">
+    <div class="card-header">
+      <div class="title">
+        <div class="icon">💻</div>
+        <h2>Menu Panel Pc/Laptop V2</h2>
+      </div>
+      <span class="note">Premium</span>
+    </div>
+    <div class="body">
+      <div class="section-label">Paket Populer</div>
+      <ul class="prices" id="and-populer">
+        <li class="item"><div class="left"><span class="name">1 Hari</span></div><div class="price" data-price>30.000</div></li>
+        <li class="item"><div class="left"><span class="name">3 Hari</span></div><div class="price" data-price>70.000</div></li>
+        <li class="item"><div class="left"><span class="name">7 Hari</span></div><div class="price" data-price>150.000</div></li>
+        <li class="item"><div class="left"><span class="name">1 Bulan</span></div><div class="price" data-price>300.000</div></li>
+        <li class="item"><div class="left"><span class="name">Permanen</span></div><div class="price" data-price>2jt</div></li>
+        </ul>
+
+      <div class="section-label">Add‑On</div>
+      <ul class="prices" id="and-addon">
+        <li class="item"><div class="left"><span class="name">Free Cara Pasang/Remot</span></li>
+        <li class="item"><div class="left"><span class="name">Antiban/Anti Blacklist</span></li>
+      </ul>
+    </div>
+    <div class="footer">
+      <span>Cocok Untuk Windows 10+</span>
+      <a class="cta" href="chat.html" onclick="alert('Hubungi admin ;">Order</a>
+    </div>
+  </section>
+
+  <!-- iPhone -->
+  <section class="card" data-card="iphone">
+    <div class="card-header">
+      <div class="title">
+        <div class="icon">🍎</div>
+        <h2>Menu Panel Premium</h2>
+      </div>
+      <span class="note">iOS / iPadOS</span>
+    </div>
+    <div class="body">
+      <div class="section-label">Paket Populer</div>
+      <ul class="prices" id="ios-populer">
+        <li class="item"><div class="left"><span class="name">1 Hari</span></div><div class="price" data-price>70.000</div></li>
+        <li class="item"><div class="left"><span class="name">3 Hari</span></div><div class="price" data-price>200.000</div></li>
+        <li class="item"><div class="left"><span class="name">7 Hari</span></div><div class="price" data-price>400.000</div></li>
+       </ul>
+
+      <div class="section-label">Add‑On</div>
+      <ul class="prices" id="ios-addon">
+        <li class="item"><div class="left"><span class="name">Free Cara Pasang</span></li>
+        <li class="item"><div class="left"><span class="name">Antiban/Anti Blacklist</span></li>
+        <li class="item"><div class="left"><span class="name">No JailBreak</span></li>
+      </ul>
+    </div>
+    <div class="footer">
+      <span>Kompatibel iOS 14+</span>
+      <a class="cta" href="chat.html" onclick="alert('Hubungi admin ;">Order</a>
+    </div>
+  </section>
+</div>
+
+<div class="divider"></div>
+
+<p style="color:var(--muted);font-size:.9rem;margin:10px 2px 0">Catatan: Harga bisa berubah sewaktu‑waktu. Semua yang di jual sudah melalui testing sebelum di jual
+</p>
+
+  </main>  <!-- Opsional: pencarian cepat per-kartu (tinggal hilangkan attribute hidden pada .search) -->  <script>
+    // Kalau mau aktifkan pencarian: hapus 'hidden' pada .search di tiap kartu.
+    document.querySelectorAll('[data-search]').forEach(inp=>{
+      inp.addEventListener('input', e=>{
+        const q = e.target.value.toLowerCase().trim();
+        const card = e.target.closest('.card');
+        card.querySelectorAll('.item').forEach(li=>{
+          const name = li.querySelector('.name')?.textContent.toLowerCase()||"";
+          const tag = li.querySelector('.tag')?.textContent.toLowerCase()||"";
+          li.style.display = (name.includes(q) || tag.includes(q)) ? 'flex' : 'none';
+        });
+      });
+    });
+  </script></body>
+</html>

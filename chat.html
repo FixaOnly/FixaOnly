@@ -1,0 +1,274 @@
+<!doctype html>
+
+<html lang="id">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Hubungi / Order Admin — Fixa Style</title>
+  <style>
+    :root{
+      --bg:#0a0a0a;
+      --card:#101013;
+      --muted:#b9b9c9;
+      --text:#f5f5f7;
+      --primary:#ff2d55; /* neon red */
+      --accent:#ff4d6d;
+      --ring: 0 0 0 2px var(--primary);
+      --shadow: 0 10px 30px rgba(255,45,85,.18);
+      --radius: 18px;
+    }
+    *{box-sizing:border-box}
+    html,body{background:var(--bg);color:var(--text);font-family:ui-rounded, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, "Apple Color Emoji", "Segoe UI Emoji";}
+    a{color:inherit}
+    .wrap{max-width:1050px;margin:32px auto;padding:0 16px}.header{display:flex;align-items:center;justify-content:space-between;gap:12px}
+.header h1{margin:0;font-size:clamp(20px,3.2vw,34px)}
+.badge{padding:.35rem .7rem;border:1px solid #27272a;border-radius:999px;font-size:.8rem;color:var(--muted)}
+
+.grid{display:grid;grid-template-columns:2fr 1.4fr;gap:18px;margin-top:18px}
+@media (max-width:960px){.grid{grid-template-columns:1fr}}
+
+.card{background:linear-gradient(180deg,rgba(255,45,85,.08),transparent 45%) , var(--card); border:1px solid #1d1d22;border-radius:var(--radius);box-shadow:var(--shadow);overflow:hidden}
+.card-h{display:flex;align-items:center;justify-content:space-between;padding:16px;border-bottom:1px solid #1e1e25;background:radial-gradient(1200px 220px at -10% -60%,rgba(255,45,85,.15),transparent 60%)}
+.title{display:flex;align-items:center;gap:12px}
+.icon{width:38px;height:38px;border-radius:12px;display:grid;place-items:center;background:#1a1a1f;border:1px solid #24242a;font-size:20px}
+.card-b{padding:16px}
+
+.row{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+@media (max-width:640px){.row{grid-template-columns:1fr}}
+
+label{display:block;font-size:.85rem;color:var(--muted);margin:4px 2px 6px}
+input,select,textarea{width:100%;background:#0f0f14;border:1px solid #222228;border-radius:12px;padding:11px 12px;color:var(--text);outline:none}
+textarea{min-height:110px;resize:vertical}
+input:focus,select:focus,textarea:focus{box-shadow:var(--ring)}
+
+.chips{display:flex;flex-wrap:wrap;gap:8px;margin-top:8px}
+.chip{border:1px dashed #2b2b33;color:var(--muted);padding:.35rem .6rem;border-radius:999px;cursor:pointer;user-select:none}
+
+.actions{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-top:14px}
+@media (max-width:640px){.actions{grid-template-columns:1fr}}
+.btn{display:flex;align-items:center;justify-content:center;gap:10px;font-weight:800;border:none;border-radius:14px;padding:12px 14px;cursor:pointer;text-decoration:none}
+.btn:focus{outline:none;box-shadow:var(--ring)}
+.wa{background:linear-gradient(180deg,#25D366,#1ea854);color:#05260f}
+.tg{background:linear-gradient(180deg,#37aee2,#1e96c8);color:#052033}
+.ig{background:linear-gradient(45deg,#f58529,#feda77,#dd2a7b,#8134af,#515bd4);color:#1a0b1a}
+
+.contact-cards{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
+@media (max-width:960px){.contact-cards{grid-template-columns:1fr}}
+.citem{border:1px solid #1d1d22;background:#0e0e12;border-radius:14px;padding:14px}
+.citem .meta{font-size:.85rem;color:var(--muted)}
+
+.muted{color:var(--muted);font-size:.9rem}
+.small{font-size:.82rem}
+.center{text-align:center}
+
+.copy{border:1px solid #2b2b33;background:#0f0f14;color:var(--muted);border-radius:999px;padding:.35rem .6rem;cursor:pointer}
+
+  </style>
+</head>
+<body>
+  <main class="wrap">
+    <div class="header">
+      <h1>Hubungi / Order Admin</h1>
+      <span class="badge">WA • Telegram • Instagram</span>
+    </div><div class="grid">
+  <!-- FORM PESAN OTOMATIS -->
+  <section class="card">
+    <div class="card-h">
+      <div class="title">
+        <div class="icon">📝</div>
+        <strong>Form Cepat</strong>
+      </div>
+      <span class="small muted">Bikin pesan otomatis → kirim via WA/TG/IG</span>
+    </div>
+    <div class="card-b">
+      <div class="row">
+        <div>
+          <label>Nama</label>
+          <input id="nama" placeholder=" Nama Anda" />
+        </div>
+        <div>
+          <label>Platform</label>
+          <select id="platform">
+            <option>Android</option>
+            <option>PC</option>
+            <option>iPhone</option>
+          </select>
+        </div>
+      </div>
+      <div class="row">
+        <div>
+          <label>Jenis Order</label>
+          <input id="jenis" placeholder="Panel/Files/Holo/Apk" />
+        </div>
+        <div>
+          <label>Kontak Balasan</label>
+          <input id="kontak" placeholder="Wa/Telegram/IG" />
+        </div>
+      </div>
+      <div style="margin-top:8px">
+        <label>Catatan</label>
+        <textarea id="catatan" placeholder="Tulis detail tambahan…"></textarea>
+      </div>
+
+      <div class="chips">
+        <span class="chip" data-add="Order Harian">+ Harian</span>
+        <span class="chip" data-add="Order Mingguan">+ Mingguan</span>
+        <span class="chip" data-add="Order Bulanan">+ Bulanan</span>
+        </div>
+
+      <div class="actions">
+        <a id="send-wa" class="btn wa" href="#">💬 WhatsApp</a>
+        <a id="send-tg" class="btn tg" href="#">✈️ Telegram</a>
+        <a id="send-ig" class="btn ig" href="#">📸 Instagram</a>
+      </div>
+      <p class="muted" style="margin-top:10px">Tip: isi form → klik salah satu tombol di atas. Pesan akan terisi otomatis.</p>
+    </div>
+  </section>
+
+  <!-- KONTAK LANGSUNG -->
+  <section class="card">
+    <div class="card-h">
+      <div class="title">
+        <div class="icon">📇</div>
+        <strong>Kontak Admin</strong>
+      </div>
+      <span class="small muted">Klik untuk buka aplikasi</span>
+    </div>
+    <div class="card-b">
+      <div class="contact-cards">
+        <div class="citem">
+          <div style="display:flex;align-items:center;justify-content:space-between">
+            <div>
+              <strong>WhatsApp</strong>
+              <div class="meta">Nomor utama</div>
+            </div>
+            <button class="copy" data-copy="6283133989258">Salin</button>
+          </div>
+          <div style="margin-top:10px" class="muted">+62 815-4315-6112</div>
+          <div style="margin-top:10px;display:flex;gap:8px">
+            <a class="btn wa" target="_blank" rel="noopener" href="https://wa.me/6281543156112">Chat Sekarang</a>
+          </div>
+        </div>
+
+        <div class="citem">
+          <div style="display:flex;align-items:center;justify-content:space-between">
+            <div>
+              <strong>Telegram</strong>
+              <div class="meta">Username</div>
+            </div>
+            <button class="copy" data-copy="@FixaOnly">Salin</button>
+          </div>
+          <div style="margin-top:10px" class="muted">@FixaOnly</div>
+          <div style="margin-top:10px;display:flex;gap:8px">
+            <a class="btn tg" target="_blank" rel="noopener" href="https://t.me/FixaOnly">Buka Telegram</a>
+          </div>
+        </div>
+
+        <div class="citem">
+          <div style="display:flex;align-items:center;justify-content:space-between">
+            <div>
+              <strong>Instagram</strong>
+              <div class="meta">Akun resmi</div>
+            </div>
+            <button class="copy" data-copy="@FixaOnly">Salin</button>
+          </div>
+          <div style="margin-top:10px" class="muted">@FixaXiterz</div>
+          <div style="margin-top:10px;display:flex;gap:8px">
+            <a class="btn ig" target="_blank" rel="noopener" href="https://www.instagram.com/fixaxiterz?igsh=djkxeGwyNzQ3b2xp">Kunjungi Profil</a>
+            <!-- DM deep link akan dicoba via skema -->
+            <a class="btn ig" id="ig-dm" href="https://www.instagram.com/fixaxiterz?igsh=djkxeGwyNzQ3b2xp">Kirim DM</a>
+          </div>
+        </div>
+      </div>
+      <p class="muted" style="margin-top:12px">.</p>
+    </div>
+  </section>
+</div>
+
+<p class="muted center" style="margin-top:16px">Fixa Xiterz 2025-2026</p>
+
+  </main>  <script>
+    // KONFIGURASI — ganti sesuai kebutuhan
+    const CONFIG = {
+      waNumber: '6281543156112',
+      tgUser: 'FixaOnly',
+      igUser: 'FixaXiterz'
+    };
+
+    const el = id => document.getElementById(id);
+
+    function buildMessage(){
+      const nama = el('nama').value.trim() || '-';
+      const platform = el('platform').value;
+      const jenis = el('jenis').value.trim() || '-';
+      const kontak = el('kontak').value.trim() || '-';
+      const catatan = el('catatan').value.trim() || '-';
+      const lines = [
+        `Halo Admin, saya mau order.`,
+        `Nama: ${nama}`,
+        `Platform: ${platform}`,
+        `Jenis Order: ${jenis}`,
+        `Kontak Balasan: ${kontak}`,
+        `Catatan: ${catatan}`,
+        `— dikirim dari halaman Order Fixa`
+      ];
+      return lines.join('\n');
+    }
+
+    // chips auto-append ke catatan
+    document.querySelectorAll('.chip').forEach(ch => {
+      ch.addEventListener('click', () => {
+        const add = ch.getAttribute('data-add');
+        const t = el('catatan');
+        t.value = (t.value ? t.value + '\n' : '') + add;
+      });
+    });
+
+    // tombol kirim
+    document.getElementById('send-wa').addEventListener('click', (e)=>{
+      e.preventDefault();
+      const text = encodeURIComponent(buildMessage());
+      const url = `https://wa.me/${CONFIG.waNumber}?text=${text}`;
+      window.open(url, '_blank');
+    });
+
+    document.getElementById('send-tg').addEventListener('click', (e)=>{
+      e.preventDefault();
+      const text = encodeURIComponent(buildMessage());
+      // Telegram tidak selalu mendukung prefilled text di t.me, jadi kita tambahkan setelah username jika klien mendukung.
+      const url = `https://t.me/${CONFIG.tgUser}`; // user akan paste pesan sendiri bila klien tidak mendukung
+      window.open(url, '_blank');
+      setTimeout(()=>{
+        alert('Pesan otomatis disalin. Tempelkan di Telegram jika belum terisi.');
+      }, 500);
+      navigator.clipboard?.writeText?.(decodeURIComponent(text)).catch(()=>{});
+    });
+
+    document.getElementById('send-ig').addEventListener('click', (e)=>{
+      e.preventDefault();
+      const user = CONFIG.igUser;
+      // Coba buka aplikasi Instagram untuk DM; jika gagal, jatuh ke profile web
+      const igApp = `instagram://user?username=${user}`;
+      const web = `https://instagram.com/${user}`;
+      // upaya membuka skema aplikasi
+      const a = document.createElement('a');
+      a.href = igApp; a.click();
+      setTimeout(()=>{ window.open(web, '_blank'); }, 600);
+      const text = buildMessage();
+      navigator.clipboard?.writeText?.(text).then(()=>{
+        setTimeout(()=>alert('Pesan otomatis disalin. Tempelkan di DM Instagram.'),400);
+      }).catch(()=>{});
+    });
+
+    // tombol salin
+    document.querySelectorAll('.copy').forEach(btn=>{
+      btn.addEventListener('click',()=>{
+        const t = btn.getAttribute('data-copy');
+        navigator.clipboard?.writeText?.(t).then(()=>{
+          btn.textContent = 'Tersalin';
+          setTimeout(()=> btn.textContent = 'Salin', 1200);
+        })
+      })
+    })
+  </script></body>
+</html>
