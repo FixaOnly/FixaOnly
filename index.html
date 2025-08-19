@@ -136,6 +136,37 @@
       <a class="cta" href="chat.html" onclick="alert('Hubungi admin ;">Order</a>
     </div>
   </section>
+        
+        <section class="card" data-card="android">
+    <div class="card-header">
+      <div class="title">
+        <div class="icon">🤖</div>
+        <h2>Menu Apk Unban </h2>
+      </div>
+      <span class="note">Semua Jenis Ban</span>
+    </div>
+    <div class="body">
+      <div class="section-label">Paket Populer</div>
+      <ul class="prices" id="and-populer">
+        <li class="item"><div class="left"><span class="name">Unban ShadowMods</span><span class="tag">3 Hari</span></div><div class="price" data-price>15.000</div></li>
+        <li class="item"><div class="left"><span class="name">Unban ShadowMods</span><span class="tag">7 hari</span></div><div class="price" data-price>25.000</div></li>
+        <li class="item"><div class="left"><span class="name">Unban ShadowMods</span><span class="tag">30 hari</span></div><div class="price" data-price>85.000</div></li>
+        <li class="item"><div class="left"><span class="name">Unban ShadowMods</span><span class="tag">Permanen</span></div><div class="price" data-price>150.000</div></li>
+      </ul>
+
+      <div class="section-label">Add‑On</div>
+      <ul class="prices" id="and-addon">
+        <li class="item"><div class="left"><span class="name">Free Cara Pasang</span></li>
+        <li class="item"><div class="left"><span class="name">Support Jenis Ban</span></div></li>
+        <li class="item"><div class="left"><span class="name">Wa/Telegram/Instagram/Tiktok/FreeFire/Facebook</span></li>
+        <li class="item"><div class="left"><span class="name">Apk Untuk Membuka Ban!!</span></li>
+      </ul>
+    </div>
+    <div class="footer">
+      <span>Cocok untuk Android 8+</span>
+      <a class="cta" href="chat.html" onclick="alert('Hubungi admin ;">Order</a>
+    </div>
+  </section>
       
       <section class="card" data-card="android">
     <div class="card-header">
@@ -331,13 +362,4 @@
     document.querySelectorAll('[data-search]').forEach(inp=>{
       inp.addEventListener('input', e=>{
         const q = e.target.value.toLowerCase().trim();
-        const card = e.target.closest('.card');
-        card.querySelectorAll('.item').forEach(li=>{
-          const name = li.querySelector('.name')?.textContent.toLowerCase()||"";
-          const tag = li.querySelector('.tag')?.textContent.toLowerCase()||"";
-          li.style.display = (name.includes(q) || tag.includes(q)) ? 'flex' : 'none';
-        });
-      });
-    });
-  </script></body>
-  </html>
+        const card
