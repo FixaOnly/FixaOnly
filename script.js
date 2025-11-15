@@ -1,4 +1,4 @@
-// --- KONFIGURASI & INISIALISASI FIREBASE ---
+// --- FIREBASE & GITHUB CONFIGURATION ---
 // PASTE KONFIGURASI FIREBASE ANDA DI SINI
 const firebaseConfig = {
   apiKey: "AIzaSyCaNc6L_5AkvmXmrn3DtmR--xGFM7jvnv4",
@@ -10,15 +10,24 @@ const firebaseConfig = {
   appId: "1:311219711928:web:f2cca4c9ba49b0c5eea94d",
   measurementId: "G-BSYHPK2WC3"
 };
+// Initialize Firebase
 firebase.initializeApp(firebaseConfig);
 const db = firebase.database();
+
+// PERINGATAN: Jangan pernah mengekspos token ini di aplikasi publik/produksi!
+// Ini hanya aman untuk penggunaan pribadi.
+const GITHUB_TOKEN = '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'; // GANTI dengan token Anda
+const GITHUB_OWNER = 'FixaOnly'; // GANTI dengan username Anda
+const GITHUB_REPO = 'FixaOnlygg'; // GANTI dengan nama repo Anda
+const GITHUB_PATH = 'files/'; // Path di dalam repo untuk menyimpan gambar
 
 // --- GLOBAL VARIABLES ---
 let currentUser = null;
 let currentGroupId = null;
 let currentPrivateChatId = null;
-let blockedUsers = []; // Cache for blocked users
-let privateChatOptionsEl = null; // For dropdown menu
+let blockedUsers = [];
+let privateChatOptionsEl = null;
+let statusListener = null;
 
 // --- DOM ELEMENTS ---
 const views = document.querySelectorAll('.view');
@@ -28,27 +37,25 @@ const privacyIdInput = document.getElementById('privacyIdInput');
 const modal = document.getElementById('modal');
 const modalBody = document.getElementById('modalBody');
 const notification = document.getElementById('notification');
+const fullStatusModal = document.getElementById('fullStatusModal');
+const fullStatusImage = document.getElementById('fullStatusImage');
+const fullStatusCaption = document.getElementById('fullStatusCaption');
+const fullStatusMeta = document.getElementById('fullStatusMeta');
 
 // --- HELPER FUNCTIONS ---
 function generateId() {
-    // Fungsi ini tetap digunakan untuk ID lain seperti Grup, dll.
     return Math.random().toString().substring(2, 10);
 }
 
-// --- FUNGSI BARU UNTUK ID PENGGUNA ---
-const USER_ID_PREFIX = "FIXA-"; // Awalan untuk ID pengguna
-
+const USER_ID_PREFIX = "FIXA-";
 function generateUserId() {
-    // Menghasilkan ID dengan awalan "FIXA-" diikuti 9 karakter acak
     const randomPart = Math.random().toString().substring(2, 11);
     return USER_ID_PREFIX + randomPart;
 }
 
-// --- FUNGSI BARU UNTUK VISIBILITY ---
 function toggleInputVisibility(inputId, button) {
     const input = document.getElementById(inputId);
     const icon = button.querySelector('i');
-
     if (input.type === 'password') {
         input.type = 'text';
         icon.classList.remove('fa-eye');
@@ -65,7 +72,6 @@ function toggleSpanVisibility(spanId, button) {
     const icon = button.querySelector('i');
     const fullText = span.getAttribute('data-full-text');
     const maskedText = span.getAttribute('data-masked-text');
-
     if (span.innerText === maskedText) {
         span.innerText = fullText;
         icon.classList.remove('fa-eye');
@@ -98,6 +104,11 @@ function showNotification(message, duration = 5000) {
     setTimeout(() => notification.classList.remove('show'), duration);
 }
 
+function handleProfileImageError(img) {
+    img.onerror = null;
+    img.src = 'https://i.pravatar.cc/150?u=' + img.alt;
+}
+
 // --- BROWSER NOTIFICATION ---
 function requestNotificationPermission() {
     if ("Notification" in window && Notification.permission === "default") {
@@ -111,7 +122,7 @@ function triggerBrowserNotification(title, options) {
     }
 }
 
-// --- AUTH & USER SETUP ---
+// --- AUTH & USER SETUP (DIPERBAIKI) ---
 function checkAuthState() {
     const savedName = localStorage.getItem('chatUserName');
     const savedPrivacyId = localStorage.getItem('chatUserPrivacyId');
@@ -126,7 +137,7 @@ function showCreateAccountModal() {
     const content = `
         <h3><i class="fas fa-user-plus"></i> Buat Akun Baru</h3>
         <p>Simpan ID Privasi Anda dengan baik! Ini digunakan untuk login.</p>
-        <form onsubmit="createAccount(event)">
+        <form id="createAccountForm">
             <input type="text" id="newNameInput" placeholder="Nama Anda" required>
             <div class="password-container">
                 <input type="password" id="newPrivacyIdInput" placeholder="ID Privasi Anda" required readonly>
@@ -134,13 +145,15 @@ function showCreateAccountModal() {
                     <i class="fas fa-eye"></i>
                 </button>
             </div>
-            <button type="submit">Buat Akun</button>
+            <button type="submit"><i class="fas fa-user-plus"></i> Buat Akun</button>
         </form>
     `;
     showModal(content);
-    // Generate ID dan tampilkan di input
-    const privacyId = generateUserId(); // Menggunakan fungsi baru
+    const privacyId = generateUserId();
     document.getElementById('newPrivacyIdInput').value = privacyId;
+
+    // Tambahkan event listener ke form yang baru dibuat
+    document.getElementById('createAccountForm').addEventListener('submit', createAccount);
 }
 
 function createAccount(e) {
@@ -149,56 +162,111 @@ function createAccount(e) {
     const privacyId = document.getElementById('newPrivacyIdInput').value.trim();
     if (!name || !privacyId) return;
 
-    const publicId = generateUserId(); // Menggunakan fungsi baru
-    db.ref(`usersByPrivacyId/${privacyId}`).set(publicId).then(() => {
-        db.ref(`users/${publicId}`).set({
+    const publicId = generateUserId();
+    const submitBtn = e.target.querySelector('button[type="submit"]');
+    const originalText = submitBtn.innerHTML;
+    submitBtn.disabled = true;
+    submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Membuat Akun...';
+
+    db.ref(`usersByPrivacyId/${privacyId}`).set(publicId)
+    .then(() => {
+        return db.ref(`users/${publicId}`).set({
             name: name,
             privacyId: privacyId,
+            status: 'Halo, saya menggunakan ChatKu!',
+            profilePictureUrl: 'https://i.pravatar.cc/150?u=' + publicId,
+            caption: '',
             createdAt: firebase.database.ServerValue.TIMESTAMP
         });
+    })
+    .then(() => {
         localStorage.setItem('chatUserName', name);
         localStorage.setItem('chatUserPrivacyId', privacyId);
-        loginUser(name, privacyId);
+        showNotification('Akun berhasil dibuat!');
         closeModal();
-    }).catch(err => {
-        showNotification('ID Privasi sudah digunakan. Silakan coba lagi atau buat yang baru.');
+        loginUser(name, privacyId);
+    })
+    .catch((error) => {
+        console.error("Error creating account:", error);
+        let errorMessage = 'Gagal membuat akun.';
+        if (error.message && error.message.includes('PERMISSION_DENIED')) {
+            errorMessage = 'Error: Izin ditolak. Periksa aturan Firebase Anda.';
+        } else if (error.message.includes('exists')) {
+            errorMessage = 'ID Privasi sudah digunakan. Silakan coba lagi atau buat yang baru.';
+        }
+        showNotification(errorMessage);
+    })
+    .finally(() => {
+        submitBtn.disabled = false;
+        submitBtn.innerHTML = originalText;
     });
 }
 
 function loginUser(name, privacyId) {
+    const loginBtn = document.querySelector('#loginForm button[type="submit"]');
+    const originalText = loginBtn.innerHTML;
+    loginBtn.disabled = true;
+    loginBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Masuk...';
+
     db.ref(`usersByPrivacyId/${privacyId}`).once('value').then(snapshot => {
         if (snapshot.exists()) {
             const publicId = snapshot.val();
-            db.ref(`users/${publicId}`).once('value').then(userSnap => {
-                const userData = userSnap.val();
-                currentUser = { name: userData.name, id: publicId, privacyId: userData.privacyId };
-                
-                document.getElementById('displayName').textContent = currentUser.name;
-                
-                // --- Setup ID Pengguna (Selalu Terlihat) ---
-                const userIdSpan = document.getElementById('displayUserId');
-                userIdSpan.innerText = `ID: ${currentUser.id}`; // Tampilkan ID lengkap tanpa sensor
-
-                // --- Setup ID Privasi (Dapat Disembunyikan) ---
-                const privacyIdSpan = document.getElementById('displayPrivacyId');
-                const fullPrivacyText = `ID Privasi: ${currentUser.privacyId}`;
-                const maskedPrivacyText = `ID Privasi: ${currentUser.privacyId.substring(0, 10)}***`;
-                
-                privacyIdSpan.setAttribute('data-full-text', fullPrivacyText);
-                privacyIdSpan.setAttribute('data-masked-text', maskedPrivacyText);
-                privacyIdSpan.innerText = maskedPrivacyText; // Tampilkan dalam keadaan tersembunyi awalnya
-
-                showView('mainView');
-                setupUserPresence();
-                loadBlockedUsers();
-                listenForNotifications();
-                listenForFriendRequests();
-                listenForGroupInvites();
-                requestNotificationPermission();
-            });
+            return db.ref(`users/${publicId}`).once('value');
         } else {
-            showNotification('ID Privasi atau Nama salah.', 3000);
+            throw new Error('ID_PRIVASI_NOT_FOUND');
         }
+    }).then(userSnap => {
+        if (userSnap.exists()) {
+            const userData = userSnap.val();
+            currentUser = { 
+                name: userData.name, 
+                id: userSnap.key, // Lebih aman pakai key dari snapshot
+                privacyId: userData.privacyId,
+                status: userData.status || '',
+                profilePictureUrl: userData.profilePictureUrl || '',
+                caption: userData.caption || ''
+            };
+            
+            document.getElementById('displayName').textContent = currentUser.name;
+            const userIdSpan = document.getElementById('displayUserId');
+            userIdSpan.innerText = `ID: ${currentUser.id}`;
+
+            const privacyIdSpan = document.getElementById('displayPrivacyId');
+            const fullPrivacyText = `ID Privasi: ${currentUser.privacyId}`;
+            const maskedPrivacyText = `ID Privasi: ${currentUser.privacyId.substring(0, 10)}***`;
+            privacyIdSpan.setAttribute('data-full-text', fullPrivacyText);
+            privacyIdSpan.setAttribute('data-masked-text', maskedPrivacyText);
+            privacyIdSpan.innerText = maskedPrivacyText;
+
+            const headerPic = document.getElementById('headerProfilePicture');
+            headerPic.src = currentUser.profilePictureUrl;
+            headerPic.alt = currentUser.id;
+            headerPic.style.display = 'block';
+
+            showView('mainView');
+            setupUserPresence();
+            loadBlockedUsers();
+            listenForNotifications();
+            listenForFriendRequests();
+            listenForGroupInvites();
+            requestNotificationPermission();
+        } else {
+            throw new Error('USER_DATA_NOT_FOUND');
+        }
+    }).catch((error) => {
+        console.error("Login error:", error);
+        let errorMessage = 'Gagal masuk.';
+        if (error.message === 'ID_PRIVASI_NOT_FOUND') {
+            errorMessage = 'ID Privasi atau Nama salah.';
+        } else if (error.message === 'USER_DATA_NOT_FOUND') {
+            errorMessage = 'Terjadi kesalahan data. Silakan coba lagi.';
+        } else if (error.message && error.message.includes('PERMISSION_DENIED')) {
+            errorMessage = 'Error: Izin ditolak. Periksa aturan Firebase Anda.';
+        }
+        showNotification(errorMessage, 5000);
+    }).finally(() => {
+        loginBtn.disabled = false;
+        loginBtn.innerHTML = originalText;
     });
 }
 
@@ -211,12 +279,78 @@ loginForm.addEventListener('submit', (e) => {
     }
 });
 
+// ... semua fungsi lainnya tetap sama ...
+// --- EDIT PROFILE ---
+function showEditProfileModal() {
+    const content = `
+        <h3><i class="fas fa-user-edit"></i> Edit Profil</h3>
+        <form onsubmit="updateProfile(event)">
+            <div class="profile-modal-content">
+                <img id="editProfilePicture" src="${currentUser.profilePictureUrl}" alt="Profile" class="profile-picture-modal" onerror="handleProfileImageError(this)">
+            </div>
+            <input type="text" id="editNameInput" placeholder="Nama" value="${currentUser.name}" required>
+            <textarea id="editStatusInput" placeholder="Status" maxlength="100">${currentUser.status}</textarea>
+            <input type="url" id="editProfileUrlInput" placeholder="URL Foto Profil (opsional)" value="${currentUser.profilePictureUrl}">
+            <textarea id="editCaptionInput" placeholder="Caption" maxlength="150">${currentUser.caption}</textarea>
+            <button type="submit">Simpan Perubahan</button>
+        </form>
+    `;
+    showModal(content);
+}
+
+function updateProfile(e) {
+    e.preventDefault();
+    const name = document.getElementById('editNameInput').value.trim();
+    const status = document.getElementById('editStatusInput').value.trim();
+    const profilePictureUrl = document.getElementById('editProfileUrlInput').value.trim();
+    const caption = document.getElementById('editCaptionInput').value.trim();
+
+    const updates = {
+        name: name,
+        status: status,
+        profilePictureUrl: profilePictureUrl || 'https://i.pravatar.cc/150?u=' + currentUser.id,
+        caption: caption
+    };
+
+    db.ref(`users/${currentUser.id}`).update(updates).then(() => {
+        currentUser = { ...currentUser, ...updates };
+        document.getElementById('displayName').textContent = currentUser.name;
+        document.getElementById('headerProfilePicture').src = currentUser.profilePictureUrl;
+        showNotification('Profil berhasil diperbarui!');
+        closeModal();
+    });
+}
+
+// --- VIEW PUBLIC PROFILE ---
+function showPublicProfileModal(userId) {
+    if (userId === currentUser.id) {
+        showEditProfileModal();
+        return;
+    }
+    db.ref(`users/${userId}`).once('value').then(snapshot => {
+        const userData = snapshot.val();
+        if (!userData) {
+            showNotification('Profil pengguna tidak ditemukan.');
+            return;
+        }
+        const content = `
+            <div class="profile-modal-content">
+                <img src="${userData.profilePictureUrl || 'https://i.pravatar.cc/150?u=' + userId}" alt="${userData.name}" class="profile-picture-modal" onerror="handleProfileImageError(this)">
+                <div class="profile-name">${userData.name}</div>
+                <div class="profile-caption">${userData.caption || 'Tidak ada caption.'}</div>
+                <div class="profile-status">${userData.status || 'Tidak ada status.'}</div>
+                <p style="font-size:0.8em; color: var(--text-muted);">ID: ${userId}</p>
+            </div>
+        `;
+        showModal(content);
+    });
+}
+
 // --- USER PRESENCE (ONLINE STATUS) ---
 function setupUserPresence() {
     const myConnectionsRef = db.ref(`users/${currentUser.id}/connections`);
     const lastOnlineRef = db.ref(`users/${currentUser.id}/lastOnline`);
     const connectedRef = db.ref('.info/connected');
-
     connectedRef.on('value', (snap) => {
         if (snap.val() === true) {
             const con = myConnectionsRef.push();
@@ -240,7 +374,7 @@ function blockUser(userId) {
     db.ref(`users/${currentUser.id}/blockedUsers/${userId}`).set(true);
     showNotification('Pengguna telah diblokir.');
     if (privateChatOptionsEl) privateChatOptionsEl.remove();
-    backToMain(); // Go back to main to avoid chatting with blocked user
+    backToMain();
 }
 
 function unblockUser(userId) {
@@ -280,7 +414,7 @@ function deleteFriend(userId) {
 }
 
 function showPrivateChatOptions() {
-    if (privateChatOptionsEl) { // If already open, close it
+    if (privateChatOptionsEl) {
         privateChatOptionsEl.remove();
         return;
     }
@@ -295,7 +429,6 @@ function showPrivateChatOptions() {
     `;
     document.querySelector('#privateChatView header').appendChild(privateChatOptionsEl);
 
-    // Close on click outside
     setTimeout(() => {
         document.addEventListener('click', function closeOptions(e) {
             if (!privateChatOptionsEl.contains(e.target) && !e.target.closest('.fa-ellipsis-v')) {
@@ -323,8 +456,7 @@ function createGroup(e) {
     e.preventDefault();
     const groupName = document.getElementById('groupNameInput').value.trim();
     if (!groupName) return;
-
-    const groupId = `GRP-${generateId()}`; // Menggunakan generateId() biasa untuk grup
+    const groupId = `GRP-${generateId()}`;
     db.ref(`groups/${groupId}`).set({
         name: groupName,
         adminId: currentUser.id,
@@ -351,7 +483,6 @@ function joinGroup(e) {
     e.preventDefault();
     const groupId = document.getElementById('groupIdInput').value.trim().toUpperCase();
     if (!groupId) return;
-
     db.ref(`groups/${groupId}`).once('value').then(snapshot => {
         if (snapshot.exists()) {
             const groupData = snapshot.val();
@@ -395,16 +526,14 @@ document.getElementById('groupMessageForm').addEventListener('submit', (e) => {
     const input = document.getElementById('groupMessageInput');
     const text = input.value.trim();
     if (!text || !currentGroupId) return;
-
     const messageData = {
         senderId: currentUser.id,
         senderName: currentUser.name,
         text: text,
         timestamp: firebase.database.ServerValue.TIMESTAMP
     };
-
     if (isToxic(text)) {
-        const banDuration = 10 * 60 * 1000; // 10 minutes
+        const banDuration = 10 * 60 * 1000;
         const banEndTime = Date.now() + banDuration;
         db.ref(`users/${currentUser.id}/bannedGroups/${currentGroupId}`).set(banEndTime);
         showNotification('Anda mengirim kata toxic! Anda dibanned selama 10 menit.', 5000);
@@ -413,7 +542,6 @@ document.getElementById('groupMessageForm').addEventListener('submit', (e) => {
         backToMain();
         return;
     }
-
     db.ref(`groupMessages/${currentGroupId}`).push(messageData);
     input.value = '';
 });
@@ -421,7 +549,6 @@ document.getElementById('groupMessageForm').addEventListener('submit', (e) => {
 // --- FITUR UNDANGAN GRUP ---
 function showInviteFriendsModal() {
     if (!currentGroupId) return;
-    
     db.ref(`users/${currentUser.id}/friends`).once('value').then(snapshot => {
         const friends = snapshot.val();
         let content = `<h3><i class="fas fa-user-plus"></i> Undang Teman ke Grup</h3><ul class="member-list">`;
@@ -451,7 +578,6 @@ function showInviteFriendsModal() {
 function sendGroupInvite(friendId, friendName) {
     if (!currentGroupId) return;
     const groupName = document.getElementById('groupChatTitle').textContent;
-
     db.ref(`groupInvites/${friendId}`).push({
         groupId: currentGroupId,
         groupName: groupName,
@@ -469,12 +595,9 @@ function listenForGroupInvites() {
     db.ref(`groupInvites/${currentUser.id}`).on('child_added', snapshot => {
         const inviteId = snapshot.key;
         const invite = snapshot.val();
-        
         const joinBtn = `<button onclick="acceptGroupInvite('${inviteId}', '${invite.groupId}', '${invite.groupName}')">Gabung</button>`;
         const declineBtn = `<button onclick="declineGroupInvite('${inviteId}')">Tolak</button>`;
-        
         const notifMessage = `${invite.inviterName} mengundang Anda ke grup "${invite.groupName}". ${joinBtn} ${declineBtn}`;
-        
         triggerBrowserNotification('Undangan Grup Baru!', { body: `${invite.inviterName} mengundang Anda ke grup "${invite.groupName}".` });
         setTimeout(() => showNotification(notifMessage, 20000), 500);
     });
@@ -482,7 +605,6 @@ function listenForGroupInvites() {
 
 function acceptGroupInvite(inviteId, groupId, groupName) {
     db.ref(`groupInvites/${currentUser.id}/${inviteId}`).remove();
-    
     db.ref(`groups/${groupId}/members/${currentUser.id}`).set(true).then(() => {
         showNotification(`Anda bergabung dengan grup ${groupName}!`);
         joinGroupChat(groupId, groupName);
@@ -513,7 +635,6 @@ function sendFriendRequest(e) {
         showNotification('ID tidak valid!', 3000);
         return;
     }
-
     db.ref(`users/${friendId}`).once('value').then(snapshot => {
         if (snapshot.exists()) {
             db.ref(`users/${friendId}/friendRequests/${currentUser.id}`).set({
@@ -534,9 +655,7 @@ function listenForFriendRequests() {
     db.ref(`users/${currentUser.id}/friendRequests`).on('child_added', snapshot => {
         const requestId = snapshot.key;
         const request = snapshot.val();
-        
         triggerBrowserNotification('Permintaan Teman Baru!', { body: `${request.fromName} ingin menambahkan Anda sebagai teman.` });
-
         if (modal.classList.contains('show') && modalBody.querySelector('#pending-requests-list')) {
             showFriendsList();
         } else {
@@ -564,9 +683,7 @@ function declineFriendRequest(requestId) {
 function showFriendsList() {
     const friendsRef = db.ref(`users/${currentUser.id}/friends`);
     const requestsRef = db.ref(`users/${currentUser.id}/friendRequests`);
-
     let content = '<h3><i class="fas fa-user-friends"></i> Daftar Teman</h3>';
-
     const pendingSection = `
         <div class="pending-requests" id="pending-requests-section">
             <h4>Permintaan Menunggu</h4>
@@ -574,13 +691,11 @@ function showFriendsList() {
         </div>
     `;
     content += pendingSection;
-
     const friendsSection = `
         <h4>Teman</h4>
         <ul class="member-list" id="friends-list"></ul>
     `;
     content += friendsSection;
-    
     showModal(content);
 
     requestsRef.once('value').then(snapshot => {
@@ -615,13 +730,16 @@ function showFriendsList() {
             listEl.innerHTML = '<p>Anda belum memiliki teman.</p>';
         } else {
             Object.keys(friends).forEach(friendId => {
-                db.ref(`users/${friendId}/name`).once('value').then(nameSnap => {
-                    const friendName = nameSnap.val();
+                db.ref(`users/${friendId}`).once('value').then(userSnap => {
+                    const friendData = userSnap.val();
                     const listItem = document.createElement('li');
                     listItem.className = 'member-item';
                     listItem.innerHTML = `
-                        <span>${friendName} (ID: ${friendId})</span>
-                        <button onclick="startPrivateChat('${friendId}', '${friendName}')"><i class="fas fa-comment"></i> Chat</button>
+                        <div class="member-item-info">
+                            <button class="view-profile-btn" onclick="showPublicProfileModal('${friendId}')" title="Lihat Profil"><i class="fas fa-eye"></i></button>
+                            <span>${friendData.name} (ID: ${friendId})</span>
+                        </div>
+                        <button onclick="startPrivateChat('${friendId}', '${friendData.name}')"><i class="fas fa-comment"></i> Chat</button>
                     `;
                     listEl.appendChild(listItem);
                 });
@@ -640,7 +758,6 @@ function startPrivateChat(friendId, friendName) {
     document.getElementById('privateMessagesContainer').innerHTML = '';
     closeModal();
     showView('privateChatView');
-
     db.ref(`privateMessages/${currentPrivateChatId}`).on('child_added', snapshot => {
         const message = snapshot.val();
         if (!blockedUsers.includes(message.senderId)) {
@@ -654,13 +771,11 @@ document.getElementById('privateMessageForm').addEventListener('submit', (e) => 
     const input = document.getElementById('privateMessageInput');
     const text = input.value.trim();
     if (!text || !currentPrivateChatId) return;
-
     const messageData = {
         senderId: currentUser.id,
         text: text,
         timestamp: firebase.database.ServerValue.TIMESTAMP
     };
-    
     db.ref(`privateMessages/${currentPrivateChatId}`).push(messageData);
     input.value = '';
 });
@@ -681,7 +796,11 @@ function showOnlineUsersModal() {
                 const listItem = document.createElement('li');
                 listItem.className = 'online-item';
                 listItem.innerHTML = `
-                    <span><div class="status"></div> ${userData.name} (ID: ${userId})</span>
+                    <div class="online-item-info">
+                        <div class="status"></div>
+                        <button class="view-profile-btn" onclick="showPublicProfileModal('${userId}')" title="Lihat Profil"><i class="fas fa-eye"></i></button>
+                        <span>${userData.name} (ID: ${userId})</span>
+                    </div>
                     <button onclick="sendFriendRequestById('${userId}', '${userData.name}')"><i class="fas fa-user-plus"></i> Tambah</button>
                 `;
                 modalBody.querySelector('ul').appendChild(listItem);
@@ -716,18 +835,15 @@ function sendFriendRequestById(userId, name) {
 // --- ADMIN & MEMBER LIST ---
 function showGroupMembers() {
     if (!currentGroupId) return;
-    
     db.ref(`groups/${currentGroupId}`).once('value').then(groupSnapshot => {
         const groupData = groupSnapshot.val();
         const isAdmin = groupData.adminId === currentUser.id;
-
         db.ref(`groups/${currentGroupId}/members`).once('value').then(membersSnapshot => {
             const members = membersSnapshot.val();
             let content = `<h3><i class="fas fa-users"></i> Anggota Grup</h3><ul class="member-list">`;
-            
             Object.keys(members).forEach(memberId => {
-                db.ref(`users/${memberId}/name`).once('value').then(nameSnap => {
-                    const memberName = nameSnap.val();
+                db.ref(`users/${memberId}`).once('value').then(userSnap => {
+                    const memberData = userSnap.val();
                     const memberItem = document.createElement('li');
                     memberItem.className = 'member-item';
                     let actionButtons = '';
@@ -737,7 +853,13 @@ function showGroupMembers() {
                             <button onclick="banMember('${memberId}')">Ban</button>
                         `;
                     }
-                    memberItem.innerHTML = `<span>${memberName} (ID: ${memberId}) ${isAdmin && memberId === currentUser.id ? '<small>(Admin)</small>' : ''}</span> ${actionButtons}`;
+                    memberItem.innerHTML = `
+                        <div class="member-item-info">
+                            <button class="view-profile-btn" onclick="showPublicProfileModal('${memberId}')" title="Lihat Profil"><i class="fas fa-eye"></i></button>
+                            <span>${memberData.name} (ID: ${memberId}) ${isAdmin && memberId === currentUser.id ? '<small>(Admin)</small>' : ''}</span>
+                        </div>
+                        ${actionButtons}
+                    `;
                     if (modalBody.querySelector('ul')) {
                         modalBody.querySelector('ul').appendChild(memberItem);
                     }
@@ -764,16 +886,12 @@ function banMember(memberId) {
     if (duration && !isNaN(duration)) {
         const banDuration = parseInt(duration) * 60 * 1000;
         const banEndTime = Date.now() + banDuration;
-        
         db.ref(`users/${memberId}/bannedGroups/${currentGroupId}`).set(banEndTime);
-        
         db.ref(`users/${memberId}/notifications`).push({
             message: `Anda telah dibanned dari grup selama ${duration} menit oleh admin.`,
             timestamp: firebase.database.ServerValue.TIMESTAMP
         });
-
         db.ref(`groups/${currentGroupId}/members/${memberId}`).remove();
-        
         showNotification(`Anggota telah dibanned selama ${duration} menit.`);
         closeModal();
     }
@@ -789,33 +907,26 @@ function displayMessage(containerId, message) {
     const container = document.getElementById(containerId);
     const messageEl = document.createElement('div');
     messageEl.classList.add('message');
-    
     const isOwn = message.senderId === currentUser.id;
     if (isOwn) {
         messageEl.classList.add('own');
     }
-
     const bubble = document.createElement('div');
     bubble.classList.add('message-bubble');
-    
     if (containerId === 'groupMessagesContainer' && !isOwn) {
         const nameEl = document.createElement('strong');
         nameEl.textContent = `${message.senderName}: `;
         bubble.appendChild(nameEl);
     }
-
     const textEl = document.createElement('span');
     textEl.textContent = message.text;
     bubble.appendChild(textEl);
-    
     messageEl.appendChild(bubble);
-    
     const metaEl = document.createElement('div');
     metaEl.classList.add('message-meta');
     const date = new Date(message.timestamp);
     metaEl.textContent = date.toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit' });
     messageEl.appendChild(metaEl);
-
     container.appendChild(messageEl);
     container.scrollTop = container.scrollHeight;
 }
@@ -833,17 +944,163 @@ function listenForNotifications() {
 
 // --- TOXICITY FILTER ---
 const toxicWords = ['bego', 'goblok', 'anjing', 'bangsat', 'asu', 'kontol', 'memek', 'tolol'];
-
 function isToxic(message) {
     const lowerCaseMessage = message.toLowerCase();
     return toxicWords.some(word => lowerCaseMessage.includes(word));
 }
 
+// --- STATUS FUNCTIONS ---
+function showStatusView() {
+    showView('statusView');
+    loadStatuses();
+}
+
+function loadStatuses() {
+    const statusContainer = document.getElementById('statusContainer');
+    statusContainer.innerHTML = '';
+    if (statusListener) statusListener.off();
+    statusListener = db.ref('statuses').on('value', snapshot => {
+        statusContainer.innerHTML = '';
+        const statuses = snapshot.val();
+        if (!statuses) {
+            statusContainer.innerHTML = '<p style="width:100%; text-align:center; color:var(--text-muted);">Belum ada status.</p>';
+            return;
+        }
+        const now = Date.now();
+        Object.keys(statuses).forEach(statusId => {
+            const status = statuses[statusId];
+            if (status.expiresAt < now) {
+                db.ref(`statuses/${statusId}`).remove();
+                return;
+            }
+            renderStatusThumbnail(status);
+        });
+    });
+}
+
+function renderStatusThumbnail(status) {
+    const statusContainer = document.getElementById('statusContainer');
+    const thumbnailDiv = document.createElement('div');
+    thumbnailDiv.className = 'status-thumbnail';
+    thumbnailDiv.innerHTML = `<img src="${status.imageUrl}" alt="${status.userName}'s status">`;
+    thumbnailDiv.onclick = () => showFullStatusModal(status);
+    statusContainer.appendChild(thumbnailDiv);
+}
+
+function showFullStatusModal(status) {
+    fullStatusImage.src = status.imageUrl;
+    fullStatusCaption.innerHTML = `<p>${status.caption || ''}</p><small>${status.userName} • ${new Date(status.timestamp).toLocaleString('id-ID')}</small>`;
+    fullStatusModal.classList.add('show');
+}
+
+function closeFullStatusModal() {
+    fullStatusModal.classList.remove('show');
+}
+
+function showUploadStatusModal() {
+    const content = `
+        <h3><i class="fas fa-image"></i> Unggah Status Baru</h3>
+        <form id="uploadStatusForm" onsubmit="uploadStatusToGitHub(event)">
+            <label for="statusImageInput" id="statusImageLabel">
+                <i class="fas fa-cloud-upload-alt" style="font-size: 3rem; color: var(--primary-color);"></i>
+                <p>Klik untuk memilih gambar</p>
+            </label>
+            <input type="file" id="statusImageInput" accept="image/*" required onchange="previewStatusImage(event)">
+            <img id="statusImagePreview" alt="Preview">
+            <textarea id="statusCaptionInput" placeholder="Tulis caption..." maxlength="150"></textarea>
+            <button type="submit" id="uploadStatusBtn"><i class="fas fa-upload"></i> Unggah</button>
+        </form>
+    `;
+    showModal(content);
+}
+
+function previewStatusImage(event) {
+    const file = event.target.files[0];
+    const preview = document.getElementById('statusImagePreview');
+    if (file) {
+        const reader = new FileReader();
+        reader.onload = function(e) {
+            preview.src = e.target.result;
+            preview.style.display = 'block';
+        }
+        reader.readAsDataURL(file);
+    }
+}
+
+async function uploadStatusToGitHub(event) {
+    event.preventDefault();
+    const fileInput = document.getElementById('statusImageInput');
+    const captionInput = document.getElementById('statusCaptionInput');
+    const uploadBtn = document.getElementById('uploadStatusBtn');
+    
+    if (!fileInput.files[0]) {
+        showNotification('Pilih gambar terlebih dahulu.');
+        return;
+    }
+
+    const file = fileInput.files[0];
+    const fileName = `${currentUser.id}-${Date.now()}.${file.name.split('.').pop()}`;
+    const githubApiUrl = `https://api.github.com/repos/${GITHUB_OWNER}/${GITHUB_REPO}/contents/${GITHUB_PATH}${fileName}`;
+
+    const reader = new FileReader();
+    reader.onloadend = async () => {
+        const base64data = reader.result.split(',')[1];
+        
+        uploadBtn.disabled = true;
+        uploadBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Mengunggah...';
+
+        try {
+            const response = await fetch(githubApiUrl, {
+                method: 'PUT',
+                headers: {
+                    'Authorization': `token ${GITHUB_TOKEN}`,
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    message: `Upload status image for ${currentUser.name}`,
+                    content: base64data,
+                }),
+            });
+
+            if (!response.ok) throw new Error('Gagal mengunggah ke GitHub.');
+
+            const data = await response.json();
+            const imageUrl = data.content.download_url;
+
+            const statusData = {
+                userId: currentUser.id,
+                userName: currentUser.name,
+                imageUrl: imageUrl,
+                caption: captionInput.value.trim(),
+                timestamp: firebase.database.ServerValue.TIMESTAMP,
+                expiresAt: Date.now() + (1 * 60 * 60 * 1000)
+            };
+            
+            await db.ref('statuses').push(statusData);
+            
+            showNotification('Status berhasil diunggah!');
+            closeModal();
+            loadStatuses();
+
+        } catch (error) {
+            console.error('Upload error:', error);
+            showNotification('Terjadi kesalahan saat mengunggah status.');
+        } finally {
+            uploadBtn.disabled = false;
+            uploadBtn.innerHTML = '<i class="fas fa-upload"></i> Unggah';
+        }
+    };
+    reader.readAsDataURL(file);
+}
+
 // --- MISC ---
 function backToMain() {
+    if (statusListener) {
+        statusListener.off();
+        statusListener = null;
+    }
     if (currentGroupId) db.ref(`groupMessages/${currentGroupId}`).off();
     if (currentPrivateChatId) db.ref(`privateMessages/${currentPrivateChatId}`).off();
-    
     currentGroupId = null;
     currentPrivateChatId = null;
     showView('mainView');
@@ -853,7 +1110,6 @@ function logout() {
     if (confirm('Apakah Anda yakin ingin keluar?')) {
         db.ref(`users/${currentUser.id}/isOnline`).set(false);
         db.ref(`users/${currentUser.id}/connections`).remove();
-
         localStorage.removeItem('chatUserName');
         localStorage.removeItem('chatUserPrivacyId');
         currentUser = null;
