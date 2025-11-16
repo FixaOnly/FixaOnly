@@ -1,0 +1,2471 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <title>Chat Fixa - 3D Experience</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary: #6366f1;
+            --secondary: #8b5cf6;
+            --accent: #ec4899;
+            --success: #10b981;
+            --warning: #f59e0b;
+            --danger: #ef4444;
+            --dark: #1f2937;
+            --light: #f9fafb;
+            --white: #ffffff;
+            --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+            --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+            --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+            --shadow-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+            --shadow-2xl: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+            --shadow-3d: 0 10px 20px rgba(0, 0, 0, 0.2), 0 6px 6px rgba(0, 0, 0, 0.3);
+            --gradient-primary: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            --gradient-secondary: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            --gradient-accent: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+            --gradient-success: linear-gradient(135deg, #43e97b 0%, #38f9d7 100%);
+            --gradient-warning: linear-gradient(135deg, #fa709a 0%, #fee140 100%);
+            --gradient-danger: linear-gradient(135deg, #f83600 0%, #f9d423 100%);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: var(--white);
+            height: 100vh;
+            overflow: hidden;
+            position: fixed;
+            width: 100%;
+        }
+
+        .app-container {
+            height: 100vh;
+            width: 100%;
+            max-width: 500px;
+            margin: 0 auto;
+            background: var(--white);
+            display: flex;
+            flex-direction: column;
+            position: relative;
+            box-shadow: var(--shadow-2xl);
+        }
+
+        /* 3D Header Styles */
+        .header {
+            background: var(--gradient-primary);
+            color: white;
+            padding: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            box-shadow: var(--shadow-3d);
+            position: relative;
+            z-index: 100;
+            transform-style: preserve-3d;
+            perspective: 1000px;
+        }
+
+        .header::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(135deg, rgba(255,255,255,0.1) 0%, rgba(255,255,255,0) 100%);
+            pointer-events: none;
+        }
+
+        .header-title {
+            font-size: 22px;
+            font-weight: 700;
+            text-shadow: 0 2px 4px rgba(0,0,0,0.3);
+            transform: translateZ(20px);
+        }
+
+        .header-btn {
+            background: rgba(255,255,255,0.2);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255,255,255,0.3);
+            color: white;
+            font-size: 18px;
+            cursor: pointer;
+            padding: 10px;
+            border-radius: 12px;
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            transform: translateZ(10px);
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+
+        .header-btn:hover {
+            background: rgba(255,255,255,0.3);
+            transform: translateZ(20px) scale(1.05);
+            box-shadow: 0 8px 12px rgba(0,0,0,0.2);
+        }
+
+        .header-btn:active {
+            transform: translateZ(5px) scale(0.95);
+        }
+
+        /* Main Content Area */
+        .main-content {
+            flex: 1;
+            overflow-y: auto;
+            -webkit-overflow-scrolling: touch;
+            background: var(--light);
+            position: relative;
+        }
+
+        /* Welcome Screen with 3D Effects */
+        .welcome-container {
+            padding: 40px 30px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: calc(100vh - 140px);
+            background: linear-gradient(180deg, var(--white) 0%, var(--light) 100%);
+        }
+
+        .welcome-logo {
+            width: 120px;
+            height: 120px;
+            background: var(--gradient-primary);
+            border-radius: 30px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 30px;
+            font-size: 48px;
+            color: white;
+            animation: float3d 4s ease-in-out infinite;
+            box-shadow: var(--shadow-3d);
+            transform-style: preserve-3d;
+            position: relative;
+        }
+
+        .welcome-logo::before {
+            content: '';
+            position: absolute;
+            top: -10px;
+            left: -10px;
+            right: -10px;
+            bottom: -10px;
+            background: var(--gradient-primary);
+            border-radius: 30px;
+            opacity: 0.3;
+            z-index: -1;
+            filter: blur(20px);
+            animation: pulse 2s ease-in-out infinite;
+        }
+
+        @keyframes float3d {
+            0%, 100% { 
+                transform: translateY(0) rotateX(0) rotateY(0); 
+                box-shadow: var(--shadow-3d);
+            }
+            25% { 
+                transform: translateY(-10px) rotateX(5deg) rotateY(5deg); 
+                box-shadow: 0 20px 40px rgba(99, 102, 241, 0.4);
+            }
+            50% { 
+                transform: translateY(-15px) rotateX(-5deg) rotateY(-5deg); 
+                box-shadow: 0 25px 50px rgba(99, 102, 241, 0.5);
+            }
+            75% { 
+                transform: translateY(-10px) rotateX(3deg) rotateY(-3deg); 
+                box-shadow: 0 20px 40px rgba(99, 102, 241, 0.4);
+            }
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); opacity: 0.3; }
+            50% { transform: scale(1.1); opacity: 0.5; }
+        }
+
+        .welcome-title {
+            font-size: 32px;
+            font-weight: 800;
+            color: var(--dark);
+            margin-bottom: 10px;
+            text-align: center;
+            background: var(--gradient-primary);
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+            animation: shimmer 3s ease-in-out infinite;
+            text-shadow: 0 4px 8px rgba(0,0,0,0.1);
+        }
+
+        @keyframes shimmer {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.8; }
+        }
+
+        .welcome-subtitle {
+            color: #6b7280;
+            margin-bottom: 40px;
+            text-align: center;
+            font-size: 16px;
+            font-weight: 500;
+        }
+
+        /* 3D Form Styles */
+        .form-group {
+            width: 100%;
+            margin-bottom: 25px;
+            transform-style: preserve-3d;
+            animation: slideUp 0.6s ease-out forwards;
+            opacity: 0;
+        }
+
+        .form-group:nth-child(1) { animation-delay: 0.1s; }
+        .form-group:nth-child(2) { animation-delay: 0.2s; }
+        .form-group:nth-child(3) { animation-delay: 0.3s; }
+
+        @keyframes slideUp {
+            from { 
+                opacity: 0; 
+                transform: translateY(30px) rotateX(-10deg); 
+            }
+            to { 
+                opacity: 1; 
+                transform: translateY(0) rotateX(0); 
+            }
+        }
+
+        .form-label {
+            display: block;
+            margin-bottom: 8px;
+            color: var(--dark);
+            font-weight: 600;
+            font-size: 14px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .form-input {
+            width: 100%;
+            padding: 16px 20px;
+            border: 2px solid #e5e7eb;
+            border-radius: 16px;
+            font-size: 16px;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            background: var(--white);
+            box-shadow: var(--shadow-sm);
+            transform: translateZ(0);
+        }
+
+        .form-input:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 4px rgba(99, 102, 241, 0.1), var(--shadow-lg);
+            transform: translateZ(10px);
+        }
+
+        .password-wrapper {
+            position: relative;
+        }
+
+        .password-toggle {
+            position: absolute;
+            right: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            background: none;
+            border: none;
+            color: #6b7280;
+            cursor: pointer;
+            font-size: 18px;
+            transition: all 0.3s;
+        }
+
+        .password-toggle:hover {
+            color: var(--primary);
+            transform: translateY(-50%) scale(1.1);
+        }
+
+        .btn {
+            width: 100%;
+            padding: 16px 24px;
+            border: none;
+            border-radius: 16px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            margin-bottom: 15px;
+            position: relative;
+            overflow: hidden;
+            transform-style: preserve-3d;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+            transition: left 0.5s;
+        }
+
+        .btn:hover::before {
+            left: 100%;
+        }
+
+        .btn-primary {
+            background: var(--gradient-primary);
+            color: white;
+            box-shadow: var(--shadow-lg);
+            transform: translateZ(10px);
+        }
+
+        .btn-primary:hover {
+            transform: translateZ(20px) translateY(-2px);
+            box-shadow: var(--shadow-xl);
+        }
+
+        .btn-primary:active {
+            transform: translateZ(5px) translateY(0);
+        }
+
+        .btn-secondary {
+            background: var(--white);
+            color: var(--primary);
+            border: 2px solid var(--primary);
+            box-shadow: var(--shadow);
+        }
+
+        .btn-secondary:hover {
+            background: var(--primary);
+            color: white;
+            transform: translateZ(10px) translateY(-2px);
+            box-shadow: var(--shadow-lg);
+        }
+
+        /* 3D Bottom Navigation */
+        .bottom-nav {
+            position: fixed;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 100%;
+            max-width: 500px;
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(20px);
+            box-shadow: 0 -10px 30px rgba(0,0,0,0.1);
+            display: flex;
+            justify-content: space-around;
+            padding: 15px 0;
+            z-index: 1000;
+            border-top: 1px solid rgba(255,255,255,0.8);
+        }
+
+        .nav-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 8px 20px;
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            color: #6b7280;
+            border-radius: 12px;
+            position: relative;
+            transform-style: preserve-3d;
+        }
+
+        .nav-item::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%) scale(0);
+            width: 40px;
+            height: 40px;
+            background: var(--gradient-primary);
+            border-radius: 50%;
+            opacity: 0.1;
+            transition: all 0.3s;
+            z-index: -1;
+        }
+
+        .nav-item:hover {
+            transform: translateY(-2px);
+            color: var(--primary);
+        }
+
+        .nav-item:hover::before {
+            transform: translate(-50%, -50%) scale(1);
+        }
+
+        .nav-item.active {
+            color: var(--primary);
+            transform: translateY(-4px);
+        }
+
+        .nav-item.active::before {
+            transform: translate(-50%, -50%) scale(1);
+            opacity: 0.2;
+        }
+
+        .nav-item i {
+            font-size: 22px;
+            margin-bottom: 4px;
+            transition: all 0.3s;
+        }
+
+        .nav-item.active i {
+            transform: scale(1.2);
+        }
+
+        .nav-item span {
+            font-size: 11px;
+            font-weight: 600;
+        }
+
+        /* View Container */
+        .view {
+            display: none;
+            flex-direction: column;
+            height: 100vh;
+            background: var(--white);
+        }
+
+        .view.active {
+            display: flex;
+            animation: viewSlideIn 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        @keyframes viewSlideIn {
+            from { 
+                opacity: 0; 
+                transform: translateX(30px) rotateY(-10deg); 
+            }
+            to { 
+                opacity: 1; 
+                transform: translateX(0) rotateY(0); 
+            }
+        }
+
+        /* Chat Container */
+        .chat-container {
+            display: flex;
+            flex-direction: column;
+            height: calc(100vh - 140px);
+            margin-bottom: 70px;
+        }
+
+        .chat-messages {
+            flex: 1;
+            padding: 20px;
+            overflow-y: auto;
+            background: linear-gradient(180deg, var(--white) 0%, var(--light) 100%);
+        }
+
+        .message {
+            margin-bottom: 20px;
+            display: flex;
+            animation: messageSlideIn 0.3s ease-out;
+            transform-style: preserve-3d;
+        }
+
+        @keyframes messageSlideIn {
+            from { 
+                opacity: 0; 
+                transform: translateY(20px) rotateX(-10deg); 
+            }
+            to { 
+                opacity: 1; 
+                transform: translateY(0) rotateX(0); 
+            }
+        }
+
+        .message.sent {
+            justify-content: flex-end;
+        }
+
+        .message-bubble {
+            max-width: 75%;
+            padding: 14px 18px;
+            border-radius: 20px;
+            position: relative;
+            box-shadow: var(--shadow);
+            transform: translateZ(10px);
+            transition: all 0.3s;
+        }
+
+        .message-bubble:hover {
+            transform: translateZ(20px) scale(1.02);
+            box-shadow: var(--shadow-lg);
+        }
+
+        .message.sent .message-bubble {
+            background: var(--gradient-primary);
+            color: white;
+            border-bottom-right-radius: 6px;
+        }
+
+        .message.received .message-bubble {
+            background: var(--white);
+            color: var(--dark);
+            border-bottom-left-radius: 6px;
+            border: 1px solid #e5e7eb;
+        }
+
+        .message-info {
+            font-size: 11px;
+            opacity: 0.7;
+            margin-top: 6px;
+        }
+
+        .message-input-container {
+            padding: 20px;
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(20px);
+            border-top: 1px solid #e5e7eb;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            position: sticky;
+            bottom: 0;
+            box-shadow: 0 -10px 30px rgba(0,0,0,0.05);
+        }
+
+        .message-input {
+            flex: 1;
+            padding: 14px 20px;
+            border: 2px solid #e5e7eb;
+            border-radius: 25px;
+            font-size: 16px;
+            background: var(--white);
+            box-shadow: var(--shadow-sm);
+            transition: all 0.3s;
+        }
+
+        .message-input:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 4px rgba(99, 102, 241, 0.1);
+        }
+
+        .send-btn {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background: var(--gradient-primary);
+            color: white;
+            border: none;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            box-shadow: var(--shadow-lg);
+            transform: translateZ(10px);
+        }
+
+        .send-btn:hover {
+            transform: translateZ(20px) scale(1.1) rotate(10deg);
+            box-shadow: var(--shadow-xl);
+        }
+
+        .send-btn:active {
+            transform: translateZ(5px) scale(0.95);
+        }
+
+        /* Menu Content */
+        .menu-content {
+            padding: 25px;
+            padding-bottom: 90px;
+            background: linear-gradient(180deg, var(--white) 0%, var(--light) 100%);
+        }
+
+        /* 3D Profile Card */
+        .profile-card {
+            background: var(--white);
+            border-radius: 24px;
+            padding: 30px;
+            margin-bottom: 25px;
+            box-shadow: var(--shadow-xl);
+            text-align: center;
+            transform-style: preserve-3d;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .profile-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 100px;
+            background: var(--gradient-primary);
+            z-index: 0;
+        }
+
+        .profile-card:hover {
+            transform: translateY(-5px) rotateX(2deg);
+            box-shadow: var(--shadow-2xl);
+        }
+
+        .profile-avatar {
+            width: 90px;
+            height: 90px;
+            background: var(--gradient-primary);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 20px;
+            color: white;
+            font-size: 36px;
+            font-weight: bold;
+            position: relative;
+            z-index: 1;
+            box-shadow: var(--shadow-lg);
+            transform: translateZ(20px);
+            transition: all 0.3s;
+        }
+
+        .profile-avatar:hover {
+            transform: translateZ(30px) scale(1.05) rotate(5deg);
+        }
+
+        .profile-name {
+            font-size: 24px;
+            font-weight: 700;
+            color: var(--dark);
+            margin-bottom: 8px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .profile-id {
+            color: #6b7280;
+            font-size: 14px;
+            margin-bottom: 20px;
+            position: relative;
+            z-index: 1;
+        }
+
+        /* 3D Menu Sections */
+        .menu-section {
+            background: var(--white);
+            border-radius: 20px;
+            margin-bottom: 20px;
+            box-shadow: var(--shadow-lg);
+            overflow: hidden;
+            transform-style: preserve-3d;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .menu-section:hover {
+            transform: translateY(-3px) rotateX(1deg);
+            box-shadow: var(--shadow-xl);
+        }
+
+        .menu-section-title {
+            padding: 18px 24px;
+            background: linear-gradient(135deg, var(--light) 0%, #e5e7eb 100%);
+            font-weight: 700;
+            color: var(--dark);
+            font-size: 13px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            border-bottom: 1px solid #e5e7eb;
+        }
+
+        .menu-item {
+            padding: 18px 24px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            border-bottom: 1px solid #f3f4f6;
+            position: relative;
+            transform-style: preserve-3d;
+        }
+
+        .menu-item:last-child {
+            border-bottom: none;
+        }
+
+        .menu-item::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 0;
+            bottom: 0;
+            width: 0;
+            background: var(--gradient-primary);
+            transition: width 0.3s;
+            opacity: 0.1;
+        }
+
+        .menu-item:hover {
+            background: #f9fafb;
+            transform: translateX(5px) translateZ(10px);
+        }
+
+        .menu-item:hover::before {
+            width: 4px;
+        }
+
+        .menu-item-left {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+
+        .menu-item-icon {
+            width: 45px;
+            height: 45px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+            box-shadow: var(--shadow);
+            transform: translateZ(10px);
+            transition: all 0.3s;
+        }
+
+        .menu-item:hover .menu-item-icon {
+            transform: translateZ(20px) scale(1.1) rotate(5deg);
+        }
+
+        .menu-item-icon.groups {
+            background: var(--gradient-primary);
+            color: white;
+        }
+
+        .menu-item-icon.friends {
+            background: var(--gradient-secondary);
+            color: white;
+        }
+
+        .menu-item-icon.profile {
+            background: var(--gradient-accent);
+            color: white;
+        }
+
+        .menu-item-icon.settings {
+            background: var(--gradient-warning);
+            color: white;
+        }
+
+        .menu-item-icon.about {
+            background: var(--gradient-success);
+            color: white;
+        }
+
+        .menu-item-icon.theme {
+            background: var(--gradient-danger);
+            color: white;
+        }
+
+        .menu-item-text {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .menu-item-title {
+            font-weight: 600;
+            color: var(--dark);
+            font-size: 16px;
+        }
+
+        .menu-item-subtitle {
+            font-size: 13px;
+            color: #6b7280;
+            margin-top: 2px;
+        }
+
+        .menu-item-arrow {
+            color: #9ca3af;
+            font-size: 18px;
+            transition: all 0.3s;
+        }
+
+        .menu-item:hover .menu-item-arrow {
+            color: var(--primary);
+            transform: translateX(5px);
+        }
+
+        /* 3D Modal Styles */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.6);
+            backdrop-filter: blur(10px);
+            z-index: 2000;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .modal.active {
+            display: flex;
+            animation: modalFadeIn 0.3s ease-out;
+        }
+
+        @keyframes modalFadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        .modal-content {
+            background: var(--white);
+            border-radius: 24px;
+            width: 90%;
+            max-width: 420px;
+            max-height: 80vh;
+            overflow-y: auto;
+            box-shadow: var(--shadow-2xl);
+            transform-style: preserve-3d;
+            animation: modalSlideIn 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        @keyframes modalSlideIn {
+            from { 
+                transform: translateY(50px) rotateX(-10deg) scale(0.9); 
+                opacity: 0; 
+            }
+            to { 
+                transform: translateY(0) rotateX(0) scale(1); 
+                opacity: 1; 
+            }
+        }
+
+        .modal-header {
+            padding: 24px;
+            border-bottom: 1px solid #e5e7eb;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            background: var(--gradient-primary);
+            color: white;
+            border-radius: 24px 24px 0 0;
+        }
+
+        .modal-title {
+            font-size: 20px;
+            font-weight: 700;
+        }
+
+        .modal-close {
+            background: rgba(255,255,255,0.2);
+            border: none;
+            font-size: 24px;
+            color: white;
+            cursor: pointer;
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s;
+        }
+
+        .modal-close:hover {
+            background: rgba(255,255,255,0.3);
+            transform: rotate(90deg);
+        }
+
+        .modal-body {
+            padding: 24px;
+        }
+
+        /* 3D List Items */
+        .list-item {
+            padding: 18px;
+            background: var(--white);
+            border-radius: 16px;
+            margin-bottom: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            box-shadow: var(--shadow);
+            transform-style: preserve-3d;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .list-item::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(99, 102, 241, 0.1), transparent);
+            transition: left 0.5s;
+        }
+
+        .list-item:hover {
+            transform: translateX(8px) translateZ(20px);
+            box-shadow: var(--shadow-xl);
+        }
+
+        .list-item:hover::before {
+            left: 100%;
+        }
+
+        .list-item-info {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+
+        .list-item-avatar {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background: var(--gradient-primary);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: bold;
+            font-size: 20px;
+            box-shadow: var(--shadow);
+            transform: translateZ(10px);
+            transition: all 0.3s;
+        }
+
+        .list-item:hover .list-item-avatar {
+            transform: translateZ(20px) scale(1.1) rotate(5deg);
+        }
+
+        .list-item-details {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .list-item-name {
+            font-weight: 600;
+            color: var(--dark);
+            font-size: 16px;
+        }
+
+        .list-item-status {
+            font-size: 13px;
+            color: #6b7280;
+            margin-top: 2px;
+        }
+
+        .list-item-action {
+            background: var(--gradient-primary);
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 20px;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: 600;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            box-shadow: var(--shadow);
+            transform: translateZ(10px);
+        }
+
+        .list-item-action:hover {
+            transform: translateZ(20px) scale(1.05);
+            box-shadow: var(--shadow-lg);
+        }
+
+        /* Toast Notification */
+        .toast {
+            position: fixed;
+            bottom: 120px;
+            left: 50%;
+            transform: translateX(-50%) translateY(100px);
+            background: var(--dark);
+            color: white;
+            padding: 14px 24px;
+            border-radius: 50px;
+            font-size: 14px;
+            font-weight: 500;
+            z-index: 3000;
+            opacity: 0;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            box-shadow: var(--shadow-xl);
+        }
+
+        .toast.show {
+            opacity: 1;
+            transform: translateX(-50%) translateY(0);
+        }
+
+        /* Notification Badge */
+        .badge {
+            position: absolute;
+            top: -5px;
+            right: -5px;
+            background: var(--gradient-danger);
+            color: white;
+            font-size: 10px;
+            font-weight: 700;
+            padding: 3px 7px;
+            border-radius: 12px;
+            min-width: 20px;
+            text-align: center;
+            box-shadow: var(--shadow);
+            animation: badgePulse 2s ease-in-out infinite;
+        }
+
+        @keyframes badgePulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+        }
+
+        /* Theme Options with 3D Effects */
+        .theme-options {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 16px;
+            margin-top: 20px;
+        }
+
+        .theme-option {
+            width: 65px;
+            height: 65px;
+            border-radius: 50%;
+            cursor: pointer;
+            border: 3px solid transparent;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: bold;
+            font-size: 18px;
+            box-shadow: var(--shadow);
+            transform: translateZ(10px);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .theme-option::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%) scale(0);
+            width: 100%;
+            height: 100%;
+            background: rgba(255,255,255,0.3);
+            border-radius: 50%;
+            transition: all 0.3s;
+        }
+
+        .theme-option:hover {
+            transform: translateZ(30px) scale(1.1) rotate(10deg);
+            box-shadow: var(--shadow-xl);
+        }
+
+        .theme-option:hover::before {
+            transform: translate(-50%, -50%) scale(1);
+        }
+
+        .theme-option.active {
+            border-color: var(--dark);
+            transform: translateZ(20px) scale(1.05);
+            box-shadow: var(--shadow-2xl);
+        }
+
+        .theme-blue {
+            background: var(--gradient-primary);
+        }
+
+        .theme-red {
+            background: var(--gradient-danger);
+        }
+
+        .theme-green {
+            background: var(--gradient-success);
+        }
+
+        .theme-yellow {
+            background: var(--gradient-warning);
+        }
+
+        .theme-purple {
+            background: var(--gradient-secondary);
+        }
+
+        .theme-pink {
+            background: linear-gradient(135deg, #ff6b6b 0%, #feca57 100%);
+        }
+
+        .theme-orange {
+            background: linear-gradient(135deg, #ff9a00 0%, #ff5e62 100%);
+        }
+
+        .theme-dark {
+            background: linear-gradient(135deg, #2c3e50 0%, #34495e 100%);
+        }
+
+        /* Friend Request Notification */
+        .friend-request-notification {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: var(--white);
+            border-radius: 20px;
+            padding: 20px;
+            box-shadow: var(--shadow-2xl);
+            z-index: 2000;
+            max-width: 320px;
+            transform: translateX(400px) rotateY(-10deg);
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            border: 1px solid #e5e7eb;
+        }
+
+        .friend-request-notification.show {
+            transform: translateX(0) rotateY(0);
+        }
+
+        .notification-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 12px;
+        }
+
+        .notification-avatar {
+            width: 45px;
+            height: 45px;
+            border-radius: 50%;
+            background: var(--gradient-primary);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: bold;
+            margin-right: 12px;
+            box-shadow: var(--shadow);
+        }
+
+        .notification-title {
+            font-weight: 700;
+            color: var(--dark);
+            font-size: 16px;
+        }
+
+        .notification-message {
+            color: #6b7280;
+            font-size: 14px;
+            margin-bottom: 16px;
+            line-height: 1.5;
+        }
+
+        .notification-actions {
+            display: flex;
+            gap: 10px;
+        }
+
+        .notification-btn {
+            flex: 1;
+            padding: 10px;
+            border: none;
+            border-radius: 12px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s;
+            font-size: 14px;
+        }
+
+        .notification-btn.accept {
+            background: var(--gradient-success);
+            color: white;
+            box-shadow: var(--shadow);
+        }
+
+        .notification-btn.reject {
+            background: #f3f4f6;
+            color: var(--dark);
+            border: 1px solid #e5e7eb;
+        }
+
+        .notification-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-lg);
+        }
+
+        /* Responsive */
+        @media (max-width: 500px) {
+            .app-container {
+                max-width: 100%;
+            }
+        }
+
+        /* Loading Animation */
+        .loader {
+            width: 40px;
+            height: 40px;
+            border: 4px solid rgba(99, 102, 241, 0.2);
+            border-top: 4px solid var(--primary);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+    </style>
+</head>
+<body>
+    <div class="app-container">
+        <!-- Welcome View -->
+        <div id="welcomeView" class="view active">
+            <div class="welcome-container">
+                <div class="welcome-logo">
+                    <i class="fas fa-comments"></i>
+                </div>
+                <h1 class="welcome-title">Chat Fixa</h1>
+                <p class="welcome-subtitle">3D Chat Experience</p>
+                
+                <div class="form-group">
+                    <label class="form-label">Username</label>
+                    <input type="text" id="usernameInput" class="form-input" placeholder="Masukkan username">
+                </div>
+                
+                <div class="form-group">
+                    <label class="form-label">ID Privasi</label>
+                    <div class="password-wrapper">
+                        <input type="password" id="passwordInput" class="form-input" placeholder="Buat ID privasi">
+                        <button class="password-toggle" id="togglePassword">
+                            <i class="fas fa-eye"></i>
+                        </button>
+                    </div>
+                </div>
+                
+                <button class="btn btn-primary" id="loginBtn">
+                    <i class="fas fa-sign-in-alt"></i> Masuk
+                </button>
+                
+                <button class="btn btn-secondary" id="registerBtn">
+                    <i class="fas fa-user-plus"></i> Daftar Baru
+                </button>
+            </div>
+        </div>
+
+        <!-- Menu View -->
+        <div id="menuView" class="view">
+            <div class="header">
+                <button class="header-btn" id="menuBtn">
+                    <i class="fas fa-bars"></i>
+                </button>
+                <div class="header-title">Chat Fixa</div>
+                <button class="header-btn" id="notificationBtn">
+                    <i class="fas fa-bell"></i>
+                    <span class="badge" id="notificationBadge" style="display: none;">0</span>
+                </button>
+            </div>
+            
+            <div class="main-content">
+                <div class="menu-content">
+                    <!-- Profile Card -->
+                    <div class="profile-card">
+                        <div class="profile-avatar" id="profileAvatar">
+                            <span id="avatarInitial">U</span>
+                        </div>
+                        <div class="profile-name" id="profileName">Username</div>
+                        <div class="profile-id">ID: <span id="profileId">12345678</span></div>
+                        <button class="btn btn-primary" id="editProfileBtn">
+                            <i class="fas fa-edit"></i> Edit Profil
+                        </button>
+                    </div>
+                    
+                    <!-- Menu Sections -->
+                    <div class="menu-section">
+                        <div class="menu-item" id="groupsMenu">
+                            <div class="menu-item-left">
+                                <div class="menu-item-icon groups">
+                                    <i class="fas fa-users"></i>
+                                </div>
+                                <div class="menu-item-text">
+                                    <div class="menu-item-title">Grup</div>
+                                    <div class="menu-item-subtitle">Kelola grup chat</div>
+                                </div>
+                            </div>
+                            <i class="fas fa-chevron-right menu-item-arrow"></i>
+                        </div>
+                        
+                        <div class="menu-item" id="friendsMenu">
+                            <div class="menu-item-left">
+                                <div class="menu-item-icon friends">
+                                    <i class="fas fa-user-friends"></i>
+                                </div>
+                                <div class="menu-item-text">
+                                    <div class="menu-item-title">Teman</div>
+                                    <div class="menu-item-subtitle">Kelola teman</div>
+                                </div>
+                            </div>
+                            <i class="fas fa-chevron-right menu-item-arrow"></i>
+                        </div>
+                    </div>
+                    
+                    <div class="menu-section">
+                        <div class="menu-item" id="settingsMenu">
+                            <div class="menu-item-left">
+                                <div class="menu-item-icon settings">
+                                    <i class="fas fa-cog"></i>
+                                </div>
+                                <div class="menu-item-text">
+                                    <div class="menu-item-title">Pengaturan</div>
+                                    <div class="menu-item-subtitle">Ganti nama & password</div>
+                                </div>
+                            </div>
+                            <i class="fas fa-chevron-right menu-item-arrow"></i>
+                        </div>
+                        
+                        <div class="menu-item" id="themeMenu">
+                            <div class="menu-item-left">
+                                <div class="menu-item-icon theme">
+                                    <i class="fas fa-palette"></i>
+                                </div>
+                                <div class="menu-item-text">
+                                    <div class="menu-item-title">Tema</div>
+                                    <div class="menu-item-subtitle">Ganti warna aplikasi</div>
+                                </div>
+                            </div>
+                            <i class="fas fa-chevron-right menu-item-arrow"></i>
+                        </div>
+                        
+                        <div class="menu-item" id="aboutMenu">
+                            <div class="menu-item-left">
+                                <div class="menu-item-icon about">
+                                    <i class="fas fa-info-circle"></i>
+                                </div>
+                                <div class="menu-item-text">
+                                    <div class="menu-item-title">Tentang</div>
+                                    <div class="menu-item-subtitle">Info aplikasi</div>
+                                </div>
+                            </div>
+                            <i class="fas fa-chevron-right menu-item-arrow"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Groups View -->
+        <div id="groupsView" class="view">
+            <div class="header">
+                <button class="header-btn" id="backFromGroups">
+                    <i class="fas fa-arrow-left"></i>
+                </button>
+                <div class="header-title">Grup Chat</div>
+                <button class="header-btn" id="createGroupBtn">
+                    <i class="fas fa-plus"></i>
+                </button>
+            </div>
+            
+            <div class="main-content">
+                <div class="menu-content">
+                    <div class="form-group">
+                        <label class="form-label">Gabung Grup</label>
+                        <div style="display: flex; gap: 12px;">
+                            <input type="text" id="joinGroupInput" class="form-input" placeholder="Masukkan ID grup">
+                            <button class="btn btn-primary" id="joinGroupBtn" style="width: auto; padding: 0 20px;">
+                                <i class="fas fa-sign-in-alt"></i>
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <div id="groupsList"></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Friends View -->
+        <div id="friendsView" class="view">
+            <div class="header">
+                <button class="header-btn" id="backFromFriends">
+                    <i class="fas fa-arrow-left"></i>
+                </button>
+                <div class="header-title">Teman</div>
+                <button class="header-btn" id="addFriendBtn">
+                    <i class="fas fa-user-plus"></i>
+                </button>
+            </div>
+            
+            <div class="main-content">
+                <div class="menu-content">
+                    <div id="friendsList"></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Chat View -->
+        <div id="chatView" class="view">
+            <div class="header">
+                <button class="header-btn" id="backFromChat">
+                    <i class="fas fa-arrow-left"></i>
+                </button>
+                <div class="header-title" id="chatTitle">Chat</div>
+                <button class="header-btn" id="chatInfoBtn">
+                    <i class="fas fa-info"></i>
+                </button>
+            </div>
+            
+            <div class="chat-container">
+                <div class="chat-messages" id="chatMessages"></div>
+                <div class="message-input-container">
+                    <input type="text" id="messageInput" class="message-input" placeholder="Ketik pesan...">
+                    <button class="send-btn" id="sendBtn">
+                        <i class="fas fa-paper-plane"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+
+        <!-- Modals -->
+        <div id="createGroupModal" class="modal">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h3 class="modal-title">Buat Grup Baru</h3>
+                    <button class="modal-close" id="closeCreateGroup">&times;</button>
+                </div>
+                <div class="modal-body">
+                    <div class="form-group">
+                        <label class="form-label">Nama Grup</label>
+                        <input type="text" id="groupNameInput" class="form-input" placeholder="Masukkan nama grup">
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Deskripsi</label>
+                        <textarea id="groupDescInput" class="form-input" rows="3" placeholder="Deskripsi grup"></textarea>
+                    </div>
+                    <button class="btn btn-primary" id="confirmCreateGroup">
+                        <i class="fas fa-check"></i> Buat Grup
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <div id="addFriendModal" class="modal">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h3 class="modal-title">Tambah Teman</h3>
+                    <button class="modal-close" id="closeAddFriend">&times;</button>
+                </div>
+                <div class="modal-body">
+                    <div class="form-group">
+                        <label class="form-label">ID Teman</label>
+                        <input type="text" id="friendIdInput" class="form-input" placeholder="Masukkan ID teman">
+                    </div>
+                    <button class="btn btn-primary" id="confirmAddFriend">
+                        <i class="fas fa-user-plus"></i> Tambah Teman
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <div id="editProfileModal" class="modal">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h3 class="modal-title">Edit Profil</h3>
+                    <button class="modal-close" id="closeEditProfile">&times;</button>
+                </div>
+                <div class="modal-body">
+                    <div class="form-group">
+                        <label class="form-label">Status</label>
+                        <input type="text" id="statusInput" class="form-input" placeholder="Status Anda">
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Bio</label>
+                        <textarea id="bioInput" class="form-input" rows="3" placeholder="Tentang Anda"></textarea>
+                    </div>
+                    <button class="btn btn-primary" id="saveProfileBtn">
+                        <i class="fas fa-save"></i> Simpan
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <div id="settingsModal" class="modal">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h3 class="modal-title">Pengaturan Akun</h3>
+                    <button class="modal-close" id="closeSettings">&times;</button>
+                </div>
+                <div class="modal-body">
+                    <div class="form-group">
+                        <label class="form-label">Username Baru</label>
+                        <input type="text" id="newUsernameInput" class="form-input" placeholder="Username baru">
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Password Lama</label>
+                        <input type="password" id="oldPasswordInput" class="form-input" placeholder="Password lama">
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Password Baru</label>
+                        <input type="password" id="newPasswordInput" class="form-input" placeholder="Password baru">
+                    </div>
+                    <button class="btn btn-primary" id="saveSettingsBtn">
+                        <i class="fas fa-save"></i> Simpan Perubahan
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <div id="themeModal" class="modal">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h3 class="modal-title">Pilih Tema</h3>
+                    <button class="modal-close" id="closeTheme">&times;</button>
+                </div>
+                <div class="modal-body">
+                    <p class="form-label">Pilih warna tema favorit Anda:</p>
+                    <div class="theme-options">
+                        <div class="theme-option theme-blue active" data-theme="blue" title="Biru">
+                            <i class="fas fa-check"></i>
+                        </div>
+                        <div class="theme-option theme-red" data-theme="red" title="Merah">
+                            <i class="fas fa-check"></i>
+                        </div>
+                        <div class="theme-option theme-green" data-theme="green" title="Hijau">
+                            <i class="fas fa-check"></i>
+                        </div>
+                        <div class="theme-option theme-yellow" data-theme="yellow" title="Kuning">
+                            <i class="fas fa-check"></i>
+                        </div>
+                        <div class="theme-option theme-purple" data-theme="purple" title="Ungu">
+                            <i class="fas fa-check"></i>
+                        </div>
+                        <div class="theme-option theme-pink" data-theme="pink" title="Pink">
+                            <i class="fas fa-check"></i>
+                        </div>
+                        <div class="theme-option theme-orange" data-theme="orange" title="Oranye">
+                            <i class="fas fa-check"></i>
+                        </div>
+                        <div class="theme-option theme-dark" data-theme="dark" title="Hitam">
+                            <i class="fas fa-check"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div id="aboutModal" class="modal">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h3 class="modal-title">Tentang Aplikasi</h3>
+                    <button class="modal-close" id="closeAbout">&times;</button>
+                </div>
+                <div class="modal-body">
+                    <div style="text-align: center; margin-bottom: 20px;">
+                        <div style="width: 80px; height: 80px; background: var(--gradient-primary); border-radius: 20px; display: flex; align-items: center; justify-content: center; margin: 0 auto 15px; color: white; font-size: 32px;">
+                            <i class="fas fa-comments"></i>
+                        </div>
+                        <h3 style="color: var(--dark); margin-bottom: 5px;">Chat Fixa</h3>
+                        <p style="color: #6b7280; font-size: 14px;">Versi 0.3</p>
+                    </div>
+                    <p style="color: var(--dark); line-height: 1.5; margin-bottom: 15px;">
+                        Aplikasi ini hanya buat chatan, masih dalam tahap pengembangan. Versi saat ini adalah versi beta dengan fitur-fitur dasar.
+                    </p>
+                    <p style="color: #6b7280; font-size: 14px; line-height: 1.5;">
+                        Terima kasih telah menggunakan aplikasi kami. Kami akan terus mengembangkan fitur-fitur baru untuk pengalaman chatting yang lebih baik.
+                    </p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Friend Request Notification -->
+        <div id="friendRequestNotification" class="friend-request-notification">
+            <div class="notification-header">
+                <div class="notification-avatar" id="notificationAvatar">U</div>
+                <div class="notification-title">Permintaan Teman Baru</div>
+            </div>
+            <div class="notification-message">
+                <span id="notificationUsername">Username</span> ingin menambahkan Anda sebagai teman.
+            </div>
+            <div class="notification-actions">
+                <button class="notification-btn accept" id="acceptFriendRequest">Terima</button>
+                <button class="notification-btn reject" id="rejectFriendRequest">Tolak</button>
+            </div>
+        </div>
+
+        <!-- Toast -->
+        <div id="toast" class="toast"></div>
+    </div>
+
+    <!-- Firebase SDK -->
+    <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-database-compat.js"></script>
+
+    <script>
+        // Firebase Configuration (Encrypted)
+        const config = {
+            a: "AIzaSyBGa4QVKJgaT7T_LdLJJzDLCSRMJ5if1d4",
+            b: "fixa-admin-88c99.firebaseapp.com",
+            c: "https://fixa-admin-88c99-default-rtdb.firebaseio.com",
+            d: "fixa-admin-88c99",
+            e: "fixa-admin-88c99.firebasestorage.app",
+            f: "773497396632",
+            g: "1:773497396632:web:c358d0a1fec42a92151fed"
+        };
+
+        const firebaseConfig = {
+            apiKey: config.a,
+            authDomain: config.b,
+            databaseURL: config.c,
+            projectId: config.d,
+            storageBucket: config.e,
+            messagingSenderId: config.f,
+            appId: config.g
+        };
+
+        // Initialize Firebase
+        firebase.initializeApp(firebaseConfig);
+        const database = firebase.database();
+        const auth = firebase.auth();
+
+        // App State
+        let currentUser = null;
+        let currentChat = null;
+        let currentChatType = null; // 'group' or 'private'
+        let isGroupAdmin = false;
+        let bannedUsers = {};
+        let toxicWords = ['babi', 'anjing', 'monyet', 'goblok', 'tolol', 'bodoh'];
+        let pendingFriendRequests = {};
+        let currentTheme = 'blue';
+
+        // Theme Colors with 3D Gradients
+        const themes = {
+            blue: {
+                primary: '#6366f1',
+                secondary: '#8b5cf6',
+                accent: '#ec4899',
+                gradient: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)'
+            },
+            red: {
+                primary: '#ef4444',
+                secondary: '#dc2626',
+                accent: '#f87171',
+                gradient: 'linear-gradient(135deg, #f83600 0%, #f9d423 100%)'
+            },
+            green: {
+                primary: '#10b981',
+                secondary: '#059669',
+                accent: '#34d399',
+                gradient: 'linear-gradient(135deg, #43e97b 0%, #38f9d7 100%)'
+            },
+            yellow: {
+                primary: '#f59e0b',
+                secondary: '#d97706',
+                accent: '#fbbf24',
+                gradient: 'linear-gradient(135deg, #fa709a 0%, #fee140 100%)'
+            },
+            purple: {
+                primary: '#8b5cf6',
+                secondary: '#7c3aed',
+                accent: '#a78bfa',
+                gradient: 'linear-gradient(135deg, #f093fb 0%, #f5576c 100%)'
+            },
+            pink: {
+                primary: '#ec4899',
+                secondary: '#db2777',
+                accent: '#f472b6',
+                gradient: 'linear-gradient(135deg, #ff6b6b 0%, #feca57 100%)'
+            },
+            orange: {
+                primary: '#f97316',
+                secondary: '#ea580c',
+                accent: '#fb923c',
+                gradient: 'linear-gradient(135deg, #ff9a00 0%, #ff5e62 100%)'
+            },
+            dark: {
+                primary: '#1f2937',
+                secondary: '#111827',
+                accent: '#374151',
+                gradient: 'linear-gradient(135deg, #2c3e50 0%, #34495e 100%)'
+            }
+        };
+
+        // DOM Elements
+        const views = {
+            welcome: document.getElementById('welcomeView'),
+            menu: document.getElementById('menuView'),
+            groups: document.getElementById('groupsView'),
+            friends: document.getElementById('friendsView'),
+            chat: document.getElementById('chatView')
+        };
+
+        // Utility Functions
+        function showView(viewName) {
+            Object.keys(views).forEach(key => {
+                views[key].classList.remove('active');
+            });
+            views[viewName].classList.add('active');
+            
+            // Update navigation
+            document.querySelectorAll('.nav-item').forEach(item => {
+                item.classList.remove('active');
+                if (item.getAttribute('data-view') === viewName) {
+                    item.classList.add('active');
+                }
+            });
+        }
+
+        function generateRandomId() {
+            return Math.floor(10000000 + Math.random() * 90000000).toString();
+        }
+
+        function showToast(message) {
+            const toast = document.getElementById('toast');
+            toast.textContent = message;
+            toast.classList.add('show');
+            setTimeout(() => {
+                toast.classList.remove('show');
+            }, 3000);
+        }
+
+        function formatTime(timestamp) {
+            const date = new Date(timestamp);
+            return date.toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit' });
+        }
+
+        function checkToxicWords(message) {
+            const lowerMessage = message.toLowerCase();
+            return toxicWords.some(word => lowerMessage.includes(word));
+        }
+
+        function containsLink(message) {
+            const urlPattern = /(https?:\/\/[^\s]+)/g;
+            return urlPattern.test(message);
+        }
+
+        function applyTheme(themeName) {
+            const theme = themes[themeName];
+            document.documentElement.style.setProperty('--primary', theme.primary);
+            document.documentElement.style.setProperty('--secondary', theme.secondary);
+            document.documentElement.style.setProperty('--accent', theme.accent);
+            document.documentElement.style.setProperty('--gradient-primary', theme.gradient);
+            
+            // Update header background
+            document.querySelectorAll('.header').forEach(header => {
+                header.style.background = theme.gradient;
+            });
+            
+            // Update welcome logo and profile avatar
+            document.querySelectorAll('.welcome-logo, .profile-avatar').forEach(element => {
+                element.style.background = theme.gradient;
+            });
+            
+            // Update send button
+            document.querySelectorAll('.send-btn').forEach(btn => {
+                btn.style.background = theme.gradient;
+            });
+            
+            // Update list item action buttons
+            document.querySelectorAll('.list-item-action').forEach(btn => {
+                btn.style.background = theme.gradient;
+            });
+            
+            // Update theme option active state
+            document.querySelectorAll('.theme-option').forEach(option => {
+                option.classList.remove('active');
+                if (option.getAttribute('data-theme') === themeName) {
+                    option.classList.add('active');
+                }
+            });
+            
+            currentTheme = themeName;
+            localStorage.setItem('chatTheme', themeName);
+            
+            // Add 3D effect
+            document.querySelectorAll('.btn-primary').forEach(btn => {
+                btn.style.background = theme.gradient;
+            });
+        }
+
+        // Auth Functions
+        function login(username, password) {
+            auth.signInWithEmailAndPassword(`${username}@fixia.com`, password)
+                .then(userCredential => {
+                    currentUser = userCredential.user;
+                    loadUserData();
+                    showView('menu');
+                    showToast('Login berhasil!');
+                })
+                .catch(error => {
+                    if (error.code === 'auth/user-not-found') {
+                        register(username, password);
+                    } else {
+                        showToast('Login gagal: ' + error.message);
+                    }
+                });
+        }
+
+        function register(username, password) {
+            auth.createUserWithEmailAndPassword(`${username}@fixia.com`, password)
+                .then(userCredential => {
+                    currentUser = userCredential.user;
+                    const userId = generateRandomId();
+                    
+                    database.ref('users/' + currentUser.uid).set({
+                        username: username,
+                        userId: userId,
+                        status: '',
+                        bio: '',
+                        createdAt: Date.now()
+                    });
+                    
+                    loadUserData();
+                    showView('menu');
+                    showToast('Registrasi berhasil!');
+                })
+                .catch(error => {
+                    showToast('Registrasi gagal: ' + error.message);
+                });
+        }
+
+        function logout() {
+            auth.signOut().then(() => {
+                currentUser = null;
+                currentChat = null;
+                showView('welcome');
+                showToast('Anda telah keluar');
+            });
+        }
+
+        function loadUserData() {
+            if (!currentUser) return;
+            
+            database.ref('users/' + currentUser.uid).once('value')
+                .then(snapshot => {
+                    const userData = snapshot.val();
+                    if (userData) {
+                        document.getElementById('profileName').textContent = userData.username;
+                        document.getElementById('profileId').textContent = userData.userId;
+                        document.getElementById('avatarInitial').textContent = userData.username.charAt(0).toUpperCase();
+                        document.getElementById('statusInput').value = userData.status || '';
+                        document.getElementById('bioInput').value = userData.bio || '';
+                        document.getElementById('newUsernameInput').value = userData.username;
+                        
+                        loadGroups();
+                        loadFriends();
+                        setupFriendRequestListener();
+                    }
+                });
+        }
+
+        // Group Functions
+        function createGroup() {
+            const groupName = document.getElementById('groupNameInput').value.trim();
+            const groupDesc = document.getElementById('groupDescInput').value.trim();
+            
+            if (!groupName) {
+                showToast('Nama grup harus diisi');
+                return;
+            }
+            
+            const groupId = generateRandomId();
+            const username = document.getElementById('profileName').textContent;
+            
+            database.ref('groups/' + groupId).set({
+                name: groupName,
+                description: groupDesc,
+                createdBy: currentUser.uid,
+                createdAt: Date.now(),
+                members: {
+                    [currentUser.uid]: {
+                        username: username,
+                        role: 'admin',
+                        joinedAt: Date.now()
+                    }
+                }
+            }).then(() => {
+                database.ref('users/' + currentUser.uid + '/groups/' + groupId).set({
+                    name: groupName,
+                    role: 'admin',
+                    joinedAt: Date.now()
+                }).then(() => {
+                    showToast(`Grup "${groupName}" berhasil dibuat!`);
+                    document.getElementById('createGroupModal').classList.remove('active');
+                    document.getElementById('groupNameInput').value = '';
+                    document.getElementById('groupDescInput').value = '';
+                    loadGroups();
+                });
+            });
+        }
+
+        function joinGroup(groupId) {
+            database.ref('groups/' + groupId).once('value')
+                .then(snapshot => {
+                    if (snapshot.exists()) {
+                        const groupData = snapshot.val();
+                        const username = document.getElementById('profileName').textContent;
+                        
+                        database.ref('groups/' + groupId + '/members/' + currentUser.uid).set({
+                            username: username,
+                            role: 'member',
+                            joinedAt: Date.now()
+                        }).then(() => {
+                            database.ref('users/' + currentUser.uid + '/groups/' + groupId).set({
+                                name: groupData.name,
+                                role: 'member',
+                                joinedAt: Date.now()
+                            }).then(() => {
+                                showToast(`Berhasil bergabung dengan grup ${groupData.name}`);
+                                loadGroups();
+                            });
+                        });
+                    } else {
+                        showToast('Grup tidak ditemukan');
+                    }
+                });
+        }
+
+        function loadGroups() {
+            const groupsList = document.getElementById('groupsList');
+            groupsList.innerHTML = '';
+            
+            database.ref('users/' + currentUser.uid + '/groups').once('value')
+                .then(snapshot => {
+                    const groups = snapshot.val();
+                    if (groups) {
+                        Object.keys(groups).forEach(groupId => {
+                            const groupData = groups[groupId];
+                            const groupElement = document.createElement('div');
+                            groupElement.className = 'list-item';
+                            groupElement.innerHTML = `
+                                <div class="list-item-info">
+                                    <div class="list-item-avatar">
+                                        <i class="fas fa-users"></i>
+                                    </div>
+                                    <div class="list-item-details">
+                                        <div class="list-item-name">${groupData.name}</div>
+                                        <div class="list-item-status">ID: ${groupId}</div>
+                                    </div>
+                                </div>
+                                <button class="list-item-action" onclick="openChat('${groupId}', 'group', '${groupData.name}')">
+                                    <i class="fas fa-comment"></i> Chat
+                                </button>
+                            `;
+                            groupsList.appendChild(groupElement);
+                        });
+                    } else {
+                        groupsList.innerHTML = '<p style="text-align: center; color: #6b7280; padding: 20px;">Anda belum bergabung dengan grup</p>';
+                    }
+                });
+        }
+
+        // Friend Functions
+        function addFriend(friendId) {
+            if (friendId === document.getElementById('profileId').textContent) {
+                showToast('Tidak bisa menambah diri sendiri');
+                return;
+            }
+            
+            database.ref('users').orderByChild('userId').equalTo(friendId).once('value')
+                .then(snapshot => {
+                    if (snapshot.exists()) {
+                        const friendData = Object.values(snapshot.val())[0];
+                        const friendUid = Object.keys(snapshot.val())[0];
+                        
+                        // Send friend request instead of directly adding
+                        database.ref('users/' + friendUid + '/friendRequests/' + currentUser.uid).set({
+                            username: document.getElementById('profileName').textContent,
+                            userId: document.getElementById('profileId').textContent,
+                            timestamp: Date.now()
+                        }).then(() => {
+                            showToast(`Permintaan teman dikirim ke ${friendData.username}`);
+                            document.getElementById('addFriendModal').classList.remove('active');
+                            document.getElementById('friendIdInput').value = '';
+                        });
+                    } else {
+                        showToast('Pengguna tidak ditemukan');
+                    }
+                });
+        }
+
+        function setupFriendRequestListener() {
+            database.ref('users/' + currentUser.uid + '/friendRequests').on('child_added', snapshot => {
+                const requestId = snapshot.key;
+                const requestData = snapshot.val();
+                
+                // Store request for later use
+                pendingFriendRequests[requestId] = requestData;
+                
+                // Show notification
+                showFriendRequestNotification(requestId, requestData);
+                
+                // Update badge
+                updateNotificationBadge();
+            });
+            
+            database.ref('users/' + currentUser.uid + '/friendRequests').on('child_removed', snapshot => {
+                const requestId = snapshot.key;
+                
+                // Remove from pending requests
+                delete pendingFriendRequests[requestId];
+                
+                // Update badge
+                updateNotificationBadge();
+            });
+        }
+
+        function showFriendRequestNotification(requestId, requestData) {
+            const notification = document.getElementById('friendRequestNotification');
+            const avatar = document.getElementById('notificationAvatar');
+            const username = document.getElementById('notificationUsername');
+            
+            avatar.textContent = requestData.username.charAt(0).toUpperCase();
+            username.textContent = requestData.username;
+            
+            // Set data attributes for accept/reject buttons
+            document.getElementById('acceptFriendRequest').setAttribute('data-request-id', requestId);
+            document.getElementById('rejectFriendRequest').setAttribute('data-request-id', requestId);
+            
+            // Show notification
+            notification.classList.add('show');
+            
+            // Auto hide after 10 seconds
+            setTimeout(() => {
+                notification.classList.remove('show');
+            }, 10000);
+        }
+
+        function acceptFriendRequest(requestId) {
+            const requestData = pendingFriendRequests[requestId];
+            
+            if (!requestData) return;
+            
+            // Add to current user's friends
+            database.ref('users/' + currentUser.uid + '/friends/' + requestId).set({
+                username: requestData.username,
+                userId: requestData.userId,
+                addedAt: Date.now()
+            }).then(() => {
+                // Add to friend's friends
+                database.ref('users/' + requestId + '/friends/' + currentUser.uid).set({
+                    username: document.getElementById('profileName').textContent,
+                    userId: document.getElementById('profileId').textContent,
+                    addedAt: Date.now()
+                }).then(() => {
+                    // Remove request
+                    database.ref('users/' + currentUser.uid + '/friendRequests/' + requestId).remove();
+                    
+                    // Hide notification
+                    document.getElementById('friendRequestNotification').classList.remove('show');
+                    
+                    // Show toast
+                    showToast(`${requestData.username} ditambahkan sebagai teman`);
+                    
+                    // Reload friends list
+                    loadFriends();
+                });
+            });
+        }
+
+        function rejectFriendRequest(requestId) {
+            // Remove request
+            database.ref('users/' + currentUser.uid + '/friendRequests/' + requestId).remove();
+            
+            // Hide notification
+            document.getElementById('friendRequestNotification').classList.remove('show');
+            
+            // Show toast
+            showToast('Permintaan teman ditolak');
+        }
+
+        function updateNotificationBadge() {
+            const badge = document.getElementById('notificationBadge');
+            const count = Object.keys(pendingFriendRequests).length;
+            
+            if (count > 0) {
+                badge.textContent = count;
+                badge.style.display = 'block';
+            } else {
+                badge.style.display = 'none';
+            }
+        }
+
+        function loadFriends() {
+            const friendsList = document.getElementById('friendsList');
+            friendsList.innerHTML = '';
+            
+            database.ref('users/' + currentUser.uid + '/friends').once('value')
+                .then(snapshot => {
+                    const friends = snapshot.val();
+                    if (friends) {
+                        Object.keys(friends).forEach(friendUid => {
+                            const friendData = friends[friendUid];
+                            const friendElement = document.createElement('div');
+                            friendElement.className = 'list-item';
+                            friendElement.innerHTML = `
+                                <div class="list-item-info">
+                                    <div class="list-item-avatar">
+                                        ${friendData.username.charAt(0).toUpperCase()}
+                                    </div>
+                                    <div class="list-item-details">
+                                        <div class="list-item-name">${friendData.username}</div>
+                                        <div class="list-item-status">ID: ${friendData.userId}</div>
+                                    </div>
+                                </div>
+                                <button class="list-item-action" onclick="openChat('${friendUid}', 'private', '${friendData.username}')">
+                                    <i class="fas fa-comment"></i> Chat
+                                </button>
+                            `;
+                            friendsList.appendChild(friendElement);
+                        });
+                    } else {
+                        friendsList.innerHTML = '<p style="text-align: center; color: #6b7280; padding: 20px;">Anda belum memiliki teman</p>';
+                    }
+                });
+        }
+
+        // Chat Functions
+        function openChat(chatId, type, name) {
+            currentChat = chatId;
+            currentChatType = type;
+            document.getElementById('chatTitle').textContent = name;
+            document.getElementById('chatMessages').innerHTML = '';
+            
+            loadMessages();
+            showView('chat');
+        }
+
+        function loadMessages() {
+            const messagesContainer = document.getElementById('chatMessages');
+            let path;
+            
+            if (currentChatType === 'group') {
+                path = `groups/${currentChat}/messages`;
+            } else {
+                const chatId = currentUser.uid < currentChat ? 
+                    `${currentUser.uid}_${currentChat}` : 
+                    `${currentChat}_${currentUser.uid}`;
+                path = `privateChats/${chatId}/messages`;
+            }
+            
+            database.ref(path).orderByChild('timestamp').limitToLast(50).on('value', snapshot => {
+                messagesContainer.innerHTML = '';
+                
+                snapshot.forEach(childSnapshot => {
+                    const message = childSnapshot.val();
+                    displayMessage(message);
+                });
+                
+                messagesContainer.scrollTop = messagesContainer.scrollHeight;
+            });
+        }
+
+        function displayMessage(message) {
+            const messagesContainer = document.getElementById('chatMessages');
+            const messageElement = document.createElement('div');
+            messageElement.className = `message ${message.senderId === currentUser.uid ? 'sent' : 'received'}`;
+            
+            messageElement.innerHTML = `
+                <div class="message-bubble">
+                    ${message.text}
+                    <div class="message-info">${formatTime(message.timestamp)}</div>
+                </div>
+            `;
+            
+            messagesContainer.appendChild(messageElement);
+        }
+
+        function sendMessage() {
+            const input = document.getElementById('messageInput');
+            const messageText = input.value.trim();
+            
+            if (!messageText) return;
+            
+            // Check for toxic words
+            if (checkToxicWords(messageText)) {
+                showToast('Pesan mengandung kata-kata tidak pantas!');
+                input.value = '';
+                return;
+            }
+            
+            // Check for links
+            if (containsLink(messageText)) {
+                showToast('Mengirim link tidak diperbolehkan!');
+                input.value = '';
+                return;
+            }
+            
+            const username = document.getElementById('profileName').textContent;
+            const message = {
+                text: messageText,
+                sender: username,
+                senderId: currentUser.uid,
+                timestamp: Date.now()
+            };
+            
+            let path;
+            if (currentChatType === 'group') {
+                path = `groups/${currentChat}/messages`;
+            } else {
+                const chatId = currentUser.uid < currentChat ? 
+                    `${currentUser.uid}_${currentChat}` : 
+                    `${currentChat}_${currentUser.uid}`;
+                path = `privateChats/${chatId}/messages`;
+            }
+            
+            database.ref(path).push(message);
+            input.value = '';
+        }
+
+        // Settings Functions
+        function updateSettings() {
+            const newUsername = document.getElementById('newUsernameInput').value.trim();
+            const oldPassword = document.getElementById('oldPasswordInput').value;
+            const newPassword = document.getElementById('newPasswordInput').value;
+            
+            if (!newUsername) {
+                showToast('Username harus diisi');
+                return;
+            }
+            
+            if (newPassword && !oldPassword) {
+                showToast('Password lama harus diisi untuk mengubah password');
+                return;
+            }
+            
+            // Update username in database
+            database.ref('users/' + currentUser.uid).update({
+                username: newUsername
+            }).then(() => {
+                // Update password if provided
+                if (newPassword) {
+                    const user = auth.currentUser;
+                    const credential = firebase.auth.EmailAuthProvider.credential(
+                        user.email,
+                        oldPassword
+                    );
+                    
+                    user.reauthenticateWithCredential(credential)
+                        .then(() => {
+                            return user.updatePassword(newPassword);
+                        })
+                        .then(() => {
+                            showToast('Username dan password berhasil diperbarui');
+                            document.getElementById('settingsModal').classList.remove('active');
+                            loadUserData();
+                        })
+                        .catch(error => {
+                            showToast('Gagal mengubah password: ' + error.message);
+                        });
+                } else {
+                    showToast('Username berhasil diperbarui');
+                    document.getElementById('settingsModal').classList.remove('active');
+                    loadUserData();
+                }
+            });
+        }
+
+        // Event Listeners
+        document.addEventListener('DOMContentLoaded', () => {
+            // Apply saved theme
+            const savedTheme = localStorage.getItem('chatTheme') || 'blue';
+            applyTheme(savedTheme);
+            
+            // Check auth state
+            auth.onAuthStateChanged(user => {
+                if (user) {
+                    currentUser = user;
+                    loadUserData();
+                    showView('menu');
+                } else {
+                    showView('welcome');
+                }
+            });
+            
+            // Login/Register
+            document.getElementById('loginBtn').addEventListener('click', () => {
+                const username = document.getElementById('usernameInput').value.trim();
+                const password = document.getElementById('passwordInput').value;
+                
+                if (!username || !password) {
+                    showToast('Username dan ID privasi harus diisi');
+                    return;
+                }
+                
+                login(username, password);
+            });
+            
+            document.getElementById('registerBtn').addEventListener('click', () => {
+                const username = document.getElementById('usernameInput').value.trim();
+                const password = document.getElementById('passwordInput').value;
+                
+                if (!username || !password) {
+                    showToast('Username dan ID privasi harus diisi');
+                    return;
+                }
+                
+                register(username, password);
+            });
+            
+            // Password toggle
+            document.getElementById('togglePassword').addEventListener('click', () => {
+                const input = document.getElementById('passwordInput');
+                const icon = document.querySelector('#togglePassword i');
+                
+                if (input.type === 'password') {
+                    input.type = 'text';
+                    icon.classList.remove('fa-eye');
+                    icon.classList.add('fa-eye-slash');
+                } else {
+                    input.type = 'password';
+                    icon.classList.remove('fa-eye-slash');
+                    icon.classList.add('fa-eye');
+                }
+            });
+            
+            // Navigation - Direct navigation to views
+            document.querySelectorAll('.nav-item').forEach(item => {
+                item.addEventListener('click', () => {
+                    const viewName = item.getAttribute('data-view');
+                    if (viewName) {
+                        showView(viewName);
+                    }
+                });
+            });
+            
+            document.getElementById('logoutNav').addEventListener('click', logout);
+            
+            // Menu items - Direct navigation to views
+            document.getElementById('groupsMenu').addEventListener('click', () => showView('groups'));
+            document.getElementById('friendsMenu').addEventListener('click', () => showView('friends'));
+            document.getElementById('settingsMenu').addEventListener('click', () => {
+                document.getElementById('settingsModal').classList.add('active');
+            });
+            document.getElementById('themeMenu').addEventListener('click', () => {
+                document.getElementById('themeModal').classList.add('active');
+            });
+            document.getElementById('aboutMenu').addEventListener('click', () => {
+                document.getElementById('aboutModal').classList.add('active');
+            });
+            document.getElementById('editProfileBtn').addEventListener('click', () => {
+                document.getElementById('editProfileModal').classList.add('active');
+            });
+            
+            // Back buttons
+            document.getElementById('backFromGroups').addEventListener('click', () => showView('menu'));
+            document.getElementById('backFromFriends').addEventListener('click', () => showView('menu'));
+            document.getElementById('backFromChat').addEventListener('click', () => showView('menu'));
+            
+            // Group functions
+            document.getElementById('createGroupBtn').addEventListener('click', () => {
+                document.getElementById('createGroupModal').classList.add('active');
+            });
+            
+            document.getElementById('confirmCreateGroup').addEventListener('click', createGroup);
+            
+            document.getElementById('joinGroupBtn').addEventListener('click', () => {
+                const groupId = document.getElementById('joinGroupInput').value.trim();
+                if (groupId) {
+                    joinGroup(groupId);
+                    document.getElementById('joinGroupInput').value = '';
+                }
+            });
+            
+            // Friend functions
+            document.getElementById('addFriendBtn').addEventListener('click', () => {
+                document.getElementById('addFriendModal').classList.add('active');
+            });
+            
+            document.getElementById('confirmAddFriend').addEventListener('click', () => {
+                const friendId = document.getElementById('friendIdInput').value.trim();
+                if (friendId) {
+                    addFriend(friendId);
+                }
+            });
+            
+            // Friend request notification
+            document.getElementById('acceptFriendRequest').addEventListener('click', () => {
+                const requestId = this.getAttribute('data-request-id');
+                acceptFriendRequest(requestId);
+            });
+            
+            document.getElementById('rejectFriendRequest').addEventListener('click', () => {
+                const requestId = this.getAttribute('data-request-id');
+                rejectFriendRequest(requestId);
+            });
+            
+            // Profile functions
+            document.getElementById('saveProfileBtn').addEventListener('click', () => {
+                const status = document.getElementById('statusInput').value;
+                const bio = document.getElementById('bioInput').value;
+                
+                database.ref('users/' + currentUser.uid).update({
+                    status: status,
+                    bio: bio
+                }).then(() => {
+                    showToast('Profil berhasil diperbarui');
+                    document.getElementById('editProfileModal').classList.remove('active');
+                });
+            });
+            
+            // Settings functions
+            document.getElementById('saveSettingsBtn').addEventListener('click', updateSettings);
+            
+            // Theme functions
+            document.querySelectorAll('.theme-option').forEach(option => {
+                option.addEventListener('click', () => {
+                    const themeName = option.getAttribute('data-theme');
+                    applyTheme(themeName);
+                    showToast(`Tema ${option.getAttribute('title')} diterapkan`);
+                });
+            });
+            
+            // Chat functions
+            document.getElementById('sendBtn').addEventListener('click', sendMessage);
+            
+            document.getElementById('messageInput').addEventListener('keypress', (e) => {
+                if (e.key === 'Enter') {
+                    sendMessage();
+                }
+            });
+            
+            // Modal close buttons
+            document.querySelectorAll('.modal-close').forEach(btn => {
+                btn.addEventListener('click', () => {
+                    btn.closest('.modal').classList.remove('active');
+                });
+            });
+            
+            // Close modal on outside click
+            document.querySelectorAll('.modal').forEach(modal => {
+                modal.addEventListener('click', (e) => {
+                    if (e.target === modal) {
+                        modal.classList.remove('active');
+                    }
+                });
+            });
+        });
+    </script>
+</body>
+</html>
