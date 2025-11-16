@@ -8,8 +8,8 @@
     <style>
         :root {
             --primary: #dc2626;
-            --secondary: #991b1b;
-            --accent: #ef4444;
+            --secondary: lab(36.51% 59.89 -29.27);
+            --accent: #dc2626;
             --success: #10b981;
             --warning: #f59e0b;
             --danger: #dc2626;
@@ -22,12 +22,16 @@
             --shadow-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
             --shadow-2xl: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
             --shadow-3d: 0 10px 20px rgba(0, 0, 0, 0.2), 0 6px 6px rgba(0, 0, 0, 0.3);
+            --shadow-red: 0 10px 30px rgba(220, 38, 38, 0.3);
+            --shadow-red-lg: 0 20px 40px rgba(220, 38, 38, 0.4);
             --gradient-primary: linear-gradient(135deg, #dc2626 0%, #991b1b 100%);
             --gradient-secondary: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
             --gradient-accent: linear-gradient(135deg, #f87171 0%, #ef4444 100%);
             --gradient-success: linear-gradient(135deg, #10b981 0%, #059669 100%);
             --gradient-warning: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
             --gradient-danger: linear-gradient(135deg, #dc2626 0%, #991b1b 100%);
+            --gradient-premium: linear-gradient(135deg, #dc2626 0%, #991b1b 50%, #dc2626 100%);
+            --gradient-glass: linear-gradient(135deg, rgba(220, 38, 38, 0.1) 0%, rgba(239, 68, 68, 0.1) 100%);
         }
 
         * {
@@ -39,11 +43,33 @@
 
         body {
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-            background: var(--white);
+            background: linear-gradient(135deg, #991b1b 0%, #dc2626 50%, #991b1b 100%);
             height: 100vh;
             overflow: hidden;
             position: fixed;
             width: 100%;
+        }
+
+        /* Animated Background */
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: 
+                radial-gradient(circle at 20% 50%, rgba(220, 38, 38, 0.1) 0%, transparent 50%),
+                radial-gradient(circle at 80% 80%, rgba(239, 68, 68, 0.1) 0%, transparent 50%),
+                radial-gradient(circle at 40% 20%, rgba(248, 113, 113, 0.1) 0%, transparent 50%);
+            animation: backgroundShift 10s ease-in-out infinite;
+            z-index: -1;
+        }
+
+        @keyframes backgroundShift {
+            0%, 100% { transform: translateX(0) translateY(0); }
+            33% { transform: translateX(-20px) translateY(-20px); }
+            66% { transform: translateX(20px) translateY(-10px); }
         }
 
         .app-container {
@@ -51,37 +77,45 @@
             width: 100%;
             max-width: 500px;
             margin: 0 auto;
-            background: var(--white);
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(20px);
             display: flex;
             flex-direction: column;
             position: relative;
             box-shadow: var(--shadow-2xl);
+            border: 1px solid rgba(220, 38, 38, 0.2);
         }
 
-        /* Header Styles */
+        /* Premium Header Styles */
         .header {
-            background: var(--gradient-primary);
+            background: var(--gradient-premium);
             color: white;
             padding: 20px;
             display: flex;
             align-items: center;
             justify-content: space-between;
-            box-shadow: var(--shadow-3d);
+            box-shadow: var(--shadow-red);
             position: relative;
             z-index: 100;
             transform-style: preserve-3d;
             perspective: 1000px;
+            overflow: hidden;
         }
 
         .header::before {
             content: '';
             position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: linear-gradient(135deg, rgba(255,255,255,0.1) 0%, rgba(255,255,255,0) 100%);
-            pointer-events: none;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: linear-gradient(45deg, transparent, rgba(255,255,255,0.1), transparent);
+            animation: headerShine 3s linear infinite;
+        }
+
+        @keyframes headerShine {
+            0% { transform: translateX(-100%) translateY(-100%) rotate(45deg); }
+            100% { transform: translateX(100%) translateY(100%) rotate(45deg); }
         }
 
         .header-title {
@@ -89,10 +123,12 @@
             font-weight: 700;
             text-shadow: 0 2px 4px rgba(0,0,0,0.3);
             transform: translateZ(20px);
+            position: relative;
+            z-index: 1;
         }
 
         .header-btn {
-            background: rgba(255,255,255,0.2);
+            background: rgba(255,255,255,0.15);
             backdrop-filter: blur(10px);
             border: 1px solid rgba(255,255,255,0.3);
             color: white;
@@ -108,16 +144,46 @@
             transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
             transform: translateZ(10px);
             box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            position: relative;
+            z-index: 1;
         }
 
         .header-btn:hover {
-            background: rgba(255,255,255,0.3);
+            background: rgba(255,255,255,0.25);
             transform: translateZ(20px) scale(1.05);
             box-shadow: 0 8px 12px rgba(0,0,0,0.2);
         }
 
         .header-btn:active {
             transform: translateZ(5px) scale(0.95);
+        }
+
+        /* Notification Badge */
+        .notification-badge {
+            position: absolute;
+            top: -5px;
+            right: -5px;
+            background: var(--gradient-danger);
+            color: white;
+            font-size: 10px;
+            font-weight: 700;
+            padding: 3px 7px;
+            border-radius: 12px;
+            min-width: 20px;
+            text-align: center;
+            box-shadow: var(--shadow);
+            animation: badgePulse 2s ease-in-out infinite;
+        }
+
+        @keyframes badgePulse {
+            0%, 100% { 
+                transform: scale(1);
+                box-shadow: 0 0 0 0 rgba(220, 38, 38, 0.7);
+            }
+            50% { 
+                transform: scale(1.1);
+                box-shadow: 0 0 0 10px rgba(220, 38, 38, 0);
+            }
         }
 
         /* Main Content Area */
@@ -129,7 +195,7 @@
             position: relative;
         }
 
-        /* Welcome Screen */
+        /* Premium Welcome Screen */
         .welcome-container {
             padding: 40px 30px;
             display: flex;
@@ -141,18 +207,18 @@
         }
 
         .welcome-logo {
-            width: 120px;
-            height: 120px;
-            background: var(--gradient-primary);
+            width: 140px;
+            height: 140px;
+            background: var(--gradient-premium);
             border-radius: 30px;
             display: flex;
             align-items: center;
             justify-content: center;
             margin-bottom: 30px;
-            font-size: 48px;
+            font-size: 56px;
             color: white;
-            animation: float3d 4s ease-in-out infinite;
-            box-shadow: var(--shadow-3d);
+            animation: logoFloat 4s ease-in-out infinite;
+            box-shadow: var(--shadow-red-lg);
             transform-style: preserve-3d;
             position: relative;
         }
@@ -160,57 +226,57 @@
         .welcome-logo::before {
             content: '';
             position: absolute;
-            top: -10px;
-            left: -10px;
-            right: -10px;
-            bottom: -10px;
-            background: var(--gradient-primary);
+            top: -15px;
+            left: -15px;
+            right: -15px;
+            bottom: -15px;
+            background: var(--gradient-premium);
             border-radius: 30px;
             opacity: 0.3;
             z-index: -1;
-            filter: blur(20px);
-            animation: pulse 2s ease-in-out infinite;
+            filter: blur(25px);
+            animation: logoGlow 2s ease-in-out infinite;
         }
 
-        @keyframes float3d {
+        @keyframes logoFloat {
             0%, 100% { 
                 transform: translateY(0) rotateX(0) rotateY(0); 
-                box-shadow: var(--shadow-3d);
+                box-shadow: var(--shadow-red-lg);
             }
             25% { 
-                transform: translateY(-10px) rotateX(5deg) rotateY(5deg); 
-                box-shadow: 0 20px 40px rgba(220, 38, 38, 0.4);
+                transform: translateY(-15px) rotateX(5deg) rotateY(5deg); 
+                box-shadow: 0 30px 60px rgba(220, 38, 38, 0.5);
             }
             50% { 
-                transform: translateY(-15px) rotateX(-5deg) rotateY(-5deg); 
-                box-shadow: 0 25px 50px rgba(220, 38, 38, 0.5);
+                transform: translateY(-20px) rotateX(-5deg) rotateY(-5deg); 
+                box-shadow: 0 35px 70px rgba(220, 38, 38, 0.6);
             }
             75% { 
-                transform: translateY(-10px) rotateX(3deg) rotateY(-3deg); 
-                box-shadow: 0 20px 40px rgba(220, 38, 38, 0.4);
+                transform: translateY(-15px) rotateX(3deg) rotateY(-3deg); 
+                box-shadow: 0 30px 60px rgba(220, 38, 38, 0.5);
             }
         }
 
-        @keyframes pulse {
+        @keyframes logoGlow {
             0%, 100% { transform: scale(1); opacity: 0.3; }
-            50% { transform: scale(1.1); opacity: 0.5; }
+            50% { transform: scale(1.2); opacity: 0.5; }
         }
 
         .welcome-title {
-            font-size: 32px;
+            font-size: 36px;
             font-weight: 800;
             color: var(--dark);
             margin-bottom: 10px;
             text-align: center;
-            background: var(--gradient-primary);
+            background: var(--gradient-premium);
             -webkit-background-clip: text;
             background-clip: text;
             -webkit-text-fill-color: transparent;
-            animation: shimmer 3s ease-in-out infinite;
+            animation: titleShimmer 3s ease-in-out infinite;
             text-shadow: 0 4px 8px rgba(0,0,0,0.1);
         }
 
-        @keyframes shimmer {
+        @keyframes titleShimmer {
             0%, 100% { opacity: 1; }
             50% { opacity: 0.8; }
         }
@@ -223,7 +289,7 @@
             font-weight: 500;
         }
 
-        /* Form Styles */
+        /* Premium Form Styles */
         .form-group {
             width: 100%;
             margin-bottom: 25px;
@@ -257,7 +323,7 @@
 
         .form-input {
             width: 100%;
-            padding: 16px 20px;
+            padding: 18px 22px;
             border: 2px solid #e5e7eb;
             border-radius: 16px;
             font-size: 16px;
@@ -274,9 +340,20 @@
             transform: translateZ(10px);
         }
 
+        .device-info {
+            background: var(--gradient-glass);
+            border-radius: 12px;
+            padding: 12px;
+            margin-bottom: 20px;
+            border-left: 4px solid var(--primary);
+            font-size: 12px;
+            color: var(--dark);
+            backdrop-filter: blur(10px);
+        }
+
         .btn {
             width: 100%;
-            padding: 16px 24px;
+            padding: 18px 24px;
             border: none;
             border-radius: 16px;
             font-size: 16px;
@@ -298,7 +375,7 @@
             left: -100%;
             width: 100%;
             height: 100%;
-            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
             transition: left 0.5s;
         }
 
@@ -307,22 +384,22 @@
         }
 
         .btn-primary {
-            background: var(--gradient-primary);
+            background: var(--gradient-premium);
             color: white;
-            box-shadow: var(--shadow-lg);
+            box-shadow: var(--shadow-red);
             transform: translateZ(10px);
         }
 
         .btn-primary:hover {
             transform: translateZ(20px) translateY(-2px);
-            box-shadow: var(--shadow-xl);
+            box-shadow: var(--shadow-red-lg);
         }
 
         .btn-primary:active {
             transform: translateZ(5px) translateY(0);
         }
 
-        /* Bottom Navigation */
+        /* Premium Bottom Navigation */
         .bottom-nav {
             position: fixed;
             bottom: 0;
@@ -337,7 +414,7 @@
             justify-content: space-around;
             padding: 15px 0;
             z-index: 1000;
-            border-top: 1px solid rgba(255,255,255,0.8);
+            border-top: 1px solid rgba(220, 38, 38, 0.2);
         }
 
         .nav-item {
@@ -426,7 +503,7 @@
             }
         }
 
-        /* Chat Container */
+        /* Premium Chat Container */
         .chat-container {
             display: flex;
             flex-direction: column;
@@ -479,7 +556,7 @@
         }
 
         .message.sent .message-bubble {
-            background: var(--gradient-primary);
+            background: var(--gradient-premium);
             color: white;
             border-bottom-right-radius: 6px;
         }
@@ -529,7 +606,7 @@
         @keyframes badgePulse {
             0%, 100% { 
                 transform: scale(1);
-                box-shadow: 0 0 0 0 rgba(220, 38, 38, 0.7);
+                box-shadow: 0 0 0 0 rgb(204, 0, 255);
             }
             50% { 
                 transform: scale(1.05);
@@ -606,7 +683,7 @@
             width: 50px;
             height: 50px;
             border-radius: 50%;
-            background: var(--gradient-primary);
+            background: var(--gradient-premium);
             color: white;
             border: none;
             cursor: pointer;
@@ -614,27 +691,27 @@
             align-items: center;
             justify-content: center;
             transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-            box-shadow: var(--shadow-lg);
+            box-shadow: var(--shadow-red);
             transform: translateZ(10px);
         }
 
         .send-btn:hover {
             transform: translateZ(20px) scale(1.1) rotate(10deg);
-            box-shadow: var(--shadow-xl);
+            box-shadow: var(--shadow-red-lg);
         }
 
         .send-btn:active {
             transform: translateZ(5px) scale(0.95);
         }
 
-        /* Menu Content */
+        /* Premium Menu Content */
         .menu-content {
             padding: 25px;
             padding-bottom: 90px;
             background: linear-gradient(180deg, var(--white) 0%, var(--light) 100%);
         }
 
-        /* Profile Card */
+        /* Premium Profile Card */
         .profile-card {
             background: var(--white);
             border-radius: 24px;
@@ -655,7 +732,7 @@
             left: 0;
             right: 0;
             height: 100px;
-            background: var(--gradient-primary);
+            background: var(--gradient-premium);
             z-index: 0;
         }
 
@@ -667,7 +744,7 @@
         .profile-avatar {
             width: 90px;
             height: 90px;
-            background: var(--gradient-primary);
+            background: var(--gradient-premium);
             border-radius: 50%;
             display: flex;
             align-items: center;
@@ -678,7 +755,7 @@
             font-weight: bold;
             position: relative;
             z-index: 1;
-            box-shadow: var(--shadow-lg);
+            box-shadow: var(--shadow-red);
             transform: translateZ(20px);
             transition: all 0.3s;
         }
@@ -708,7 +785,7 @@
             z-index: 1;
         }
 
-        /* Menu Sections */
+        /* Premium Menu Sections */
         .menu-section {
             background: var(--white);
             border-radius: 20px;
@@ -726,13 +803,13 @@
 
         .menu-section-title {
             padding: 18px 24px;
-            background: linear-gradient(135deg, var(--light) 0%, #e5e7eb 100%);
+            background: var(--gradient-glass);
             font-weight: 700;
             color: var(--dark);
             font-size: 13px;
             text-transform: uppercase;
             letter-spacing: 1px;
-            border-bottom: 1px solid #e5e7eb;
+            border-bottom: 1px solid rgba(220, 38, 38, 0.1);
         }
 
         .menu-item {
@@ -810,8 +887,13 @@
             color: white;
         }
 
-        .menu-item-icon.settings {
+        .menu-item-icon.notifications {
             background: var(--gradient-warning);
+            color: white;
+        }
+
+        .menu-item-icon.settings {
+            background: var(--gradient-accent);
             color: white;
         }
 
@@ -848,7 +930,7 @@
             transform: translateX(5px);
         }
 
-        /* Modal Styles */
+        /* Premium Modal Styles */
         .modal {
             display: none;
             position: fixed;
@@ -902,7 +984,7 @@
             display: flex;
             align-items: center;
             justify-content: space-between;
-            background: var(--gradient-primary);
+            background: var(--gradient-premium);
             color: white;
             border-radius: 24px 24px 0 0;
         }
@@ -936,7 +1018,7 @@
             padding: 24px;
         }
 
-        /* List Items */
+        /* Premium List Items */
         .list-item {
             padding: 18px;
             background: var(--white);
@@ -1044,7 +1126,7 @@
             background: var(--gradient-danger);
         }
 
-        /* Toast Notification */
+        /* Premium Toast Notification */
         .toast {
             position: fixed;
             bottom: 120px;
@@ -1157,6 +1239,176 @@
             box-shadow: var(--shadow);
         }
 
+        /* Friend Request Notification */
+        .friend-request-notification {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: var(--white);
+            border-radius: 20px;
+            padding: 20px;
+            box-shadow: var(--shadow-2xl);
+            z-index: 2000;
+            max-width: 320px;
+            transform: translateX(400px) rotateY(-10deg);
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            border: 1px solid rgba(220, 38, 38, 0.2);
+        }
+
+        .friend-request-notification.show {
+            transform: translateX(0) rotateY(0);
+        }
+
+        .notification-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 12px;
+        }
+
+        .notification-avatar {
+            width: 45px;
+            height: 45px;
+            border-radius: 50%;
+            background: var(--gradient-primary);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: bold;
+            margin-right: 12px;
+            box-shadow: var(--shadow);
+        }
+
+        .notification-title {
+            font-weight: 700;
+            color: var(--dark);
+            font-size: 16px;
+        }
+
+        .notification-message {
+            color: #6b7280;
+            font-size: 14px;
+            margin-bottom: 16px;
+            line-height: 1.5;
+        }
+
+        .notification-actions {
+            display: flex;
+            gap: 10px;
+        }
+
+        .notification-btn {
+            flex: 1;
+            padding: 10px;
+            border: none;
+            border-radius: 12px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s;
+            font-size: 14px;
+        }
+
+        .notification-btn.accept {
+            background: var(--gradient-success);
+            color: white;
+            box-shadow: var(--shadow);
+        }
+
+        .notification-btn.reject {
+            background: #f3f4f6;
+            color: var(--dark);
+            border: 1px solid #e5e7eb;
+        }
+
+        .notification-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-lg);
+        }
+
+        /* Pending Requests */
+        .pending-requests {
+            background: var(--gradient-glass);
+            border-radius: 16px;
+            padding: 15px;
+            margin-bottom: 20px;
+            border-left: 4px solid var(--primary);
+            backdrop-filter: blur(10px);
+        }
+
+        .pending-requests-title {
+            font-weight: 700;
+            color: var(--primary);
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .pending-request-item {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 12px;
+            background: var(--white);
+            border-radius: 12px;
+            margin-bottom: 10px;
+            box-shadow: var(--shadow-sm);
+        }
+
+        .pending-request-info {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .pending-request-avatar {
+            width: 35px;
+            height: 35px;
+            border-radius: 50%;
+            background: var(--gradient-primary);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: bold;
+            font-size: 14px;
+        }
+
+        .pending-request-name {
+            font-weight: 600;
+            color: var(--dark);
+            font-size: 14px;
+        }
+
+        .pending-request-actions {
+            display: flex;
+            gap: 6px;
+        }
+
+        .pending-request-btn {
+            padding: 6px 10px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 12px;
+            font-weight: 600;
+            transition: all 0.3s;
+        }
+
+        .pending-request-btn.accept {
+            background: var(--gradient-success);
+            color: white;
+        }
+
+        .pending-request-btn.reject {
+            background: var(--gradient-danger);
+            color: white;
+        }
+
+        .pending-request-btn:hover {
+            transform: scale(1.05);
+        }
+
         /* Responsive */
         @media (max-width: 500px) {
             .app-container {
@@ -1181,11 +1433,12 @@
 
         /* Group Rules */
         .group-rules {
-            background: rgba(220, 38, 38, 0.1);
+            background: var(--gradient-glass);
             border-radius: 16px;
             padding: 15px;
             margin-bottom: 20px;
             border-left: 4px solid var(--primary);
+            backdrop-filter: blur(10px);
         }
 
         .group-rules-title {
@@ -1216,6 +1469,15 @@
             margin-top: 3px;
             font-size: 12px;
         }
+
+        /* Premium Effects */
+        .premium-glow {
+            box-shadow: 0 0 30px rgba(220, 38, 38, 0.5);
+        }
+
+        .premium-border {
+            border: 2px solid rgba(220, 38, 38, 0.3);
+        }
     </style>
 </head>
 <body>
@@ -1227,7 +1489,11 @@
                     <i class="fas fa-crown"></i>
                 </div>
                 <h1 class="welcome-title">FixaOnly</h1>
-                <p class="welcome-subtitle">Premium Chat Experience</p>
+                <p class="welcome-subtitle">Premium Experience</p>
+                
+                <div class="device-info">
+                    <i class="fas fa-shield-alt"></i> Device ID: <span id="deviceIdDisplay">Loading...</span>
+                </div>
                 
                 <div class="form-group">
                     <label class="form-label">Username</label>
@@ -1249,6 +1515,7 @@
                 <div class="header-title">FixaOnly</div>
                 <button class="header-btn" id="notificationBtn">
                     <i class="fas fa-bell"></i>
+                    <span class="notification-badge" id="notificationBadge" style="display: none;">0</span>
                 </button>
             </div>
             
@@ -1281,6 +1548,19 @@
                             </div>
                             <i class="fas fa-chevron-right menu-item-arrow"></i>
                         </div>
+                        
+                        <div class="menu-item" id="friendsMenu">
+                            <div class="menu-item-left">
+                                <div class="menu-item-icon friends">
+                                    <i class="fas fa-user-friends"></i>
+                                </div>
+                                <div class="menu-item-text">
+                                    <div class="menu-item-title">Teman</div>
+                                    <div class="menu-item-subtitle">Kelola teman</div>
+                                </div>
+                            </div>
+                            <i class="fas fa-chevron-right menu-item-arrow"></i>
+                        </div>
                     </div>
                     
                     <div class="menu-section">
@@ -1293,6 +1573,19 @@
                                 <div class="menu-item-text">
                                     <div class="menu-item-title">Pengguna Online</div>
                                     <div class="menu-item-subtitle">Lihat siapa yang online</div>
+                                </div>
+                            </div>
+                            <i class="fas fa-chevron-right menu-item-arrow"></i>
+                        </div>
+                        
+                        <div class="menu-item" id="notificationsMenu">
+                            <div class="menu-item-left">
+                                <div class="menu-item-icon notifications">
+                                    <i class="fas fa-bell"></i>
+                                </div>
+                                <div class="menu-item-text">
+                                    <div class="menu-item-title">Notifikasi</div>
+                                    <div class="menu-item-subtitle">Permintaan pertemanan</div>
                                 </div>
                             </div>
                             <i class="fas fa-chevron-right menu-item-arrow"></i>
@@ -1347,6 +1640,57 @@
             </div>
         </div>
 
+        <!-- Friends View -->
+        <div id="friendsView" class="view">
+            <div class="header">
+                <button class="header-btn" id="backFromFriends">
+                    <i class="fas fa-arrow-left"></i>
+                </button>
+                <div class="header-title">Teman</div>
+                <button class="header-btn" id="addFriendBtn">
+                    <i class="fas fa-user-plus"></i>
+                </button>
+            </div>
+            
+            <div class="main-content">
+                <div class="menu-content">
+                    <div id="pendingRequestsSection" style="display: none;">
+                        <div class="pending-requests">
+                            <div class="pending-requests-title">
+                                <i class="fas fa-user-clock"></i>
+                                Permintaan Pertemanan
+                            </div>
+                            <div id="pendingRequestsList"></div>
+                        </div>
+                    </div>
+                    
+                    <div id="friendsList"></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Notifications View -->
+        <div id="notificationsView" class="view">
+            <div class="header">
+                <button class="header-btn" id="backFromNotifications">
+                    <i class="fas fa-arrow-left"></i>
+                </button>
+                <div class="header-title">Notifikasi</div>
+            </div>
+            
+            <div class="main-content">
+                <div class="menu-content">
+                    <div class="pending-requests">
+                        <div class="pending-requests-title">
+                            <i class="fas fa-user-clock"></i>
+                            Permintaan Pertemanan
+                        </div>
+                        <div id="allPendingRequestsList"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
         <!-- Online Users View -->
         <div id="onlineUsersView" class="view">
             <div class="header">
@@ -1387,14 +1731,9 @@
         </div>
 
         <!-- Bottom Navigation -->
-        <div class="bottom-nav">
-            <div class="nav-item" data-view="menu">
-                <i class="fas fa-home"></i>
-                <span>Beranda</span>
-            </div>
-            <div class="nav-item" data-view="groups">
-                <i class="fas fa-users"></i>
-                <span>Grup</span>
+            <div class="nav-item" data-view="friends">
+                <i class="fas fa-user-friends"></i>
+                <span>Teman</span>
             </div>
             <div class="nav-item" id="logoutNav">
                 <i class="fas fa-sign-out-alt"></i>
@@ -1437,6 +1776,24 @@
             </div>
         </div>
 
+        <div id="addFriendModal" class="modal">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h3 class="modal-title">Tambah Teman</h3>
+                    <button class="modal-close" id="closeAddFriend">&times;</button>
+                </div>
+                <div class="modal-body">
+                    <div class="form-group">
+                        <label class="form-label">ID Teman</label>
+                        <input type="text" id="friendIdInput" class="form-input" placeholder="Masukkan ID teman">
+                    </div>
+                    <button class="btn btn-primary" id="confirmAddFriend">
+                        <i class="fas fa-user-plus"></i> Kirim Permintaan
+                    </button>
+                </div>
+            </div>
+        </div>
+
         <div id="groupMembersModal" class="modal">
             <div class="modal-content">
                 <div class="modal-header">
@@ -1457,19 +1814,38 @@
                 </div>
                 <div class="modal-body">
                     <div style="text-align: center; margin-bottom: 20px;">
-                        <div style="width: 80px; height: 80px; background: var(--gradient-primary); border-radius: 20px; display: flex; align-items: center; justify-content: center; margin: 0 auto 15px; color: white; font-size: 32px;">
+                        <div style="width: 80px; height: 80px; background: var(--gradient-premium); border-radius: 20px; display: flex; align-items: center; justify-content: center; margin: 0 auto 15px; color: white; font-size: 32px;">
                             <i class="fas fa-crown"></i>
                         </div>
                         <h3 style="color: var(--dark); margin-bottom: 5px;">FixaOnly</h3>
-                        <p style="color: #6b7280; font-size: 14px;">Premium Chat v1.0</p>
+                        <p style="color: #6b7280; font-size: 14px;">Premium v2.0</p>
                     </div>
                     <p style="color: var(--dark); line-height: 1.5; margin-bottom: 15px;">
-                        Aplikasi chat premium dengan sistem keamanan tinggi. 1 username untuk 1 device, sistem admin grup, dan fitur kick/ban lengkap.
+                        Aplikasi chat premium dengan sistem keamanan tinggi. 1 username untuk 1 device, sistem admin grup, dan fitur kick/ban permanen.
                     </p>
                     <p style="color: #6b7280; font-size: 14px; line-height: 1.5;">
                         © 2024 FixaOnly. All rights reserved.
                     </p>
                 </div>
+            </div>
+        </div>
+
+        <!-- Friend Request Notification -->
+        <div id="friendRequestNotification" class="friend-request-notification">
+            <div class="notification-header">
+                <div class="notification-avatar" id="notificationAvatar">U</div>
+                <div class="notification-title">Permintaan Teman Baru</div>
+            </div>
+            <div class="notification-message">
+                <span id="notificationUsername">Username</span> ingin menambahkan Anda sebagai teman.
+            </div>
+            <div class="notification-actions">
+                <button class="notification-btn accept" id="acceptFriendRequest">
+                    <i class="fas fa-check"></i> Terima
+                </button>
+                <button class="notification-btn reject" id="rejectFriendRequest">
+                    <i class="fas fa-times"></i> Tolak
+                </button>
             </div>
         </div>
 
@@ -1480,7 +1856,7 @@
     <!-- Firebase SDK - Encrypted Configuration -->
     <script>
         // Firebase Configuration - Advanced Encryption
-        const _0x5f4b = ['AIzaSyBGa4QVKJgaT7T_LdLJJzDLCSRMJ5if1d4', 'fixa-admin-88c99.firebaseapp.com', 'https://fixa-admin-88c99-default-rtdb.firebaseio.com', 'fixaonly-premium', 'fixa-admin-88c99.firebasestorage.app', '773497396632', '1:773497396632:web:c358d0a1fec42a92151fed'];
+        const _0x5f4b = ['AIzaSyBGa4QVKJgaT7T_LdLJJzDLCSRMJ5if1d4', 'fixa-admin-88c99.firebaseapp.co', 'httpfixs://fixa-admin-88c99-default-rtdb.firebaseio.com', 'fixa-admin-88c99', 'fixa-admin-88c99.firebasestorage.app', '773497396632', '1:773497396632:web:c358d0a1fec42a92151fed'];
         
         // Decode function
         const decodeFirebaseConfig = () => {
@@ -1514,20 +1890,55 @@
         let isGroupAdmin = false;
         let bannedUsers = {};
         let toxicWords = ['babi', 'anjing', 'monyet', 'goblok', 'tolol', 'bodoh', 'bangsat', 'kontol', 'memek', 'pepek', 'ngentot'];
-        let deviceId = localStorage.getItem('deviceId') || generateDeviceId();
+        let deviceId = null;
+        let deviceUsername = null;
         let onlineUsers = {};
+        let pendingFriendRequests = {};
+        let notificationCount = 0;
+        let kickedFromGroups = {};
 
-        // Generate unique device ID with fingerprinting
+        // Generate unique device ID with advanced fingerprinting
         function generateDeviceId() {
+            // Create canvas fingerprint
             const canvas = document.createElement('canvas');
             const ctx = canvas.getContext('2d');
             ctx.textBaseline = 'top';
             ctx.font = '14px Arial';
-            ctx.fillText('Device fingerprint', 2, 2);
+            ctx.fillText('FixaOnly Premium Fingerprint', 2, 2);
             const fingerprint = canvas.toDataURL();
             
-            const id = 'fx_' + btoa(fingerprint + navigator.userAgent + Date.now()).replace(/[^a-zA-Z0-9]/g, '').substr(0, 20);
-            localStorage.setItem('deviceId', id);
+            // Get browser info
+            const browserInfo = navigator.userAgent + navigator.language + navigator.platform;
+            
+            // Get screen info
+            const screenInfo = screen.width + 'x' + screen.height + 'x' + screen.colorDepth;
+            
+            // Get timezone
+            const timezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
+            
+            // Combine all info
+            const combinedInfo = fingerprint + browserInfo + screenInfo + timezone + Date.now();
+            
+            // Generate hash
+            const id = 'fx_' + btoa(combinedInfo).replace(/[^a-zA-Z0-9]/g, '').substr(0, 25);
+            
+            // Store in multiple places for persistence
+            localStorage.setItem('fx_device_id', id);
+            sessionStorage.setItem('fx_device_id', id);
+            
+            return id;
+        }
+
+        // Get device ID (existing or new)
+        function getDeviceId() {
+            // Try to get from localStorage first
+            let id = localStorage.getItem('fx_device_id') || 
+                    sessionStorage.getItem('fx_device_id');
+            
+            if (!id) {
+                id = generateDeviceId();
+            }
+            
             return id;
         }
 
@@ -1536,6 +1947,8 @@
             welcome: document.getElementById('welcomeView'),
             menu: document.getElementById('menuView'),
             groups: document.getElementById('groupsView'),
+            friends: document.getElementById('friendsView'),
+            notifications: document.getElementById('notificationsView'),
             online: document.getElementById('onlineUsersView'),
             chat: document.getElementById('chatView')
         };
@@ -1584,8 +1997,47 @@
             return urlPattern.test(message);
         }
 
+        function updateNotificationBadge() {
+            const badge = document.getElementById('notificationBadge');
+            const count = Object.keys(pendingFriendRequests).length;
+            
+            if (count > 0) {
+                badge.textContent = count;
+                badge.style.display = 'block';
+            } else {
+                badge.style.display = 'none';
+            }
+        }
+
+        function showFriendRequestNotification(requestId, requestData) {
+            const notification = document.getElementById('friendRequestNotification');
+            const avatar = document.getElementById('notificationAvatar');
+            const username = document.getElementById('notificationUsername');
+            
+            avatar.textContent = requestData.username.charAt(0).toUpperCase();
+            username.textContent = requestData.username;
+            
+            // Set data attributes for accept/reject buttons
+            document.getElementById('acceptFriendRequest').setAttribute('data-request-id', requestId);
+            document.getElementById('rejectFriendRequest').setAttribute('data-request-id', requestId);
+            
+            // Show notification
+            notification.classList.add('show');
+            
+            // Auto hide after 10 seconds
+            setTimeout(() => {
+                notification.classList.remove('show');
+            }, 10000);
+        }
+
         // Auth Functions
         function login(username) {
+            // Check if device already has a username
+            if (deviceUsername && deviceUsername !== username) {
+                showToast('Device ini sudah terdaftar dengan username lain!');
+                return;
+            }
+            
             // Check if user exists
             database.ref('users').orderByChild('username').equalTo(username).once('value')
                 .then(snapshot => {
@@ -1611,6 +2063,10 @@
                             online: true,
                             lastSeen: Date.now()
                         }).then(() => {
+                            // Store device-username mapping
+                            localStorage.setItem('fx_device_username', username);
+                            deviceUsername = username;
+                            
                             currentUser = {
                                 uid: userId,
                                 username: username
@@ -1639,6 +2095,10 @@
                 online: true,
                 banned: false
             }).then(() => {
+                // Store device-username mapping
+                localStorage.setItem('fx_device_username', username);
+                deviceUsername = username;
+                
                 currentUser = {
                     uid: userId,
                     username: username
@@ -1664,6 +2124,9 @@
                 database.ref('onlineUsers/' + currentUser.uid).remove();
             }
             
+            // Clear local storage
+            localStorage.removeItem('fx_device_username');
+            deviceUsername = null;
             currentUser = null;
             currentChat = null;
             showView('welcome');
@@ -1700,7 +2163,171 @@
             document.getElementById('avatarInitial').textContent = currentUser.username.charAt(0).toUpperCase();
             
             loadGroups();
+            loadFriends();
             loadOnlineUsers();
+            setupFriendRequestListener();
+            loadKickedGroups();
+        }
+
+        // Friend Request Functions
+        function setupFriendRequestListener() {
+            // Listen for incoming friend requests
+            database.ref('users/' + currentUser.uid + '/friendRequests').on('child_added', snapshot => {
+                const requestId = snapshot.key;
+                const requestData = snapshot.val();
+                
+                // Store request
+                pendingFriendRequests[requestId] = requestData;
+                
+                // Update badge
+                updateNotificationBadge();
+                
+                // Show notification
+                showFriendRequestNotification(requestId, requestData);
+                
+                // Update pending requests UI
+                updatePendingRequestsUI();
+            });
+            
+            // Listen for removed requests
+            database.ref('users/' + currentUser.uid + '/friendRequests').on('child_removed', snapshot => {
+                const requestId = snapshot.key;
+                
+                // Remove from pending
+                delete pendingFriendRequests[requestId];
+                
+                // Update badge
+                updateNotificationBadge();
+                
+                // Update UI
+                updatePendingRequestsUI();
+            });
+        }
+
+        function sendFriendRequest(friendId) {
+            if (friendId === currentUser.uid) {
+                showToast('Tidak bisa menambah diri sendiri');
+                return;
+            }
+            
+            database.ref('users').orderByChild('userId').equalTo(friendId).once('value')
+                .then(snapshot => {
+                    if (snapshot.exists()) {
+                        const friendData = Object.values(snapshot.val())[0];
+                        const friendUid = Object.keys(snapshot.val())[0];
+                        
+                        // Check if already friends
+                        database.ref('users/' + currentUser.uid + '/friends/' + friendUid).once('value')
+                            .then(friendSnapshot => {
+                                if (friendSnapshot.exists()) {
+                                    showToast('Anda sudah berteman dengan ' + friendData.username);
+                                    return;
+                                }
+                                
+                                // Send friend request
+                                database.ref('users/' + friendUid + '/friendRequests/' + currentUser.uid).set({
+                                    username: currentUser.username,
+                                    userId: currentUser.uid,
+                                    timestamp: Date.now()
+                                }).then(() => {
+                                    showToast(`Permintaan pertemanan dikirim ke ${friendData.username}`);
+                                    document.getElementById('addFriendModal').classList.remove('active');
+                                    document.getElementById('friendIdInput').value = '';
+                                });
+                            });
+                    } else {
+                        showToast('Pengguna tidak ditemukan');
+                    }
+                });
+        }
+
+        function acceptFriendRequest(requestId) {
+            const requestData = pendingFriendRequests[requestId];
+            
+            if (!requestData) return;
+            
+            // Add to current user's friends
+            database.ref('users/' + currentUser.uid + '/friends/' + requestId).set({
+                username: requestData.username,
+                userId: requestData.userId,
+                addedAt: Date.now()
+            }).then(() => {
+                // Add to friend's friends
+                database.ref('users/' + requestId + '/friends/' + currentUser.uid).set({
+                    username: currentUser.username,
+                    userId: currentUser.uid,
+                    addedAt: Date.now()
+                }).then(() => {
+                    // Remove request
+                    database.ref('users/' + currentUser.uid + '/friendRequests/' + requestId).remove();
+                    
+                    // Hide notification
+                    document.getElementById('friendRequestNotification').classList.remove('show');
+                    
+                    // Show toast
+                    showToast(`${requestData.username} ditambahkan sebagai teman`);
+                    
+                    // Open chat directly
+                    openChat(requestId, 'private', requestData.username);
+                    
+                    // Reload friends list
+                    loadFriends();
+                });
+            });
+        }
+
+        function rejectFriendRequest(requestId) {
+            const requestData = pendingFriendRequests[requestId];
+            
+            if (!requestData) return;
+            
+            // Remove request
+            database.ref('users/' + currentUser.uid + '/friendRequests/' + requestId).remove();
+            
+            // Hide notification
+            document.getElementById('friendRequestNotification').classList.remove('show');
+            
+            // Show toast
+            showToast('Permintaan teman ditolak');
+        }
+
+        function updatePendingRequestsUI() {
+            const pendingSection = document.getElementById('pendingRequestsSection');
+            const pendingList = document.getElementById('pendingRequestsList');
+            const allPendingList = document.getElementById('allPendingRequestsList');
+            
+            const count = Object.keys(pendingFriendRequests).length;
+            
+            if (count > 0) {
+                pendingSection.style.display = 'block';
+                
+                let html = '';
+                Object.keys(pendingFriendRequests).forEach(requestId => {
+                    const request = pendingFriendRequests[requestId];
+                    html += `
+                        <div class="pending-request-item">
+                            <div class="pending-request-info">
+                                <div class="pending-request-avatar">${request.username.charAt(0).toUpperCase()}</div>
+                                <div class="pending-request-name">${request.username}</div>
+                            </div>
+                            <div class="pending-request-actions">
+                                <button class="pending-request-btn accept" onclick="acceptFriendRequest('${requestId}')">
+                                    <i class="fas fa-check"></i>
+                                </button>
+                                <button class="pending-request-btn reject" onclick="rejectFriendRequest('${requestId}')">
+                                    <i class="fas fa-times"></i>
+                                </button>
+                            </div>
+                        </div>
+                    `;
+                });
+                
+                pendingList.innerHTML = html;
+                allPendingList.innerHTML = html;
+            } else {
+                pendingSection.style.display = 'none';
+                allPendingList.innerHTML = '<p style="text-align: center; color: #6b7280; padding: 20px;">Tidak ada permintaan pertemanan</p>';
+            }
         }
 
         // Group Functions
@@ -1743,6 +2370,12 @@
         }
 
         function joinGroup(groupId) {
+            // Check if user is kicked from this group
+            if (kickedFromGroups[groupId]) {
+                showToast('Anda telah dikick dari grup ini!');
+                return;
+            }
+            
             database.ref('groups/' + groupId).once('value')
                 .then(snapshot => {
                     if (snapshot.exists()) {
@@ -1798,6 +2431,81 @@
                         });
                     } else {
                         groupsList.innerHTML = '<p style="text-align: center; color: #6b7280; padding: 20px;">Anda belum bergabung dengan grup</p>';
+                    }
+                });
+        }
+
+        // Friend Functions
+        function loadFriends() {
+            const friendsList = document.getElementById('friendsList');
+            friendsList.innerHTML = '';
+            
+            database.ref('users/' + currentUser.uid + '/friends').once('value')
+                .then(snapshot => {
+                    const friends = snapshot.val();
+                    if (friends) {
+                        Object.keys(friends).forEach(friendUid => {
+                            const friendData = friends[friendUid];
+                            const friendElement = document.createElement('div');
+                            friendElement.className = 'list-item';
+                            friendElement.innerHTML = `
+                                <div class="list-item-info">
+                                    <div class="list-item-avatar">
+                                        ${friendData.username.charAt(0).toUpperCase()}
+                                    </div>
+                                    <div class="list-item-details">
+                                        <div class="list-item-name">${friendData.username}</div>
+                                        <div class="list-item-status">ID: ${friendData.userId}</div>
+                                    </div>
+                                </div>
+                                <button class="list-item-action" onclick="openChat('${friendUid}', 'private', '${friendData.username}')">
+                                    <i class="fas fa-comment"></i> Chat
+                                </button>
+                            `;
+                            friendsList.appendChild(friendElement);
+                        });
+                    } else {
+                        friendsList.innerHTML = '<p style="text-align: center; color: #6b7280; padding: 20px;">Anda belum memiliki teman</p>';
+                    }
+                });
+        }
+
+        // Online Users Functions
+        function loadOnlineUsers() {
+            const onlineUsersList = document.getElementById('onlineUsersList');
+            onlineUsersList.innerHTML = '';
+            
+            database.ref('onlineUsers').once('value')
+                .then(snapshot => {
+                    const users = snapshot.val();
+                    if (users) {
+                        Object.keys(users).forEach(userId => {
+                            const userData = users[userId];
+                            if (userId !== currentUser.uid) {
+                                const userElement = document.createElement('div');
+                                userElement.className = 'list-item';
+                                userElement.innerHTML = `
+                                    <div class="list-item-info">
+                                        <div class="list-item-avatar">
+                                            ${userData.username.charAt(0).toUpperCase()}
+                                        </div>
+                                        <div class="list-item-details">
+                                            <div class="list-item-name">
+                                                ${userData.username}
+                                                <span class="online-indicator"></span>
+                                            </div>
+                                            <div class="list-item-status">Sedang Online</div>
+                                        </div>
+                                    </div>
+                                    <button class="list-item-action" onclick="sendFriendRequest('${userId}')">
+                                        <i class="fas fa-user-plus"></i> Add
+                                    </button>
+                                `;
+                                onlineUsersList.appendChild(userElement);
+                            }
+                        });
+                    } else {
+                        onlineUsersList.innerHTML = '<p style="text-align: center; color: #6b7280; padding: 20px;">Tidak ada pengguna online</p>';
                     }
                 });
         }
@@ -1861,9 +2569,15 @@
         }
 
         function kickMember(memberId, username) {
-            if (confirm(`Apakah Anda yakin ingin KICK ${username} dari grup?`)) {
+            if (confirm(`Apakah Anda yakin ingin KICK ${username} dari grup? User bisa bergabung kembali.`)) {
                 // Remove from group
                 database.ref('groups/' + currentChat + '/members/' + memberId).remove();
+                
+                // Add to user's kicked groups
+                database.ref('users/' + memberId + '/kickedGroups/' + currentChat).set({
+                    kickedAt: Date.now(),
+                    kickedBy: currentUser.username
+                });
                 
                 // Remove from user's groups
                 database.ref('users/' + memberId + '/groups/' + currentChat).remove();
@@ -1877,79 +2591,81 @@
                 
                 database.ref('groups/' + currentChat + '/messages').push(systemMessage);
                 
-                showToast(`${username} telah dikick dari grup!`);
+                // Force user to leave chat if they're in it
+                if (memberId === currentUser.uid) {
+                    currentChat = null;
+                    currentChatType = null;
+                    showView('groups');
+                    showToast('Anda telah dikick dari grup!');
+                } else {
+                    showToast(`${username} telah dikick dari grup!`);
+                }
+                
                 loadGroupMembers();
             }
         }
 
         function banMember(memberId, username) {
-            if (confirm(`Apakah Anda yakin ingin BAN ${username}? User tidak bisa bergabung lagi.`)) {
-                // Ban user globally
-                database.ref('users/' + memberId).update({
-                    banned: true,
-                    online: false
+            if (confirm(`Apakah Anda yakin ingin BAN ${username}? User tidak bisa bergabung lagi (PERMANEN).`)) {
+                // Ban user from group permanently
+                database.ref('groups/' + currentChat + '/bannedMembers/' + memberId).set({
+                    bannedAt: Date.now(),
+                    bannedBy: currentUser.username,
+                    reason: 'Banned by admin'
                 });
                 
                 // Remove from group
                 database.ref('groups/' + currentChat + '/members/' + memberId).remove();
                 database.ref('users/' + memberId + '/groups/' + currentChat).remove();
                 
-                // Remove from online users
-                database.ref('onlineUsers/' + memberId).remove();
+                // Add to user's kicked groups (permanent)
+                database.ref('users/' + memberId + '/kickedGroups/' + currentChat).set({
+                    kickedAt: Date.now(),
+                    kickedBy: currentUser.username,
+                    permanent: true
+                });
                 
                 // Send system message
                 const systemMessage = {
-                    text: `${username} telah dibanned dari grup oleh admin`,
+                    text: `${username} telah dibanned PERMANEN dari grup oleh admin`,
                     system: true,
                     timestamp: Date.now()
                 };
                 
                 database.ref('groups/' + currentChat + '/messages').push(systemMessage);
                 
-                showToast(`${username} telah dibanned!`);
+                // Force user to leave chat if they're in it
+                if (memberId === currentUser.uid) {
+                    currentChat = null;
+                    currentChatType = null;
+                    showView('groups');
+                    showToast('Anda telah dibanned PERMANEN dari grup!');
+                } else {
+                    showToast(`${username} telah dibanned PERMANEN dari grup!`);
+                }
+                
                 loadGroupMembers();
             }
         }
 
-        // Online Users Functions
-        function loadOnlineUsers() {
-            const onlineUsersList = document.getElementById('onlineUsersList');
-            onlineUsersList.innerHTML = '';
-            
-            database.ref('onlineUsers').once('value')
+        // Load kicked groups
+        function loadKickedGroups() {
+            database.ref('users/' + currentUser.uid + '/kickedGroups').once('value')
                 .then(snapshot => {
-                    const users = snapshot.val();
-                    if (users) {
-                        Object.keys(users).forEach(userId => {
-                            const userData = users[userId];
-                            if (userId !== currentUser.uid) {
-                                const userElement = document.createElement('div');
-                                userElement.className = 'list-item';
-                                userElement.innerHTML = `
-                                    <div class="list-item-info">
-                                        <div class="list-item-avatar">
-                                            ${userData.username.charAt(0).toUpperCase()}
-                                        </div>
-                                        <div class="list-item-details">
-                                            <div class="list-item-name">
-                                                ${userData.username}
-                                                <span class="online-indicator"></span>
-                                            </div>
-                                            <div class="list-item-status">Sedang Online</div>
-                                        </div>
-                                    </div>
-                                `;
-                                onlineUsersList.appendChild(userElement);
-                            }
-                        });
-                    } else {
-                        onlineUsersList.innerHTML = '<p style="text-align: center; color: #6b7280; padding: 20px;">Tidak ada pengguna online</p>';
+                    if (snapshot.exists()) {
+                        kickedFromGroups = snapshot.val();
                     }
                 });
         }
 
         // Chat Functions
         function openChat(chatId, type, name) {
+            // Check if user is kicked from this group
+            if (type === 'group' && kickedFromGroups[chatId]) {
+                showToast('Anda telah dikick/banned dari grup ini!');
+                return;
+            }
+            
             currentChat = chatId;
             currentChatType = type;
             document.getElementById('chatTitle').textContent = name;
@@ -2035,6 +2751,16 @@
             
             if (!messageText) return;
             
+            // Check if user is still in the group
+            if (currentChatType === 'group' && kickedFromGroups[currentChat]) {
+                showToast('Anda telah dikick dari grup ini!');
+                currentChat = null;
+                currentChatType = null;
+                showView('groups');
+                input.value = '';
+                return;
+            }
+            
             // Check if user is banned
             database.ref('users/' + currentUser.uid).once('value')
                 .then(snapshot => {
@@ -2085,6 +2811,18 @@
 
         // Event Listeners
         document.addEventListener('DOMContentLoaded', () => {
+            // Initialize device ID
+            deviceId = getDeviceId();
+            deviceUsername = localStorage.getItem('fx_device_username');
+            
+            // Display device ID
+            document.getElementById('deviceIdDisplay').textContent = deviceId;
+            
+            // Auto-fill username if device has one
+            if (deviceUsername) {
+                document.getElementById('usernameInput').value = deviceUsername;
+            }
+            
             // Login
             document.getElementById('loginBtn').addEventListener('click', () => {
                 const username = document.getElementById('usernameInput').value.trim();
@@ -2111,6 +2849,11 @@
             
             // Menu items
             document.getElementById('groupsMenu').addEventListener('click', () => showView('groups'));
+            document.getElementById('friendsMenu').addEventListener('click', () => showView('friends'));
+            document.getElementById('notificationsMenu').addEventListener('click', () => {
+                updatePendingRequestsUI();
+                showView('notifications');
+            });
             document.getElementById('onlineUsersMenu').addEventListener('click', () => {
                 loadOnlineUsers();
                 showView('online');
@@ -2121,6 +2864,8 @@
             
             // Back buttons
             document.getElementById('backFromGroups').addEventListener('click', () => showView('menu'));
+            document.getElementById('backFromFriends').addEventListener('click', () => showView('menu'));
+            document.getElementById('backFromNotifications').addEventListener('click', () => showView('menu'));
             document.getElementById('backFromOnline').addEventListener('click', () => showView('menu'));
             document.getElementById('backFromChat').addEventListener('click', () => showView('menu'));
             
@@ -2137,6 +2882,29 @@
                     joinGroup(groupId);
                     document.getElementById('joinGroupInput').value = '';
                 }
+            });
+            
+            // Friend functions
+            document.getElementById('addFriendBtn').addEventListener('click', () => {
+                document.getElementById('addFriendModal').classList.add('active');
+            });
+            
+            document.getElementById('confirmAddFriend').addEventListener('click', () => {
+                const friendId = document.getElementById('friendIdInput').value.trim();
+                if (friendId) {
+                    sendFriendRequest(friendId);
+                }
+            });
+            
+            // Friend request notification
+            document.getElementById('acceptFriendRequest').addEventListener('click', () => {
+                const requestId = this.getAttribute('data-request-id');
+                acceptFriendRequest(requestId);
+            });
+            
+            document.getElementById('rejectFriendRequest').addEventListener('click', () => {
+                const requestId = this.getAttribute('data-request-id');
+                rejectFriendRequest(requestId);
             });
             
             // Chat functions
