@@ -3,12 +3,12 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sedang Dalam Perbaikan</title>
+    <title>FixaOnly | Sedang Dalam Perbaikan</title>
     
     <!-- Google Font: Poppins -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@200;300;400;600;700&display=swap" rel="stylesheet">
 
     <style>
         /* --- Reset & Style Dasar --- */
@@ -21,7 +21,7 @@
         body {
             font-family: 'Poppins', sans-serif;
             overflow: hidden;
-            background: #000; /* Warna fallback kalau video gagal load */
+            background: #000;
         }
 
         /* --- Background Video --- */
@@ -44,11 +44,11 @@
             left: 0;
             width: 100%;
             height: 100%;
-            background: rgba(0, 0, 0, 0.5); /* Sesuaikan kegelapannya di sini */
+            background: rgba(0, 0, 0, 0.4); /* Lebih terang agar video kelihatan */
             z-index: -1;
         }
 
-        /* --- Container Utama dengan Efek Glassmorphism --- */
+        /* --- Container Utama (Lebih Transparan) --- */
         .container {
             position: absolute;
             top: 50%;
@@ -56,70 +56,75 @@
             transform: translate(-50%, -50%);
             text-align: center;
             color: #ffffff;
-            padding: 50px;
-            background: rgba(255, 255, 255, 0.1); /* Efek kaca */
-            backdrop-filter: blur(10px);
-            -webkit-backdrop-filter: blur(10px); /* Untuk Safari */
+            padding: 60px;
+            background: rgba(255, 255, 255, 0.04); /* Lebih transparan */
+            backdrop-filter: blur(6px); /* Blur dikurangi */
+            -webkit-backdrop-filter: blur(6px);
             border-radius: 20px;
-            border: 1px solid rgba(255, 255, 255, 0.2);
-            box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.3);
             max-width: 500px;
             width: 90%;
-            animation: fadeInUp 1s ease-out;
+            animation: fadeIn 1.5s ease-out;
         }
 
-        @keyframes fadeInUp {
-            from {
-                opacity: 0;
-                transform: translate(-50%, -40%);
-            }
-            to {
-                opacity: 1;
-                transform: translate(-50%, -50%);
-            }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translate(-50%, -45%); }
+            to { opacity: 1; transform: translate(-50%, -50%); }
         }
 
-        /* --- Logo dengan Animasi Halus --- */
+        /* --- Teks "FixaOnly" --- */
+        .brand-text {
+            font-size: 1.2rem;
+            font-weight: 600;
+            letter-spacing: 4px;
+            margin-bottom: 20px;
+            color: rgba(255, 255, 255, 0.85);
+            text-transform: uppercase;
+        }
+
+        /* --- Logo dengan Animasi Pelan --- */
         .logo {
-            width: 80px;
-            height: 80px;
-            margin: 0 auto 30px auto;
-            animation: pulse 2s infinite;
+            width: 60px;
+            height: 60px;
+            margin: 0 auto 25px auto;
+            animation: spinSlow 25s linear infinite;
+            filter: drop-shadow(0 0 8px rgba(255, 255, 255, 0.2));
         }
 
-        @keyframes pulse {
-            0% { filter: drop-shadow(0 0 10px rgba(255, 255, 255, 0.7)); }
-            50% { filter: drop-shadow(0 0 20px rgba(255, 255, 255, 1)); }
-            100% { filter: drop-shadow(0 0 10px rgba(255, 255, 255, 0.7)); }
+        @keyframes spinSlow {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
         }
 
-        /* --- Teks --- */
+        /* --- Teks Utama --- */
         h1 {
-            font-size: 2.5rem;
+            font-size: 2rem;
             font-weight: 700;
             margin-bottom: 15px;
+            letter-spacing: 1px;
         }
 
         .status-text {
-            font-size: 1rem;
+            font-size: 0.95rem;
             font-weight: 400;
-            color: #e0e0e0;
+            color: rgba(255, 255, 255, 0.8);
             margin-bottom: 25px;
         }
 
         #dynamic-text {
-            font-size: 1rem;
+            font-size: 0.95rem;
             font-weight: 300;
             font-style: italic;
             color: #ffffff;
             min-height: 25px;
             opacity: 0;
-            transition: opacity 1.5s ease-in-out;
+            transition: opacity 1s ease-in-out;
         }
 
-        /* --- Pemutar Musik Minimalis --- */
+        /* --- Pemutar Musik (Play/Pause) --- */
         .music-player {
-            position: fixed; /* Ditempel di pojok */
+            position: fixed;
             bottom: 30px;
             right: 30px;
             z-index: 100;
@@ -129,9 +134,9 @@
             width: 50px;
             height: 50px;
             border-radius: 50%;
-            background: rgba(255, 255, 255, 0.1);
+            background: rgba(255, 255, 255, 0.08);
             backdrop-filter: blur(10px);
-            border: 1px solid rgba(255, 255, 255, 0.2);
+            border: 1px solid rgba(255, 255, 255, 0.15);
             color: #ffffff;
             cursor: pointer;
             display: flex;
@@ -141,7 +146,7 @@
         }
 
         .music-toggle:hover {
-            background: rgba(255, 255, 255, 0.2);
+            background: rgba(255, 255, 255, 0.15);
             transform: scale(1.1);
         }
 
@@ -157,7 +162,15 @@
                 padding: 40px 25px;
             }
             h1 {
-                font-size: 2rem;
+                font-size: 1.8rem;
+            }
+            .brand-text {
+                font-size: 1rem;
+                letter-spacing: 3px;
+            }
+            .logo {
+                width: 50px;
+                height: 50px;
             }
         }
     </style>
@@ -176,35 +189,38 @@
 
     <!-- Container Utama -->
     <div class="container">
-        <!-- Logo (Contoh: Icon infinity) -->
+        <!-- Teks Brand "FixaOnly" -->
+        <p class="brand-text">FixaOnly</p>
+
+        <!-- Logo -->
         <div class="logo">
             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
-                <path d="M18.6,6.62C17.16,6.62 15.8,7.18 14.83,8.15L12,11.66C9.81,14.15 6.28,14.25 4,12C3.84,11.82 3.69,11.61 3.57,11.42H2.42C2.56,11.71 2.73,12 2.94,12.25C5.57,15.5 10.5,15.7 13.36,12.67L16.19,9.16C17.39,7.8 19.42,7.69 20.79,8.9C21.57,9.58 22,10.58 22,11.62C22,12.66 21.57,13.66 20.79,14.34L19.31,15.82C19.5,16.32 19.61,16.84 19.66,17.37L21.56,15.47C22.59,14.45 23.16,13.07 23.16,11.62C23.16,10.17 22.59,8.79 21.56,7.77C20.8,7 19.72,6.62 18.6,6.62M9.4,17.38C10.84,17.38 12.2,16.82 13.17,15.85L16,12.34C18.19,9.85 21.72,9.75 24,12C24.16,12.18 24.31,12.39 24.43,12.58H25.58C25.44,12.29 25.27,12 25.06,11.75C22.43,8.5 17.5,8.3 14.64,11.33L11.81,14.84C10.61,16.2 8.58,16.31 7.21,15.1C6.43,14.42 6,13.42 6,12.38C6,11.34 6.43,10.34 7.21,9.66L8.69,8.18C8.5,7.68 8.39,7.16 8.34,6.63L6.44,8.53C5.41,9.55 4.84,10.93 4.84,12.38C4.84,13.83 5.41,15.21 6.44,16.23C7.2,17 8.28,17.38 9.4,17.38Z" />
+                <path d="M12,15.5A3.5,3.5 0 0,1 8.5,12A3.5,3.5 0 0,1 12,8.5A3.5,3.5 0 0,1 15.5,12A3.5,3.5 0 0,1 12,15.5M19.43,12.97C19.47,12.65 19.5,12.33 19.5,12C19.5,11.67 19.47,11.34 19.43,11L21.54,9.37C21.73,9.22 21.78,8.95 21.66,8.73L19.66,5.27C19.54,5.05 19.27,4.96 19.05,5.05L16.56,6.05C16.04,5.66 15.5,5.32 14.87,5.07L14.5,2.42C14.46,2.18 14.25,2 14,2H10C9.75,2 9.54,2.18 9.5,2.42L9.13,5.07C8.5,5.32 7.96,5.66 7.44,6.05L4.95,5.05C4.73,4.96 4.46,5.05 4.34,5.27L2.34,8.73C2.21,8.95 2.27,9.22 2.46,9.37L4.57,11C4.53,11.34 4.5,11.67 4.5,12C4.5,12.33 4.53,12.65 4.57,12.97L2.46,14.63C2.27,14.78 2.21,15.05 2.34,15.27L4.34,18.73C4.46,18.95 4.73,19.03 4.95,18.95L7.44,17.94C7.96,18.34 8.5,18.68 9.13,18.93L9.5,21.58C9.54,21.82 9.75,22 10,22H14C14.25,22 14.46,21.82 14.5,21.58L14.87,18.93C15.5,18.67 16.04,18.34 16.56,17.94L19.05,18.95C19.27,19.03 19.54,18.95 19.66,18.73L21.66,15.27C21.78,15.05 21.73,14.78 21.54,14.63L19.43,12.97Z" />
             </svg>
         </div>
 
         <h1>Sedang Dalam Perbaikan</h1>
-        <p class="status-text">Kami sedang membangun kembali pengalaman digital Anda.</p>
+        <p class="status-text">Kami sedang mempersiapkan sesuatu yang istimewa untuk Anda.</p>
         
         <!-- Teks Dinamis -->
         <p id="dynamic-text"></p>
     </div>
 
-    <!-- Pemutar Musik Minimalis -->
+    <!-- Pemutar Musik -->
     <div class="music-player">
         <button id="musicToggleBtn" class="music-toggle">
-            <!-- Icon Play -->
+            <!-- Icon Play (Default) -->
             <svg id="playIcon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
                 <path d="M8,5.14V19.14L19,12.14L8,5.14Z"/>
             </svg>
-            <!-- Icon Pause -->
+            <!-- Icon Pause (Disembunyikan) -->
             <svg id="pauseIcon" style="display:none;" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
                 <path d="M14,19H18V5H14M6,19H10V5H6V19Z"/>
             </svg>
         </button>
     </div>
 
-    <!-- Audio Element -->
+    <!-- Audio Element (Tanpa Autoplay) -->
     <audio id="audioPlayer" src="fixa.mp3" loop></audio>
 
     <script>
@@ -229,7 +245,7 @@
         changeText();
         setInterval(changeText, 4000);
 
-        // --- JS untuk Music Player ---
+        // --- JS untuk Music Player (Play/Pause) ---
         const audioPlayer = document.getElementById('audioPlayer');
         const musicToggleBtn = document.getElementById('musicToggleBtn');
         const playIcon = document.getElementById('playIcon');
