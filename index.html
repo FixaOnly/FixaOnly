@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sedang Dalam Perbaikan</title>
+    
+    <!-- Google Font: Poppins -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+
+    <style>
+        /* --- Reset & Style Dasar --- */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            overflow: hidden;
+            background: #000; /* Warna fallback kalau video gagal load */
+        }
+
+        /* --- Background Video --- */
+        .video-background {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            min-width: 100%;
+            min-height: 100%;
+            width: auto;
+            height: auto;
+            transform: translateX(-50%) translateY(-50%);
+            z-index: -2;
+        }
+
+        /* --- Overlay Gelap untuk Kontras --- */
+        .overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5); /* Sesuaikan kegelapannya di sini */
+            z-index: -1;
+        }
+
+        /* --- Container Utama dengan Efek Glassmorphism --- */
+        .container {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            text-align: center;
+            color: #ffffff;
+            padding: 50px;
+            background: rgba(255, 255, 255, 0.1); /* Efek kaca */
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px); /* Untuk Safari */
+            border-radius: 20px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
+            max-width: 500px;
+            width: 90%;
+            animation: fadeInUp 1s ease-out;
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translate(-50%, -40%);
+            }
+            to {
+                opacity: 1;
+                transform: translate(-50%, -50%);
+            }
+        }
+
+        /* --- Logo dengan Animasi Halus --- */
+        .logo {
+            width: 80px;
+            height: 80px;
+            margin: 0 auto 30px auto;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0% { filter: drop-shadow(0 0 10px rgba(255, 255, 255, 0.7)); }
+            50% { filter: drop-shadow(0 0 20px rgba(255, 255, 255, 1)); }
+            100% { filter: drop-shadow(0 0 10px rgba(255, 255, 255, 0.7)); }
+        }
+
+        /* --- Teks --- */
+        h1 {
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 15px;
+        }
+
+        .status-text {
+            font-size: 1rem;
+            font-weight: 400;
+            color: #e0e0e0;
+            margin-bottom: 25px;
+        }
+
+        #dynamic-text {
+            font-size: 1rem;
+            font-weight: 300;
+            font-style: italic;
+            color: #ffffff;
+            min-height: 25px;
+            opacity: 0;
+            transition: opacity 1.5s ease-in-out;
+        }
+
+        /* --- Pemutar Musik Minimalis --- */
+        .music-player {
+            position: fixed; /* Ditempel di pojok */
+            bottom: 30px;
+            right: 30px;
+            z-index: 100;
+        }
+
+        .music-toggle {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            color: #ffffff;
+            cursor: pointer;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            transition: all 0.3s ease;
+        }
+
+        .music-toggle:hover {
+            background: rgba(255, 255, 255, 0.2);
+            transform: scale(1.1);
+        }
+
+        .music-toggle svg {
+            width: 24px;
+            height: 24px;
+            fill: currentColor;
+        }
+
+        /* --- Responsive --- */
+        @media (max-width: 600px) {
+            .container {
+                padding: 40px 25px;
+            }
+            h1 {
+                font-size: 2rem;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Background Video -->
+    <video autoplay muted loop playsinline class="video-background">
+        <!-- GANTI 'background.mp4' dengan nama file video kamu -->
+        <source src="background.mp4" type="video/mp4">
+        Browser kamu tidak mendukung tag video.
+    </video>
+
+    <!-- Overlay -->
+    <div class="overlay"></div>
+
+    <!-- Container Utama -->
+    <div class="container">
+        <!-- Logo (Contoh: Icon infinity) -->
+        <div class="logo">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
+                <path d="M18.6,6.62C17.16,6.62 15.8,7.18 14.83,8.15L12,11.66C9.81,14.15 6.28,14.25 4,12C3.84,11.82 3.69,11.61 3.57,11.42H2.42C2.56,11.71 2.73,12 2.94,12.25C5.57,15.5 10.5,15.7 13.36,12.67L16.19,9.16C17.39,7.8 19.42,7.69 20.79,8.9C21.57,9.58 22,10.58 22,11.62C22,12.66 21.57,13.66 20.79,14.34L19.31,15.82C19.5,16.32 19.61,16.84 19.66,17.37L21.56,15.47C22.59,14.45 23.16,13.07 23.16,11.62C23.16,10.17 22.59,8.79 21.56,7.77C20.8,7 19.72,6.62 18.6,6.62M9.4,17.38C10.84,17.38 12.2,16.82 13.17,15.85L16,12.34C18.19,9.85 21.72,9.75 24,12C24.16,12.18 24.31,12.39 24.43,12.58H25.58C25.44,12.29 25.27,12 25.06,11.75C22.43,8.5 17.5,8.3 14.64,11.33L11.81,14.84C10.61,16.2 8.58,16.31 7.21,15.1C6.43,14.42 6,13.42 6,12.38C6,11.34 6.43,10.34 7.21,9.66L8.69,8.18C8.5,7.68 8.39,7.16 8.34,6.63L6.44,8.53C5.41,9.55 4.84,10.93 4.84,12.38C4.84,13.83 5.41,15.21 6.44,16.23C7.2,17 8.28,17.38 9.4,17.38Z" />
+            </svg>
+        </div>
+
+        <h1>Sedang Dalam Perbaikan</h1>
+        <p class="status-text">Kami sedang membangun kembali pengalaman digital Anda.</p>
+        
+        <!-- Teks Dinamis -->
+        <p id="dynamic-text"></p>
+    </div>
+
+    <!-- Pemutar Musik Minimalis -->
+    <div class="music-player">
+        <button id="musicToggleBtn" class="music-toggle">
+            <!-- Icon Play -->
+            <svg id="playIcon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                <path d="M8,5.14V19.14L19,12.14L8,5.14Z"/>
+            </svg>
+            <!-- Icon Pause -->
+            <svg id="pauseIcon" style="display:none;" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                <path d="M14,19H18V5H14M6,19H10V5H6V19Z"/>
+            </svg>
+        </button>
+    </div>
+
+    <!-- Audio Element -->
+    <audio id="audioPlayer" src="fixa.mp3" loop></audio>
+
+    <script>
+        // --- JS untuk Teks Dinamis ---
+        const phrases = [
+            "Memperbarui sistem untuk performa terbaik.",
+            "Mengintegrasikan inovasi terbaru.",
+            "Hampir selesai, harap tunggu sebentar.",
+            "Kami akan kembali lebih baik.",
+            "Terima kasih atas kesabaran Anda."
+        ];
+        let phraseIndex = 0;
+        const textElement = document.getElementById('dynamic-text');
+        function changeText() {
+            textElement.style.opacity = 0;
+            setTimeout(() => {
+                textElement.textContent = phrases[phraseIndex];
+                textElement.style.opacity = 1;
+                phraseIndex = (phraseIndex + 1) % phrases.length;
+            }, 1000);
+        }
+        changeText();
+        setInterval(changeText, 4000);
+
+        // --- JS untuk Music Player ---
+        const audioPlayer = document.getElementById('audioPlayer');
+        const musicToggleBtn = document.getElementById('musicToggleBtn');
+        const playIcon = document.getElementById('playIcon');
+        const pauseIcon = document.getElementById('pauseIcon');
+
+        musicToggleBtn.addEventListener('click', () => {
+            if (audioPlayer.paused) {
+                audioPlayer.play();
+                playIcon.style.display = 'none';
+                pauseIcon.style.display = 'block';
+            } else {
+                audioPlayer.pause();
+                playIcon.style.display = 'block';
+                pauseIcon.style.display = 'none';
+            }
+        });
+    </script>
+
+</body>
+</html>
