@@ -1,0 +1,1397 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>VIP CHEAT STORE</title>
+    <!-- Font Keren: Rajdhani & Orbitron -->
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500;700&family=Rajdhani:wght@400;600;700&display=swap" rel="stylesheet">
+    <!-- Icon FontAwesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <style>
+        :root {
+            /* Palette Warna Ungu Neon */
+            --neon-purple: #bc13fe; 
+            --deep-purple: #5b0a91;
+            --dark-bg: #0a0510;
+            --card-bg: rgba(30, 16, 45, 0.8);
+            --text-glow: 0 0 10px rgba(188, 19, 254, 0.7);
+            --box-glow: 0 0 20px rgba(91, 10, 145, 0.5);
+            --text-light: #ffffff;
+            --text-gray: #cfcfcf;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Rajdhani', sans-serif;
+        }
+
+        body {
+            background-color: var(--dark-bg);
+            background-image: 
+                radial-gradient(circle at 10% 20%, rgba(91, 10, 145, 0.2) 0%, transparent 20%),
+                radial-gradient(circle at 90% 80%, rgba(188, 19, 254, 0.15) 0%, transparent 20%),
+                url('https://images.unsplash.com/photo-1511512578047-dfb367046420?q=80&w=1920&auto=format&fit=crop');
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
+            color: var(--text-light);
+            padding-bottom: 60px;
+            overflow-x: hidden;
+            position: relative;
+        }
+
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(10, 5, 16, 0.85);
+            z-index: -1;
+        }
+
+        /* HEADER DENGAN GLOW */
+        header {
+            text-align: center;
+            padding: 50px 20px 30px;
+            background: linear-gradient(180deg, rgba(20,0,30,0.9) 0%, rgba(10,5,16,0) 100%);
+            border-bottom: 1px solid rgba(188, 19, 254, 0.2);
+            margin-bottom: 30px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        header::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(188, 19, 254, 0.1) 0%, transparent 70%);
+            animation: rotate 20s linear infinite;
+        }
+
+        @keyframes rotate {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        h1 {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 3.2rem;
+            color: #fff;
+            text-transform: uppercase;
+            letter-spacing: 3px;
+            text-shadow: 
+                0 0 5px #fff,
+                0 0 10px #fff,
+                0 0 20px var(--neon-purple),
+                0 0 40px var(--neon-purple);
+            margin-bottom: 10px;
+            position: relative;
+            z-index: 1;
+        }
+
+        p.subtitle {
+            color: var(--text-gray);
+            font-size: 1.2rem;
+            letter-spacing: 2px;
+            font-weight: 600;
+            position: relative;
+            z-index: 1;
+        }
+
+        /* FILTER BUTTONS */
+        .filter-container {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            flex-wrap: wrap;
+            margin-bottom: 30px;
+            padding: 0 20px;
+        }
+
+        .filter-btn {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid var(--neon-purple);
+            color: #fff;
+            padding: 12px 30px;
+            border-radius: 50px;
+            font-size: 1.1rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .filter-btn::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 0;
+            height: 0;
+            background: var(--neon-purple);
+            border-radius: 50%;
+            transform: translate(-50%, -50%);
+            transition: width 0.6s, height 0.6s;
+        }
+
+        .filter-btn:hover::before, .filter-btn.active::before {
+            width: 300px;
+            height: 300px;
+        }
+
+        .filter-btn span {
+            position: relative;
+            z-index: 1;
+        }
+
+        .filter-btn:hover, .filter-btn.active {
+            color: #fff;
+            box-shadow: 0 0 20px var(--neon-purple);
+            transform: translateY(-3px);
+        }
+
+        /* GAME SELECTOR */
+        .game-selector {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            flex-wrap: wrap;
+            margin-bottom: 40px;
+            padding: 0 20px;
+        }
+
+        .game-btn {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            color: #fff;
+            padding: 10px 25px;
+            border-radius: 10px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .game-btn i {
+            font-size: 1.2rem;
+        }
+
+        .game-btn:hover, .game-btn.active {
+            background: rgba(188, 19, 254, 0.2);
+            border-color: var(--neon-purple);
+            box-shadow: 0 0 15px rgba(188, 19, 254, 0.4);
+            transform: translateY(-3px);
+        }
+
+        /* PRODUCT GRID */
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 35px;
+        }
+
+        /* CARD STYLE (Glassmorphism) */
+        .card {
+            background: var(--card-bg);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(188, 19, 254, 0.3);
+            border-radius: 20px;
+            overflow: hidden;
+            transition: 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            height: 100%;
+        }
+
+        .card:hover {
+            transform: translateY(-10px) scale(1.02);
+            border-color: var(--neon-purple);
+            box-shadow: 0 0 30px rgba(188, 19, 254, 0.2);
+            z-index: 2;
+        }
+
+        /* Image Placeholder */
+        .img-container {
+            position: relative;
+            width: 100%;
+            height: 220px;
+            overflow: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: rgba(0, 0, 0, 0.3);
+            cursor: pointer;
+        }
+
+        .img-container::after {
+            content: '\f00e';
+            font-family: 'Font Awesome 6 Free';
+            font-weight: 900;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 2.5rem;
+            color: rgba(255, 255, 255, 0);
+            transition: all 0.3s ease;
+            z-index: 2;
+            pointer-events: none;
+        }
+
+        .img-container:hover::after {
+            color: rgba(255, 255, 255, 0.8);
+            text-shadow: 0 0 10px rgba(188, 19, 254, 0.8);
+        }
+
+        .img-container:hover::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 1;
+        }
+
+        .card-img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+            transition: transform 0.5s ease;
+        }
+
+        .card:hover .card-img {
+            transform: scale(1.05);
+        }
+
+        /* Unavailable Product Overlay */
+        .unavailable-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.7);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            color: #fff;
+            z-index: 3;
+        }
+
+        .unavailable-overlay i {
+            font-size: 3rem;
+            margin-bottom: 15px;
+            color: var(--neon-purple);
+        }
+
+        .unavailable-overlay p {
+            font-size: 1.2rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        /* Tag Overlay on Image */
+        .category-tag {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            padding: 5px 12px;
+            border-radius: 8px;
+            font-size: 0.8rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.5);
+            z-index: 2;
+        }
+
+        .tag-ios { background: #fff; color: #000; }
+        .tag-android { background: #a4c639; color: #000; }
+        .tag-pc { background: #00d2ff; color: #000; }
+
+        .card-body {
+            padding: 25px;
+            flex-grow: 1;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .card-title {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 1.4rem;
+            margin-bottom: 15px;
+            color: #fff;
+            background: linear-gradient(90deg, #fff, #d88eff);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        /* Price List Design */
+        .price-list {
+            list-style: none;
+            margin-bottom: 20px;
+            background: rgba(0, 0, 0, 0.3);
+            padding: 15px;
+            border-radius: 12px;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .price-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 8px 0;
+            border-bottom: 1px dashed rgba(255, 255, 255, 0.1);
+            font-size: 1.1rem;
+            color: #ddd;
+        }
+
+        .price-item:last-child {
+            border-bottom: none;
+        }
+
+        .price-val {
+            color: var(--neon-purple);
+            font-weight: 700;
+            text-shadow: 0 0 5px rgba(188, 19, 254, 0.5);
+        }
+
+        /* Hidden Features */
+        .features {
+            display: none;
+            font-size: 0.95rem;
+            color: #ccc;
+            margin-bottom: 20px;
+            background: rgba(188, 19, 254, 0.1);
+            padding: 15px;
+            border-radius: 10px;
+            border-left: 3px solid var(--neon-purple);
+            animation: slideDown 0.3s ease-out;
+        }
+        
+        @keyframes slideDown {
+            from { opacity: 0; transform: translateY(-10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .features ul {
+            padding-left: 20px;
+        }
+
+        /* Buttons */
+        .action-buttons {
+            display: flex;
+            gap: 12px;
+            margin-top: auto;
+        }
+
+        .btn {
+            flex: 1;
+            padding: 12px;
+            border-radius: 10px;
+            text-align: center;
+            text-decoration: none;
+            font-size: 1rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: 0.3s;
+            border: none;
+            text-transform: uppercase;
+        }
+
+        .btn-info {
+            background: transparent;
+            border: 2px solid #444;
+            color: #fff;
+        }
+        .btn-info:hover {
+            border-color: #fff;
+            background: rgba(255,255,255,0.1);
+        }
+
+        .btn-order {
+            background: linear-gradient(45deg, var(--deep-purple), var(--neon-purple));
+            color: #fff;
+            box-shadow: 0 4px 15px rgba(188, 19, 254, 0.4);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        /* Efek kilat pada tombol order */
+        .btn-order::before {
+            content: '';
+            position: absolute;
+            top: 0; left: -100%;
+            width: 100%; height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.4), transparent);
+            transition: 0.5s;
+        }
+        .btn-order:hover::before {
+            left: 100%;
+        }
+
+        .btn-order:hover {
+            box-shadow: 0 6px 25px rgba(188, 19, 254, 0.6);
+            transform: translateY(-2px);
+        }
+
+        /* FOOTER */
+        .footer {
+            margin-top: 60px;
+            text-align: center;
+            padding: 30px;
+            border-top: 1px solid rgba(188, 19, 254, 0.2);
+            background: rgba(5, 2, 8, 0.8);
+            color: #888;
+        }
+
+        .contact-admin {
+            display: inline-block;
+            margin-top: 10px;
+            color: var(--neon-purple);
+            font-size: 1.3rem;
+            font-weight: 700;
+            text-decoration: none;
+            padding: 10px 20px;
+            border: 1px solid var(--neon-purple);
+            border-radius: 8px;
+            transition: 0.3s;
+        }
+
+        .contact-admin:hover {
+            background: var(--neon-purple);
+            color: #fff;
+            box-shadow: 0 0 20px var(--neon-purple);
+        }
+
+        /* Animasi Masuk */
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .card {
+            animation: fadeIn 0.6s ease forwards;
+        }
+
+        /* Notification Toast */
+        .notification {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background: rgba(30, 16, 45, 0.9);
+            color: #fff;
+            padding: 15px 20px;
+            border-radius: 10px;
+            border-left: 4px solid var(--neon-purple);
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
+            transform: translateX(400px);
+            transition: transform 0.3s ease;
+            z-index: 1000;
+            max-width: 300px;
+        }
+
+        .notification.show {
+            transform: translateX(0);
+        }
+
+        .notification-title {
+            font-weight: 700;
+            margin-bottom: 5px;
+        }
+
+        .notification-message {
+            font-size: 0.9rem;
+            color: #ccc;
+        }
+
+        /* Loading Animation */
+        .loading {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(10, 5, 16, 0.9);
+            z-index: 9999;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+        }
+
+        .loading-spinner {
+            width: 60px;
+            height: 60px;
+            border: 5px solid rgba(188, 19, 254, 0.3);
+            border-top: 5px solid var(--neon-purple);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin-bottom: 20px;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .loading-text {
+            font-size: 1.2rem;
+            color: #fff;
+            font-weight: 700;
+        }
+
+        /* IMAGE MODAL / LIGHTBOX */
+        .image-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.95);
+            z-index: 10000;
+            justify-content: center;
+            align-items: center;
+            animation: fadeIn 0.3s ease;
+        }
+
+        .image-modal.show {
+            display: flex;
+        }
+
+        .modal-content {
+            position: relative;
+            max-width: 90%;
+            max-height: 90%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            animation: zoomIn 0.3s ease;
+        }
+
+        @keyframes zoomIn {
+            from { transform: scale(0.8); opacity: 0; }
+            to { transform: scale(1); opacity: 1; }
+        }
+
+        .modal-image {
+            max-width: 100%;
+            max-height: 80vh;
+            object-fit: contain;
+            border-radius: 10px;
+            box-shadow: 0 0 30px rgba(188, 19, 254, 0.5);
+            transition: transform 0.3s ease;
+        }
+
+        .modal-controls {
+            display: flex;
+            gap: 15px;
+            margin-top: 20px;
+            align-items: center;
+        }
+
+        .modal-btn {
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid var(--neon-purple);
+            color: #fff;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 1.2rem;
+        }
+
+        .modal-btn:hover {
+            background: var(--neon-purple);
+            box-shadow: 0 0 15px var(--neon-purple);
+            transform: scale(1.1);
+        }
+
+        .modal-close {
+            position: absolute;
+            top: 20px;
+            right: 40px;
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid #fff;
+            color: #fff;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 1.5rem;
+            z-index: 10;
+        }
+
+        .modal-close:hover {
+            background: rgba(255, 0, 0, 0.7);
+            border-color: #ff0000;
+            transform: rotate(90deg);
+        }
+
+        .zoom-info {
+            color: #ccc;
+            font-size: 0.9rem;
+            margin-top: 10px;
+            text-align: center;
+        }
+
+        /* Zoom levels */
+        .zoom-level-1 { transform: scale(1); }
+        .zoom-level-2 { transform: scale(1.5); }
+        .zoom-level-3 { transform: scale(2); }
+        .zoom-level-4 { transform: scale(3); }
+    </style>
+</head>
+<body>
+
+    <header>
+        <h1><i class="fas fa-gamepad"></i> FIXA STORE</h1>
+        <p class="subtitle">PREMIUM • SECURE • UNDETECTED</p>
+    </header>
+
+    <!-- Filter Buttons -->
+    <div class="filter-container">
+        <button class="filter-btn active" onclick="filterSelection('all')"><span>ALL</span></button>
+        <button class="filter-btn" onclick="filterSelection('ios')"><span><i class="fab fa-apple"></i> iOS</span></button>
+        <button class="filter-btn" onclick="filterSelection('android')"><span><i class="fab fa-android"></i> Android</span></button>
+        <button class="filter-btn" onclick="filterSelection('pc')"><span><i class="fas fa-desktop"></i> PC</span></button>
+    </div>
+
+    <!-- Game Selector -->
+    <div class="game-selector">
+        <button class="game-btn active" onclick="gameSelection('all')">
+            <i class="fas fa-th"></i> SEMUA GAME
+        </button>
+        <button class="game-btn" onclick="gameSelection('ff')">
+            <i class="fas fa-fire"></i> FREE FIRE
+        </button>
+        <button class="game-btn" onclick="gameSelection('ml')">
+            <i class="fas fa-crown"></i> MOBILE LEGENDS
+        </button>
+        <button class="game-btn" onclick="gameSelection('delta')">
+            <i class="fas fa-crosshairs"></i> DELTA FORCE
+        </button>
+        <button class="game-btn" onclick="gameSelection('bloodstrike')">
+            <i class="fas fa-skull"></i> BLOOD STRIKE
+        </button>
+        <button class="game-btn" onclick="gameSelection('pubg')">
+            <i class="fas fa-medal"></i> PUBG
+        </button>
+    </div>
+
+    <div class="container" id="product-container">
+
+        <!-- ================= FREE FIRE PRODUCTS ================= -->
+        
+        <div class="card android ff">
+            <div class="img-container" onclick="openImageModal(this)">
+                <span class="category-tag tag-android">ANDROID</span>
+                <img src="https://raw.githubusercontent.com/FixaOnly/JapanKey/main/list%20harga/hg%20cheat%20no%20root.jpg" alt="Prime" class="card-img">
+            </div>
+            <div class="card-body">
+                <h3 class="card-title">🎀 HG CHEAT APKMOD</h3>
+                <p style="font-size:0.8rem; color:#888; margin-bottom:10px;">No Root</p>
+                <div id="feat-1" class="features">
+                    <ul>
+                        <li>Safe Feature</li>
+                        <li>No Root/Virtual</li>
+                        <li>Free Update</li>
+                        <li>Ss 00 Bisa</li>
+                        <li>Anti Detection</li>
+                    </ul>
+                </div>
+                <ul class="price-list">
+                    <li class="price-item"><span>5 Hari</span> <span class="price-val">100K</span></li>
+                    <li class="price-item"><span>10 Hari</span> <span class="price-val">300K</span></li>
+                </ul>
+                <div class="action-buttons">
+                    <button class="btn btn-info" onclick="toggleInfo('feat-1')">INFO</button>
+                    <a href="https://wa.me/6281543156112?text=Order%20HGCHEAT%20NOROOT" class="btn btn-order">ORDER</a>
+                </div>
+            </div>
+        </div>
+
+        <div class="card android ff">
+            <div class="img-container" onclick="openImageModal(this)">
+                <span class="category-tag tag-android">ANDROID</span>
+                <img src="https://raw.githubusercontent.com/FixaOnly/JapanKey/main/list%20harga/drip%20no%20root.jpg" alt="Drip" class="card-img">
+            </div>
+            <div class="card-body">
+                <h3 class="card-title">🎀 DRIP CLIENT</h3>
+                <p style="font-size:0.8rem; color:#888; margin-bottom:10px;">Root & No Root</p>
+                <div id="feat-2" class="features">
+                    <ul>
+                        <li>Visual ESP Smooth</li>
+                        <li>Root/No Root Bisa</li>
+                        <li>Aim Legit</li>
+                        <li>Free Update</li>
+                    </ul>
+                </div>
+                <ul class="price-list">
+                    <li class="price-item"><span>1 Hari</span> <span class="price-val">50K</span></li>
+                    <li class="price-item"><span>7 Hari</span> <span class="price-val">150K</span></li>
+                    <li class="price-item"><span>15 Hari</span> <span class="price-val">250K</span></li>
+                    <li class="price-item"><span>30 Hari</span> <span class="price-val">350K</span></li>
+                </ul>
+                <div class="action-buttons">
+                    <button class="btn btn-info" onclick="toggleInfo('feat-2')">INFO</button>
+                    <a href="https://wa.me/6281543156112?text=Order%20DRIP%20CLIENT" class="btn btn-order">ORDER</a>
+                </div>
+            </div>
+        </div>
+
+         <div class="card android ff">
+            <div class="img-container" onclick="openImageModal(this)">
+                <span class="category-tag tag-android">ANDROID</span>
+                <img src="https://raw.githubusercontent.com/FixaOnly/JapanKey/main/list%20harga/patoteam%20no%20root.jpg" alt="Drip" class="card-img">
+            </div>
+            <div class="card-body">
+                <h3 class="card-title">🎀 PATO TEAM</h3>
+                <p style="font-size:0.8rem; color:#888; margin-bottom:10px;">No Root</p>
+                <div id="feat-10" class="features">
+                    <ul>
+                        <li>Visual ESP Smooth</li>
+                        <li>Aim Legit</li>
+                        <li>Hide Icon</li>
+                        <li>Ss 00 Safe</li>
+                        <li>Free Update</li>
+                    </ul>
+                </div>
+                <ul class="price-list">
+                    <li class="price-item"><span>3 Hari</span> <span class="price-val">100K</span></li>
+                    <li class="price-item"><span>7 Hari</span> <span class="price-val">150K</span></li>
+                    <li class="price-item"><span>15 Hari</span> <span class="price-val">250K</span></li>
+                    <li class="price-item"><span>30 Hari</span> <span class="price-val">350K</span></li>
+                </ul>
+                <div class="action-buttons">
+                    <button class="btn btn-info" onclick="toggleInfo('feat-10')">INFO</button>
+                    <a href="https://wa.me/6281543156112?text=Order%20DRIP%20CLIENT" class="btn btn-order">ORDER</a>
+                </div>
+            </div>
+        </div>
+
+        
+         <div class="card android ff">
+            <div class="img-container" onclick="openImageModal(this)">
+                <span class="category-tag tag-android">ANDROID</span>
+                <img src="https://raw.githubusercontent.com/FixaOnly/JapanKey/main/list%20harga/file.png" alt="Drip" class="card-img">
+            </div>
+            <div class="card-body">
+                <h3 class="card-title">🎀 FILE SHADOW MODS</h3>
+                <p style="font-size:0.8rem; color:#888; margin-bottom:10px;">No Root</p>
+                <div id="feat-11" class="features">
+                    <ul>
+                        <li>Membantu Meningkatkan Aim/li>
+                        <li>No Ban/Blacklist</li>
+                        <li>Support FF Ori/Max</li>
+                    </ul>
+                </div>
+                <ul class="price-list">
+                    <li class="price-item"><span>AIMBOT 50%</span> <span class="price-val">25K</span></li>
+                    <li class="price-item"><span>HEADLOCK V7</span> <span class="price-val">50K</span></li>
+                    <li class="price-item"><span>HOLOGRAM FULL BODY</span> <span class="price-val">100K</span></li>
+                    <li class="price-item"><span>HOLOGRAM WEAPON 3D</span> <span class="price-val">75K</span></li>
+                </ul>
+                <div class="action-buttons">
+                    <button class="btn btn-info" onclick="toggleInfo('feat-11')">INFO</button>
+                    <a href="https://wa.me/6281543156112?text=Order%20DRIP%20CLIENT" class="btn btn-order">ORDER</a>
+                </div>
+            </div>
+        </div>
+
+         <div class="card android ff">
+            <div class="img-container" onclick="openImageModal(this)">
+                <span class="category-tag tag-android">ANDROID</span>
+                <img src="https://raw.githubusercontent.com/FixaOnly/JapanKey/main/list%20harga/shadow%20mods.jpg" alt="Drip" class="card-img">
+            </div>
+            <div class="card-body">
+                <h3 class="card-title">🎀 SHADOW MODS INJECTOR</h3>
+                <p style="font-size:0.8rem; color:#888; margin-bottom:10px;">No Root</p>
+                <p style="font-size:0.8rem; color:#888; margin-bottom:10px;"></p>
+                <div id="feat-9" class="features">
+                    <ul>
+                        <li>Meningkatkan Performa Aim</li>
+                        <li>Bukan Auto Hs</li>
+                        <li>Fiture New Hologram</li>
+                        <li>Need Shizuku</li>
+                    </ul>
+                </div>
+                <ul class="price-list">
+                    <li class="price-item"><span>3 Hari</span> <span class="price-val">30K</span></li>
+                    <li class="price-item"><span>7 Hari</span> <span class="price-val">50K</span></li>
+                    <li class="price-item"><span>15 Hari</span> <span class="price-val">100K</span></li>
+                    <li class="price-item"><span>30 Hari</span> <span class="price-val">200K</span></li>
+                </ul>
+                <div class="action-buttons">
+                    <button class="btn btn-info" onclick="toggleInfo('feat-9')">INFO</button>
+                    <a href="https://wa.me/6281543156112?text=Order%20DRIP%20CLIENT" class="btn btn-order">ORDER</a>
+                </div>
+            </div>
+        </div>
+
+        <div class="card android ff">
+            <div class="img-container" onclick="openImageModal(this)">
+                <span class="category-tag tag-android">ANDROID</span>
+                <img src="https://raw.githubusercontent.com/FixaOnly/JapanKey/main/list%20harga/br%20mods%20root.jpg" alt="BRModz" class="card-img">
+            </div>
+            <div class="card-body">
+                <h3 class="card-title">🎀 BRMODZ V ROOT</h3>
+                <p style="font-size:0.8rem; color:#888; margin-bottom:10px;">Root</p>
+                <div id="feat-3" class="features">
+                    <ul>
+                        <li>Khusus HP Root</li>
+                        <li>Inject Library</li>
+                        <li>No Root Pakai Virtual</li>
+                    </ul>
+                </div>
+                <ul class="price-list">
+                    <li class="price-item"><span>2 Hari</span> <span class="price-val">50K</span></li>
+                    <li class="price-item"><span>7 Hari</span> <span class="price-val">150K</span></li>
+                    <li class="price-item"><span>15 Hari</span> <span class="price-val">250K</span></li>
+                    <li class="price-item"><span>30 Hari</span> <span class="price-val">350K</span></li>
+                </ul>
+                <div class="action-buttons">
+                    <button class="btn btn-info" onclick="toggleInfo('feat-3')">INFO</button>
+                    <a href="https://wa.me/6281543156112?text=Order%20BRMODZ" class="btn btn-order">ORDER</a>
+                </div>
+            </div>
+        </div>
+
+        <div class="card android ff">
+            <div class="img-container" onclick="openImageModal(this)">
+                <span class="category-tag tag-android">ANDROID</span>
+                <img src="https://raw.githubusercontent.com/FixaOnly/JapanKey/main/list%20harga/hg%20cheat%20root.jpg" alt="BRModz" class="card-img">
+            </div>
+            <div class="card-body">
+                <h3 class="card-title">🎀 HG CHEAT V ROOT</h3>
+                <p style="font-size:0.8rem; color:#888; margin-bottom:10px;">Root</p>
+                <div id="feat-12" class="features">
+                    <ul>
+                        <li>Khusus HP Root</li>
+                        <li>Inject Library</li>
+                        <li>No Root Pakai Virtual</li>
+                    </ul>
+                </div>
+                <ul class="price-list">
+                    <li class="price-item"><span>10 Hari</span> <span class="price-val">10K</span></li>
+                    <li class="price-item"><span>30 Hari</span> <span class="price-val">300K</span></li>  
+                </ul>
+                <div class="action-buttons">
+                    <button class="btn btn-info" onclick="toggleInfo('feat-12')">INFO</button>
+                    <a href="https://wa.me/6281543156112?text=Order%20BRMODZ" class="btn btn-order">ORDER</a>
+                </div>
+            </div>
+        </div>
+
+        <!-- ================= MOBILE LEGENDS PRODUCTS ================= -->
+
+        <div class="card android ml">
+            <div class="img-container" onclick="openImageModal(this)">
+                <span class="category-tag tag-android">ANDROID</span>
+                <img src="https://raw.githubusercontent.com/FixaOnly/JapanKey/main/list%20harga/ml%20albara.png" alt="MLBB" class="card-img">
+            </div>
+            <div class="card-body">
+                <h3 class="card-title">📱 MLBB ANDROID</h3>
+                <div id="feat-4" class="features">
+                    <ul>
+  <li><b>Map Hack No Ban</b></li>
+  <li>Auto DOD</li>
+  <li>Drone View</li>
+  <li>Map Hack Enemy</li>
+  <li>Room Info & Winrate Info</li>
+  <li>Show Cooldown</li>
+  <li>ESP Player & Monster</li>
+  <li>Alert Lord Attack</li>
+</ul>
+
+                </div>
+                <ul class="price-list">
+                    <li class="price-item"><span>1 Hari</span> <span class="price-val">30K</span></li>
+                    <li class="price-item"><span>7 Hari</span> <span class="price-val">100K</span></li>
+                    <li class="price-item"><span>30 Hari</span> <span class="price-val">300K</span></li>
+                </ul>
+                <div class="action-buttons">
+                    <button class="btn btn-info" onclick="toggleInfo('feat-4')">INFO</button>
+                    <a href="https://wa.me/6281543156112?text=Order%20Cheat%20MLBB%20Android" class="btn btn-order">ORDER</a>
+                </div>
+            </div>
+        </div>
+
+        <!-- ================= DELTA FORCE PRODUCTS (COMING SOON) ================= -->
+
+        <div class="card android delta">
+            <div class="img-container" onclick="openImageModal(this)">
+                <span class="category-tag tag-android">ANDROID</span>
+                <img src="https://placehold.co/600x400/333333/cccccc?text=DELTA+FORCE" alt="Delta Force" class="card-img">
+                <div class="unavailable-overlay">
+                    <i class="fas fa-clock"></i>
+                    <p>PRODUK BELUM TERSEDIA</p>
+                </div>
+            </div>
+            <div class="card-body">
+                <h3 class="card-title">🎯 DELTA FORCE CHEAT</h3>
+                <ul class="price-list">
+                    <li class="price-item"><span>Coming Soon</span> <span class="price-val">-</span></li>
+                </ul>
+                <div class="action-buttons">
+                    <button class="btn btn-info" onclick="showNotification('Info', 'Produk akan segera tersedia!')">INFO</button>
+                    <button class="btn btn-order" onclick="showNotification('Info', 'Produk akan segera tersedia!')">NOTIFY ME</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- ================= BLOOD STRIKE PRODUCTS (COMING SOON) ================= -->
+
+        <div class="card android bloodstrike">
+            <div class="img-container" onclick="openImageModal(this)">
+                <span class="category-tag tag-android">ANDROID</span>
+                <img src="https://placehold.co/600x400/333333/cccccc?text=BLOOD+STRIKE" alt="Blood Strike" class="card-img">
+                <div class="unavailable-overlay">
+                    <i class="fas fa-clock"></i>
+                    <p>PRODUK BELUM TERSEDIA</p>
+                </div>
+            </div>
+            <div class="card-body">
+                <h3 class="card-title">🩸 BLOOD STRIKE CHEAT</h3>
+                <ul class="price-list">
+                    <li class="price-item"><span>Coming Soon</span> <span class="price-val">-</span></li>
+                </ul>
+                <div class="action-buttons">
+                    <button class="btn btn-info" onclick="showNotification('Info', 'Produk akan segera tersedia!')">INFO</button>
+                    <button class="btn btn-order" onclick="showNotification('Info', 'Produk akan segera tersedia!')">NOTIFY ME</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- ================= PUBG PRODUCTS ================= -->
+
+        
+        <div class="card android pubg">
+            <div class="img-container" onclick="openImageModal(this)">
+                <span class="category-tag tag-android">ANDROID</span>
+                <img src="https://placehold.co/600x400/333333/cccccc?text=PUBG+MOBILE" alt="PUBG" class="card-img">
+                <div class="unavailable-overlay">
+                    <i class="fas fa-clock"></i>
+                    <p>PRODUK BELUM TERSEDIA</p>
+                </div>
+            </div>
+            <div class="card-body">
+                <h3 class="card-title">🎯 PUBG MOBILE</h3>
+                <ul class="price-list">
+                    <li class="price-item"><span>Coming Soon</span> <span class="price-val">-</span></li>
+                </ul>
+                <div class="action-buttons">
+                    <button class="btn btn-info" onclick="showNotification('Info', 'Produk akan segera tersedia!')">INFO</button>
+                    <button class="btn btn-order" onclick="showNotification('Info', 'Produk akan segera tersedia!')">NOTIFY ME</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- ================= PC PRODUCTS ================= -->
+
+        <div class="card pc ff">
+            <div class="img-container" onclick="openImageModal(this)">
+                <span class="category-tag tag-pc">PC / LAPTOP</span>
+                <img src="https://raw.githubusercontent.com/FixaOnly/JapanKey/main/list%20harga/br%20mods%20pc.jpg" alt="BR PC" class="card-img">
+            </div>
+            <div class="card-body">
+                <h3 class="card-title">💻 BR MODS + BYPASS</h3>
+                <div id="feat-6" class="features">
+                    <ul>
+                        <li>Emulator Bypass</li>
+                        <li>ESP & Aim for PC</li>
+                    </ul>
+                </div>
+                <ul class="price-list">
+                    <li class="price-item"><span>1 Hari</span> <span class="price-val">10K</span></li>
+                    <li class="price-item"><span>10 Hari</span> <span class="price-val">300K</span></li>
+                    <li class="price-item"><span>30 Hari</span> <span class="price-val">500K</span></li>
+                </ul>
+                <div class="action-buttons">
+                    <button class="btn btn-info" onclick="toggleInfo('feat-6')">INFO</button>
+                    <a href="https://wa.me/6281543156112?text=Order%20BR%20MODS%20PC" class="btn btn-order">ORDER</a>
+                </div>
+            </div>
+        </div>
+
+        <div class="card pc ff">
+            <div class="img-container" onclick="openImageModal(this)">
+                <span class="category-tag tag-pc">PC / LAPTOP</span>
+                <img src="https://raw.githubusercontent.com/FixaOnly/JapanKey/main/list%20harga/DRIP%20AIM%20RAGE.png" alt="Drip Rage" class="card-img">
+            </div>
+            <div class="card-body">
+                <h3 class="card-title">🖥 DRIP AIM RAGE</h3>
+                <div id="feat-7" class="features">
+                    <ul>
+                        <li>Rage Mode</li>
+                        <li>Brutal Aim</li>
+                        <li>Auto Kill</li>
+                    </ul>
+                </div>
+                <ul class="price-list">
+                    <li class="price-item"><span>1 Hari</span> <span class="price-val">100K</span></li>
+                    <li class="price-item"><span>15 Hari</span> <span class="price-val">200K</span></li>
+                    <li class="price-item"><span>30 Hari</span> <span class="price-val">300K</span></li>
+                </ul>
+                <div class="action-buttons">
+                    <button class="btn btn-info" onclick="toggleInfo('feat-7')">INFO</button>
+                    <a href="https://wa.me/6281543156112?text=Order%20DRIP%20RAGE" class="btn btn-order">ORDER</a>
+                </div>
+            </div>
+        </div>
+
+        <!-- ================= IOS PRODUCTS ================= -->
+        
+        <div class="card ios ff">
+            <div class="img-container" onclick="openImageModal(this)">
+                <span class="category-tag tag-ios">iOS</span>
+                <img src="https://raw.githubusercontent.com/FixaOnly/JapanKey/main/list%20harga/flourit.jpg" alt="Flourite" class="card-img">
+            </div>
+            <div class="card-body">
+                <h3 class="card-title">🎀 FLOURITE</h3>
+                <div id="feat-8" class="features">
+                    <p><strong>Fitur Premium:</strong></p>
+                    <ul>
+                        <li><i class="fas fa-check-circle" style="color:var(--neon-purple)"></i> Auto Aim Precision</li>
+                        <li><i class="fas fa-check-circle" style="color:var(--neon-purple)"></i> ESP Player & Items</li>
+                        <li><i class="fas fa-check-circle" style="color:var(--neon-purple)"></i> Safe Main Account</li>
+                    </ul>
+                </div>
+                <ul class="price-list">
+                    <li class="price-item"><span>1 Hari</span> <span class="price-val">70K / $5</span></li>
+                    <li class="price-item"><span>7 Hari</span> <span class="price-val">250K / $15</span></li>
+                    <li class="price-item"><span>30 Hari</span> <span class="price-val">400K / $24</span></li>
+                </ul>
+                <div class="action-buttons">
+                    <button class="btn btn-info" onclick="toggleInfo('feat-8')">INFO</button>
+                    <a href="https://wa.me/6281543156112?text=Order%20FLOURITE%20iOS" class="btn btn-order"><i class="fab fa-whatsapp"></i> ORDER</a>
+                </div>
+            </div>
+        </div>
+
+        <div class="card ios ff">
+            <div class="img-container" onclick="openImageModal(this)">
+                <span class="category-tag tag-ios">iOS</span>
+                <img src="https://raw.githubusercontent.com/FixaOnly/JapanKey/main/list%20harga/gbox.png" alt="Gbox" class="card-img">
+            </div>
+            <div class="card-body">
+                <h3 class="card-title">📱 GBOX CERTIFICATE</h3>
+                <div id="feat-9" class="features">
+                    <ul>
+                        <li>Anti Revoke 1 Tahun</li>
+                        <li>Install IPA Bebas</li>
+                        <li>Garansi Aktif</li>
+                    </ul>
+                </div>
+                <ul class="price-list">
+                    <li class="price-item"><span>1 Tahun</span> <span class="price-val">300K</span></li>
+                </ul>
+                <div class="action-buttons">
+                    <button class="btn btn-info" onclick="toggleInfo('feat-9')">INFO</button>
+                    <a href="https://wa.me/6281543156112?text=Order%20GBOX%20CERTIFICATE" class="btn btn-order">ORDER</a>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <div class="footer">
+        <p style="color:#aaa; font-size:0.9rem;">🛠 NOTE: HARGA BISA BERUBAH KAPAN SAJA TERGANTUNG ATURAN DARI PUSAT</p>
+        <br>
+        <a href="https://wa.me/6281543156112" class="contact-admin">
+            <i class="fab fa-whatsapp"></i> HUBUNGI ADMIN
+        </a>
+        <br><br><br>
+        <p style="opacity: 0.5;">&copy; 2025 FIXA STORE. All Rights Reserved.</p>
+    </div>
+
+    <!-- Notification Toast -->
+    <div id="notification" class="notification">
+        <div class="notification-title" id="notification-title">Notification</div>
+        <div class="notification-message" id="notification-message">Message</div>
+    </div>
+
+    <!-- Loading Screen -->
+    <div id="loading" class="loading">
+        <div class="loading-spinner"></div>
+        <div class="loading-text">Loading...</div>
+    </div>
+
+    <!-- Image Modal -->
+    <div id="imageModal" class="image-modal">
+        <div class="modal-close" onclick="closeImageModal()">
+            <i class="fas fa-times"></i>
+        </div>
+        <div class="modal-content">
+            <img id="modalImage" class="modal-image zoom-level-1" src="" alt="">
+            <div class="modal-controls">
+                <button class="modal-btn" onclick="zoomOut()">
+                    <i class="fas fa-search-minus"></i>
+                </button>
+                <button class="modal-btn" onclick="resetZoom()">
+                    <i class="fas fa-compress"></i>
+                </button>
+                <button class="modal-btn" onclick="zoomIn()">
+                    <i class="fas fa-search-plus"></i>
+                </button>
+                <button class="modal-btn" onclick="downloadImage()">
+                    <i class="fas fa-download"></i>
+                </button>
+            </div>
+            <div class="zoom-info">
+                Gunakan scroll mouse untuk zoom • Klik tombol + atau - untuk zoom
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // FUNGSI FILTER PLATFORM
+        function filterSelection(category) {
+            var cards = document.getElementsByClassName("card");
+            var btns = document.getElementsByClassName("filter-btn");
+
+            for (var i = 0; i < btns.length; i++) {
+                btns[i].classList.remove("active");
+                if (btns[i].textContent.toLowerCase().includes(category) || (category == 'all' && btns[i].textContent == 'ALL')) {
+                   if(category === 'all' && btns[i].textContent === 'ALL') btns[i].classList.add("active");
+                   if(category !== 'all' && btns[i].textContent.toLowerCase().includes(category)) btns[i].classList.add("active");
+                }
+            }
+            if (category == 'all') document.querySelector('.filter-btn:first-child').classList.add('active');
+
+            for (var i = 0; i < cards.length; i++) {
+                if (category == "all") {
+                    cards[i].style.display = "flex";
+                } else {
+                    if (cards[i].classList.contains(category)) {
+                        cards[i].style.display = "flex";
+                    } else {
+                        cards[i].style.display = "none";
+                    }
+                }
+            }
+        }
+
+        // FUNGSI FILTER GAME
+        function gameSelection(game) {
+            var cards = document.getElementsByClassName("card");
+            var btns = document.getElementsByClassName("game-btn");
+
+            for (var i = 0; i < btns.length; i++) {
+                btns[i].classList.remove("active");
+            }
+            event.target.closest('.game-btn').classList.add('active');
+
+            // Show loading screen
+            showLoading();
+
+            setTimeout(function() {
+                for (var i = 0; i < cards.length; i++) {
+                    if (game == "all") {
+                        cards[i].style.display = "flex";
+                    } else {
+                        if (cards[i].classList.contains(game)) {
+                            cards[i].style.display = "flex";
+                        } else {
+                            cards[i].style.display = "none";
+                        }
+                    }
+                }
+                hideLoading();
+            }, 500);
+        }
+
+        // FUNGSI DETAILS
+        function toggleInfo(id) {
+            var x = document.getElementById(id);
+            if (x.style.display === "block") {
+                x.style.display = "none";
+            } else {
+                x.style.display = "block";
+            }
+        }
+
+        // FUNGSI NOTIFICATION
+        function showNotification(title, message) {
+            var notification = document.getElementById("notification");
+            var notificationTitle = document.getElementById("notification-title");
+            var notificationMessage = document.getElementById("notification-message");
+            
+            notificationTitle.textContent = title;
+            notificationMessage.textContent = message;
+            
+            notification.classList.add("show");
+            
+            setTimeout(function() {
+                notification.classList.remove("show");
+            }, 3000);
+        }
+
+        // FUNGSI LOADING
+        function showLoading() {
+            document.getElementById("loading").style.display = "flex";
+        }
+
+        function hideLoading() {
+            document.getElementById("loading").style.display = "none";
+        }
+
+        // IMAGE MODAL FUNCTIONS
+        let currentZoom = 1;
+        let isDragging = false;
+        let startX, startY, scrollLeft, scrollTop;
+
+        function openImageModal(container) {
+            // Check if image has unavailable overlay
+            if (container.querySelector('.unavailable-overlay')) {
+                showNotification('Info', 'Produk belum tersedia, gambar hanya preview');
+            }
+            
+            const img = container.querySelector('.card-img');
+            const modal = document.getElementById('imageModal');
+            const modalImg = document.getElementById('modalImage');
+            
+            modalImg.src = img.src;
+            modalImg.alt = img.alt;
+            modal.classList.add('show');
+            
+            // Reset zoom
+            currentZoom = 1;
+            modalImg.className = 'modal-image zoom-level-1';
+            
+            // Prevent body scroll
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeImageModal() {
+            const modal = document.getElementById('imageModal');
+            modal.classList.remove('show');
+            document.body.style.overflow = 'auto';
+        }
+
+        function zoomIn() {
+            const modalImg = document.getElementById('modalImage');
+            if (currentZoom < 4) {
+                currentZoom++;
+                modalImg.className = 'modal-image zoom-level-' + currentZoom;
+            }
+        }
+
+        function zoomOut() {
+            const modalImg = document.getElementById('modalImage');
+            if (currentZoom > 1) {
+                currentZoom--;
+                modalImg.className = 'modal-image zoom-level-' + currentZoom;
+            }
+        }
+
+        function resetZoom() {
+            const modalImg = document.getElementById('modalImage');
+            currentZoom = 1;
+            modalImg.className = 'modal-image zoom-level-1';
+        }
+
+        function downloadImage() {
+            const modalImg = document.getElementById('modalImage');
+            const link = document.createElement('a');
+            link.href = modalImg.src;
+            link.download = modalImg.alt || 'image';
+            link.click();
+            showNotification('Download', 'Gambar sedang diunduh...');
+        }
+
+        // Mouse wheel zoom
+        document.getElementById('modalImage').addEventListener('wheel', function(e) {
+            e.preventDefault();
+            if (e.deltaY < 0) {
+                zoomIn();
+            } else {
+                zoomOut();
+            }
+        });
+
+        // Close modal on escape key
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape') {
+                closeImageModal();
+            }
+        });
+
+        // Close modal on background click
+        document.getElementById('imageModal').addEventListener('click', function(e) {
+            if (e.target === this) {
+                closeImageModal();
+            }
+        });
+
+        // Initialize page
+        document.addEventListener('DOMContentLoaded', function() {
+            // Add smooth scroll behavior
+            document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+                anchor.addEventListener('click', function (e) {
+                    e.preventDefault();
+                    document.querySelector(this.getAttribute('href')).scrollIntoView({
+                        behavior: 'smooth'
+                    });
+                });
+            });
+
+            // Add animation to cards on scroll
+            const observerOptions = {
+                root: null,
+                rootMargin: '0px',
+                threshold: 0.1
+            };
+
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.style.opacity = 1;
+                        entry.target.style.transform = 'translateY(0)';
+                    }
+                });
+            }, observerOptions);
+
+            document.querySelectorAll('.card').forEach(card => {
+                card.style.opacity = 0;
+                card.style.transform = 'translateY(20px)';
+                card.style.transition = 'opacity 0.5s ease, transform 0.5s ease';
+                observer.observe(card);
+            });
+        });
+    </script>
+
+</body>
+</html>
